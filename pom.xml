@@ -8,7 +8,7 @@
         <relativePath>../lionengine-parent</relativePath>
     </parent>
     <artifactId>lionengine-examples</artifactId>
-    <name>LionEngine Example</name>
+    <name>LionEngine Examples</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
