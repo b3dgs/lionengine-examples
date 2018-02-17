@@ -17,6 +17,8 @@
  */
 package com.b3dgs.lionengine.example;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
@@ -28,11 +30,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Verbose;
-import com.b3dgs.lionengine.awt.swing.Theme;
-import com.b3dgs.lionengine.awt.swing.UtilSwing;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.example.core.drawable.AppDrawable;
 import com.b3dgs.lionengine.example.game.action.AppAction;
@@ -71,7 +73,7 @@ public class AppExamples
      */
     public static void main(final String[] args)
     {
-        Theme.set(Theme.SYSTEM);
+        setThemeSystem();
 
         final JFrame frame = new JFrame(NAME);
         frame.setPreferredSize(new Dimension(576, 256));
@@ -94,6 +96,55 @@ public class AppExamples
             }
         });
 
+        run(frame, panel);
+    }
+
+    /**
+     * Use system theme for UI.
+     */
+    private static void setThemeSystem()
+    {
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (ClassNotFoundException
+               | InstantiationException
+               | IllegalAccessException
+               | UnsupportedLookAndFeelException exception)
+        {
+            Verbose.exception(exception);
+        }
+    }
+
+    /**
+     * Add all examples.
+     * 
+     * @param panel The panel reference.
+     */
+    private static void addExamples(JPanel panel)
+    {
+        final Class<?>[] examples = new Class<?>[]
+        {
+            AppHelloWorld.class, AppDrawable.class, AppAction.class, AppAssign.class, AppAttack.class,
+            AppBackground.class, AppCollision.class, AppCursor.class, AppEffect.class, AppFog.class, AppMap.class,
+            AppPathfinding.class, AppProduction.class, AppExtraction.class, AppProjectile.class, AppRaster.class,
+            AppSelector.class, AppState.class, AppPong.class
+        };
+        for (final Class<?> example : examples)
+        {
+            addExample(panel, example);
+        }
+    }
+
+    /**
+     * Run frame.
+     * 
+     * @param frame The frame reference.
+     * @param panel The panel reference.
+     */
+    private static void run(JFrame frame, JPanel panel)
+    {
         SwingUtilities.invokeLater(() ->
         {
             frame.add(panel);
@@ -116,6 +167,25 @@ public class AppExamples
     }
 
     /**
+     * Set the enabled state of a components set.
+     * 
+     * @param components The components.
+     * @param enabled The enabled state.
+     */
+    private static void setEnabled(Component[] components, boolean enabled)
+    {
+        for (final Component component : components)
+        {
+            component.setEnabled(enabled);
+            if (component instanceof Container)
+            {
+                final Container container = (Container) component;
+                setEnabled(container.getComponents(), enabled);
+            }
+        }
+    }
+
+    /**
      * Add a example with its button and action.
      * 
      * @param panel The panel reference.
@@ -126,55 +196,41 @@ public class AppExamples
         final JButton drawable = new JButton(example.getSimpleName().substring(3));
         drawable.addActionListener(event ->
         {
-            UtilSwing.setEnabled(panel.getComponents(), false);
+            setEnabled(panel.getComponents(), false);
             try
             {
                 example.getDeclaredMethod("main", String[].class).invoke(example, (Object[]) new String[1]);
-                final Runnable runnable = () ->
-                {
-                    while (Engine.isStarted())
-                    {
-                        try
-                        {
-                            Thread.sleep(250);
-                        }
-                        catch (final InterruptedException exception)
-                        {
-                            Thread.currentThread().interrupt();
-                            Verbose.exception(exception);
-                            break;
-                        }
-                    }
-                    SwingUtilities.invokeLater(() -> UtilSwing.setEnabled(panel.getComponents(), true));
-                };
-                EXECUTOR.execute(runnable);
+                EXECUTOR.execute(() -> waitClose(panel));
             }
             catch (final Exception exception)
             {
                 Verbose.exception(exception);
-                SwingUtilities.invokeLater(() -> UtilSwing.setEnabled(panel.getComponents(), true));
+                SwingUtilities.invokeLater(() -> setEnabled(panel.getComponents(), true));
             }
         });
         panel.add(drawable);
     }
 
     /**
-     * Add all examples.
+     * Wait for engine end. Restore panel buttons.
      * 
      * @param panel The panel reference.
      */
-    private static void addExamples(JPanel panel)
+    private static void waitClose(JPanel panel)
     {
-        final Class<?>[] examples = new Class<?>[]
+        while (Engine.isStarted())
         {
-            AppHelloWorld.class, AppDrawable.class, AppAction.class, AppAssign.class, AppAttack.class,
-            AppBackground.class, AppCollision.class, AppCursor.class, AppEffect.class, AppFog.class, AppMap.class,
-            AppPathfinding.class, AppProduction.class, AppExtraction.class, AppProjectile.class, AppRaster.class,
-            AppSelector.class, AppState.class, AppPong.class
-        };
-        for (final Class<?> example : examples)
-        {
-            addExample(panel, example);
+            try
+            {
+                Thread.sleep(Constant.THOUSAND);
+            }
+            catch (final InterruptedException exception)
+            {
+                Thread.currentThread().interrupt();
+                Verbose.exception(exception);
+                break;
+            }
         }
+        SwingUtilities.invokeLater(() -> setEnabled(panel.getComponents(), true));
     }
 }
