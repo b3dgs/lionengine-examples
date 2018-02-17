@@ -8,8 +8,8 @@
         <relativePath>../lionengine-parent</relativePath>
     </parent>
     <artifactId>lionengine-examples</artifactId>
-    <name>LionEngine Examples</name>
     <packaging>jar</packaging>
+    <name>LionEngine Examples</name>
     <dependencies>
         <dependency>
             <groupId>com.b3dgs.lionengine</groupId>
