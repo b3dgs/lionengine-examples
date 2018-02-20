@@ -17,7 +17,7 @@
  */
 package com.b3dgs.lionengine.example.game.collision;
 
-import com.b3dgs.lionengine.game.Direction;
+import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Refreshable;
@@ -52,7 +52,7 @@ class PlayerController extends FeatureModel implements Refreshable
     @Override
     public void update(double extrp)
     {
-        movement.setDirection(Direction.ZERO);
+        movement.setDirection(DirectionNone.INSTANCE);
         if (keyboard.isPressed(Keyboard.LEFT))
         {
             movement.setDirection(-SPEED, 0);

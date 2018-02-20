@@ -18,7 +18,7 @@
 package com.b3dgs.lionengine.example.game.collision;
 
 import com.b3dgs.lionengine.Context;
-import com.b3dgs.lionengine.game.Direction;
+import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.FeatureGet;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
@@ -96,7 +96,7 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
         if (Axis.Y == axis && transformable.getY() < transformable.getOldY())
         {
             body.resetGravity();
-            jump.setDirection(Direction.ZERO);
+            jump.setDirection(DirectionNone.INSTANCE);
         }
     }
 }

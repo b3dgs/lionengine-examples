@@ -23,7 +23,7 @@ import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.core.Medias;
 import com.b3dgs.lionengine.core.drawable.Drawable;
-import com.b3dgs.lionengine.game.Direction;
+import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.StateFactory;
 import com.b3dgs.lionengine.game.feature.Camera;
@@ -99,7 +99,7 @@ class Mario extends FeaturableModel
             if (transformable.getY() < GROUND)
             {
                 transformable.teleportY(GROUND);
-                jump.setDirection(Direction.ZERO);
+                jump.setDirection(DirectionNone.INSTANCE);
                 body.resetGravity();
             }
             surface.setMirror(mirrorable.getMirror());
