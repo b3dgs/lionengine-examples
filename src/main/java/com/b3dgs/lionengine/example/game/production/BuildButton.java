@@ -23,6 +23,7 @@ import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Updatable;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.game.Cursor;
 import com.b3dgs.lionengine.game.SizeConfig;
@@ -46,7 +47,6 @@ import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Image;
 import com.b3dgs.lionengine.graphic.Text;
 import com.b3dgs.lionengine.io.Xml;
-import com.b3dgs.lionengine.io.awt.Mouse;
 import com.b3dgs.lionengine.util.UtilMath;
 
 /**
@@ -75,11 +75,11 @@ class BuildButton extends FeaturableModel
         addFeature(new LayerableModel(3));
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
-        actionable.setClickAction(Mouse.LEFT);
+        actionable.setClickAction(MouseAwt.LEFT);
         state = actionable;
 
         final Assignable assignable = addFeatureAndGet(new AssignableModel(services));
-        assignable.setClickAssign(Mouse.LEFT);
+        assignable.setClickAssign(MouseAwt.LEFT);
 
         final Media target = Medias.create(setup.getText("media"));
         final Cursor cursor = services.get(Cursor.class);

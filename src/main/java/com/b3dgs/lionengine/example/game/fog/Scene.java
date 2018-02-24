@@ -24,6 +24,7 @@ import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.feature.Camera;
@@ -72,7 +73,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override

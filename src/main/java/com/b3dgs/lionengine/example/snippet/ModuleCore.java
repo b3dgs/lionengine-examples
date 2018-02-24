@@ -70,7 +70,7 @@ public class ModuleCore
      */
 
     private final Services services = new Services();
-    private final Text text = services.add(Graphics.createText(Text.SANS_SERIF, 9, TextStyle.NORMAL));
+    private final Text text = services.add(Graphics.createText(Constant.FONT_SANS_SERIF, 9, TextStyle.NORMAL));
 
     // Method 1
     private final Factory factory1 = services.create(Factory.class); // Already added !
@@ -165,7 +165,7 @@ public class ModuleCore
     void text()
     {
         // Create the text
-        final Text text = Graphics.createText(Text.SANS_SERIF, 12, TextStyle.NORMAL);
+        final Text text = Graphics.createText(Constant.FONT_SANS_SERIF, 12, TextStyle.NORMAL);
 
         // Rendering type 1
         text.setText("Hello");

@@ -22,6 +22,8 @@ import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.feature.AnimatableModel;
@@ -80,7 +82,7 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
         mouse = getInputDevice(Mouse.class);
 
         handler.addComponent(new ComponentRefreshable());
@@ -140,7 +142,7 @@ class Scene extends Sequence
     {
         handler.update(extrp);
         count++;
-        if (mouse.hasClickedOnce(Mouse.LEFT))
+        if (mouse.hasClickedOnce(MouseAwt.LEFT))
         {
             useRaster = !useRaster;
             if (useRaster)

@@ -17,10 +17,12 @@
  */
 package com.b3dgs.lionengine.example.game.pathfinding;
 
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.Cursor;
 import com.b3dgs.lionengine.game.TextGame;
@@ -38,7 +40,6 @@ import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePathModel;
 import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Text;
 import com.b3dgs.lionengine.graphic.TextStyle;
 import com.b3dgs.lionengine.io.awt.Keyboard;
 import com.b3dgs.lionengine.io.awt.Mouse;
@@ -52,7 +53,7 @@ class Scene extends Sequence
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final TextGame text = new TextGame(Text.SANS_SERIF, 10, TextStyle.NORMAL);
+    private final TextGame text = new TextGame(Constant.FONT_SANS_SERIF, 10, TextStyle.NORMAL);
     private final Services services = new Services();
     private final Handler handler = services.create(Handler.class);
     private final Camera camera = services.create(Camera.class);
@@ -73,7 +74,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override

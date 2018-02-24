@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Updatable;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.game.Cursor;
 import com.b3dgs.lionengine.game.feature.Actionable;
@@ -42,7 +43,6 @@ import com.b3dgs.lionengine.game.feature.tile.map.extractable.Extractor;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePath;
 import com.b3dgs.lionengine.graphic.Image;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.io.awt.Mouse;
 
 /**
  * Resources button action.
@@ -67,10 +67,10 @@ class Button extends FeaturableModel
         addFeature(new LayerableModel(3));
 
         final Assignable assignable = addFeatureAndGet(new AssignableModel(services));
-        assignable.setClickAssign(Mouse.LEFT);
+        assignable.setClickAssign(MouseAwt.LEFT);
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
-        actionable.setClickAction(Mouse.LEFT);
+        actionable.setClickAction(MouseAwt.LEFT);
 
         final Cursor cursor = services.get(Cursor.class);
         final AtomicReference<Updatable> state = new AtomicReference<>(actionable);

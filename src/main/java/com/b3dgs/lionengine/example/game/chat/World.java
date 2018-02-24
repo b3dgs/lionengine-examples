@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.b3dgs.lionengine.Align;
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.graphic.ColorRgba;
@@ -60,7 +61,7 @@ abstract class World<N extends NetworkedWorld> extends WorldGame implements Netw
     public World(Context context)
     {
         super(context);
-        text = Graphics.createText(Text.SANS_SERIF, 10, TextStyle.NORMAL);
+        text = Graphics.createText(Constant.FONT_SANS_SERIF, 10, TextStyle.NORMAL);
         chat = new Chat(this);
         networkableModel = new NetworkableModel();
         clients = new HashMap<>(2);

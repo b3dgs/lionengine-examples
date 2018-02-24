@@ -22,12 +22,12 @@ import java.util.LinkedList;
 
 import com.b3dgs.lionengine.Align;
 import com.b3dgs.lionengine.Constant;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
 import com.b3dgs.lionengine.graphic.TextStyle;
-import com.b3dgs.lionengine.io.awt.Keyboard;
 import com.b3dgs.lionengine.network.ConnectionListener;
 import com.b3dgs.lionengine.network.message.NetworkMessageChat;
 import com.b3dgs.lionengine.network.purview.NetworkChat;
@@ -58,9 +58,9 @@ class Chat extends NetworkChat implements ConnectionListener
     {
         super(TypeMessage.MESSAGE_CHAT.getId());
         this.world = world;
-        text = Graphics.createText(Text.DIALOG, 9, TextStyle.NORMAL);
-        setKeyValidate(Keyboard.ENTER.intValue());
-        setKeyBackSpace(Keyboard.BACK_SPACE.intValue());
+        text = Graphics.createText(Constant.FONT_DIALOG, 9, TextStyle.NORMAL);
+        setKeyValidate(KeyboardAwt.ENTER.intValue());
+        setKeyBackSpace(KeyboardAwt.BACK_SPACE.intValue());
     }
 
     /*

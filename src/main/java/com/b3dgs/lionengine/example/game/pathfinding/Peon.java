@@ -21,6 +21,7 @@ import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.game.Cursor;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
@@ -34,7 +35,6 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
 import com.b3dgs.lionengine.graphic.SpriteAnimated;
-import com.b3dgs.lionengine.io.awt.Mouse;
 
 /**
  * Peon entity implementation.
@@ -70,7 +70,7 @@ class Peon extends FeaturableModel
 
         addFeature(new RefreshableModel(extrp ->
         {
-            if (cursor.hasClickedOnce(Mouse.RIGHT))
+            if (cursor.hasClickedOnce(MouseAwt.RIGHT))
             {
                 pathfindable.setDestination(cursor);
             }

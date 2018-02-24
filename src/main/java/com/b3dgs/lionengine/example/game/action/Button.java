@@ -21,6 +21,7 @@ import java.util.Arrays;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.game.ActionConfig;
 import com.b3dgs.lionengine.game.feature.Actionable;
@@ -32,7 +33,6 @@ import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.graphic.Image;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.io.awt.Mouse;
 import com.b3dgs.lionengine.util.UtilReflection;
 
 /**
@@ -62,7 +62,7 @@ class Button extends FeaturableModel
         addFeature(new ButtonLink());
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
-        actionable.setClickAction(Mouse.LEFT);
+        actionable.setClickAction(MouseAwt.LEFT);
 
         final ActionFeature action = addFeatureAndGet(setup.getImplementation(ActionFeature.class,
                                                                               UtilReflection.getParamTypes(setup),

@@ -22,6 +22,7 @@ import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Timing;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.graphic.Graphic;
@@ -51,7 +52,7 @@ class Scene extends Sequence
 
         Drawable.setDpi(NATIVE, getConfig());
         image = Drawable.loadImage(Medias.create("lionengine.png"));
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
         timing.start();
     }
 

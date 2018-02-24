@@ -20,8 +20,9 @@ package com.b3dgs.lionengine.example.game.background;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.sequence.Sequence;
-import com.b3dgs.lionengine.game.background.BackgroundGame;
+import com.b3dgs.lionengine.game.background.BackgroundAbstract;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.io.awt.Keyboard;
 import com.b3dgs.lionengine.util.UtilMath;
@@ -36,7 +37,7 @@ class Scene extends Sequence
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final BackgroundGame background = new Swamp(getConfig().getSource(), 1.0, 1.0);
+    private final BackgroundAbstract background = new Swamp(getConfig().getSource(), 1.0, 1.0);
     private final Foreground foreground = new Foreground(getConfig().getSource());
 
     private double y;
@@ -50,7 +51,7 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override

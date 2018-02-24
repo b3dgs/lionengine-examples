@@ -21,6 +21,8 @@ import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.Cursor;
@@ -74,7 +76,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
 
-        keyboard.addActionPressed(Keyboard.ESCAPE, () -> end());
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, () -> end());
 
         setSystemCursorVisible(false);
     }
@@ -106,7 +108,7 @@ class Scene extends Sequence
         selector.addFeature(new LayerableModel(2));
         selector.setClickableArea(camera);
         selector.setSelectionColor(ColorRgba.GREEN);
-        selector.setClickSelection(Mouse.LEFT);
+        selector.setClickSelection(MouseAwt.LEFT);
         selector.addListener(peon);
         handler.add(selector);
     }
@@ -118,19 +120,19 @@ class Scene extends Sequence
         cursor.update(extrp);
         handler.update(extrp);
 
-        if (keyboard.isPressed(Keyboard.UP))
+        if (keyboard.isPressed(KeyboardAwt.UP))
         {
             camera.moveLocation(extrp, 0, 16);
         }
-        if (keyboard.isPressed(Keyboard.DOWN))
+        if (keyboard.isPressed(KeyboardAwt.DOWN))
         {
             camera.moveLocation(extrp, 0, -16);
         }
-        if (keyboard.isPressed(Keyboard.LEFT))
+        if (keyboard.isPressed(KeyboardAwt.LEFT))
         {
             camera.moveLocation(extrp, -16, 0);
         }
-        if (keyboard.isPressed(Keyboard.RIGHT))
+        if (keyboard.isPressed(KeyboardAwt.RIGHT))
         {
             camera.moveLocation(extrp, 16, 0);
         }

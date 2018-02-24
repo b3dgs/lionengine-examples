@@ -18,9 +18,11 @@
 package com.b3dgs.lionengine.example.helloworld;
 
 import com.b3dgs.lionengine.Align;
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
@@ -37,7 +39,7 @@ class Scene extends Sequence
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final Text text = Graphics.createText(Text.SANS_SERIF, 12, TextStyle.NORMAL);
+    private final Text text = Graphics.createText(Constant.FONT_SANS_SERIF, 12, TextStyle.NORMAL);
 
     /**
      * Constructor.
@@ -48,7 +50,7 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override

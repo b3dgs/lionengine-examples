@@ -22,6 +22,7 @@ import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.Cursor;
@@ -55,7 +56,7 @@ class Scene extends Sequence
     private static final Resolution NATIVE = new Resolution(320, 200, 60);
 
     private final Services services = new Services();
-    private final Text text = services.add(Graphics.createText(Text.SANS_SERIF, 9, TextStyle.NORMAL));
+    private final Text text = services.add(Graphics.createText(Constant.FONT_SANS_SERIF, 9, TextStyle.NORMAL));
     private final Handler handler = services.create(Handler.class);
     private final Cursor cursor = services.create(Cursor.class);
     private final Mouse mouse = getInputDevice(Mouse.class);
@@ -76,7 +77,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override

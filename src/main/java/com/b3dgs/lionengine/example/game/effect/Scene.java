@@ -20,6 +20,8 @@ package com.b3dgs.lionengine.example.game.effect;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
+import com.b3dgs.lionengine.core.awt.MouseAwt;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.feature.Camera;
 import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
@@ -56,7 +58,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
 
-        getInputDevice(Keyboard.class).addActionPressed(Keyboard.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     @Override
@@ -69,7 +71,7 @@ class Scene extends Sequence
     public void update(double extrp)
     {
         mouse.update(extrp);
-        if (mouse.hasClicked(Mouse.LEFT))
+        if (mouse.hasClicked(MouseAwt.LEFT))
         {
             final Effect effect = factory.create(Effect.EXPLODE);
             effect.start(mouse);

@@ -17,10 +17,12 @@
  */
 package com.b3dgs.lionengine.example.game.cursor;
 
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.core.sequence.Sequence;
 import com.b3dgs.lionengine.game.Cursor;
 import com.b3dgs.lionengine.game.TextGame;
@@ -39,7 +41,6 @@ import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewer;
 import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Text;
 import com.b3dgs.lionengine.graphic.TextStyle;
 import com.b3dgs.lionengine.io.awt.Keyboard;
 import com.b3dgs.lionengine.io.awt.Mouse;
@@ -53,7 +54,7 @@ class Scene extends Sequence
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final TextGame text = new TextGame(Text.DIALOG, 9, TextStyle.NORMAL);
+    private final TextGame text = new TextGame(Constant.FONT_DIALOG, 9, TextStyle.NORMAL);
     private final Services services = new Services();
     private final Camera camera = services.create(Camera.class);
     private final Cursor cursor = services.create(Cursor.class);
@@ -75,7 +76,7 @@ class Scene extends Sequence
         super(context, NATIVE);
 
         setSystemCursorVisible(false);
-        keyboard.addActionPressed(Keyboard.ESCAPE, () -> end());
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, () -> end());
     }
 
     /**
@@ -130,19 +131,19 @@ class Scene extends Sequence
         mouse.update(extrp);
         cursor.update(extrp);
 
-        if (keyboard.isPressedOnce(Keyboard.UP))
+        if (keyboard.isPressedOnce(KeyboardAwt.UP))
         {
             camera.moveLocation(extrp, 0, 64);
         }
-        if (keyboard.isPressedOnce(Keyboard.DOWN))
+        if (keyboard.isPressedOnce(KeyboardAwt.DOWN))
         {
             camera.moveLocation(extrp, 0, -64);
         }
-        if (keyboard.isPressedOnce(Keyboard.LEFT))
+        if (keyboard.isPressedOnce(KeyboardAwt.LEFT))
         {
             camera.moveLocation(extrp, -64, 0);
         }
-        if (keyboard.isPressedOnce(Keyboard.RIGHT))
+        if (keyboard.isPressedOnce(KeyboardAwt.RIGHT))
         {
             camera.moveLocation(extrp, 64, 0);
         }

@@ -17,6 +17,7 @@
  */
 package com.b3dgs.lionengine.example.game.collision;
 
+import com.b3dgs.lionengine.core.awt.KeyboardAwt;
 import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
@@ -53,15 +54,15 @@ class PlayerController extends FeatureModel implements Refreshable
     public void update(double extrp)
     {
         movement.setDirection(DirectionNone.INSTANCE);
-        if (keyboard.isPressed(Keyboard.LEFT))
+        if (keyboard.isPressed(KeyboardAwt.LEFT))
         {
             movement.setDirection(-SPEED, 0);
         }
-        if (keyboard.isPressed(Keyboard.RIGHT))
+        if (keyboard.isPressed(KeyboardAwt.RIGHT))
         {
             movement.setDirection(SPEED, 0);
         }
-        if (keyboard.isPressedOnce(Keyboard.UP))
+        if (keyboard.isPressedOnce(KeyboardAwt.UP))
         {
             jump.setDirection(0.0, JUMP);
         }
