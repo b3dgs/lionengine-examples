@@ -19,10 +19,10 @@ package com.b3dgs.lionengine.example.game.background;
 
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.core.Medias;
+import com.b3dgs.lionengine.game.background.BackgroundAbstract;
 import com.b3dgs.lionengine.game.background.BackgroundComponent;
 import com.b3dgs.lionengine.game.background.BackgroundElement;
 import com.b3dgs.lionengine.game.background.BackgroundElementRastered;
-import com.b3dgs.lionengine.game.background.BackgroundAbstract;
 import com.b3dgs.lionengine.game.background.Parallax;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Sprite;
