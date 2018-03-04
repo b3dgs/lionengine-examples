@@ -18,7 +18,6 @@
 package com.b3dgs.lionengine.example.game.map;
 
 import com.b3dgs.lionengine.Config;
-import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Version;
 import com.b3dgs.lionengine.core.awt.EngineAwt;
 import com.b3dgs.lionengine.core.sequence.Loader;
@@ -38,7 +37,6 @@ public class AppMap
     public static void main(String[] args)
     {
         EngineAwt.start(AppMap.class.getSimpleName(), Version.create(1, 0, 0), AppMap.class);
-        final Resolution output = new Resolution(640, 480, 60);
-        Loader.start(Config.windowed(output), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
     }
 }

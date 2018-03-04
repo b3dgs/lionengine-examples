@@ -41,7 +41,8 @@ import com.b3dgs.lionengine.io.awt.Keyboard;
  */
 class Scene extends Sequence
 {
-    private static final Resolution NATIVE = new Resolution(320, 240, 60);
+    /** Native resolution. */
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Services services = new Services();
     private final Camera camera = services.create(Camera.class);
