@@ -62,7 +62,7 @@ class Scene extends Sequence
     private final SpriteTiled tilesheet = Drawable.loadSpriteTiled(Medias.create("tilesheet.png"), 16, 16);
 
     // Set animation data (frames between 4-6, at a speed of 0.125, looped)
-    private final Animation anim = new Animation(null, 4, 6, 0.125, false, true);
+    private final Animation anim = new Animation(Animation.DEFAULT_NAME, 4, 6, 0.125, false, true);
 
     private double tile;
 

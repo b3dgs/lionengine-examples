@@ -224,7 +224,7 @@ public class ModuleCore
 
     void animation()
     {
-        final Animation animation = new Animation(null, 4, 6, 0.125, false, true);
+        final Animation animation = new Animation(Animation.DEFAULT_NAME, 4, 6, 0.125, false, true);
         System.out.println(animation.getFirst()); // 4
         System.out.println(animation.getLast()); // 6
         System.out.println(animation.getSpeed()); // 0.125
@@ -235,7 +235,7 @@ public class ModuleCore
     void animator()
     {
         final Animator animator = Anim.createAnimator();
-        final Animation animation = new Animation(null, 4, 6, 0.125, false, true);
+        final Animation animation = new Animation(Animation.DEFAULT_NAME, 4, 6, 0.125, false, true);
         animator.play(animation);
 
         // ... (loop)
@@ -246,7 +246,7 @@ public class ModuleCore
     void animState()
     {
         final Animator animator = Anim.createAnimator();
-        final Animation animation = new Animation(null, 1, 2, 1.0, false, false);
+        final Animation animation = new Animation(Animation.DEFAULT_NAME, 1, 2, 1.0, false, false);
         animator.getAnimState(); // returns STOPPED
         animator.play(animation);
         animator.update(extrp);
@@ -341,7 +341,7 @@ public class ModuleCore
         animation.load();
         animation.prepare();
 
-        final Animation anim = new Animation(null, 4, 6, 0.125, false, true);
+        final Animation anim = new Animation(Animation.DEFAULT_NAME, 4, 6, 0.125, false, true);
         animation.play(anim);
         animation.setLocation(160, 300);
 
