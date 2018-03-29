@@ -34,7 +34,7 @@ import com.b3dgs.lionengine.game.feature.MirrorableModel;
 import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.StateAnimationBased;
+import com.b3dgs.lionengine.game.feature.StateAnimationUtil;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.body.Body;
@@ -78,7 +78,7 @@ class Mario extends FeaturableModel
         surface.setOrigin(Origin.CENTER_BOTTOM);
         surface.setFrameOffsets(-1, 0);
 
-        StateAnimationBased.Util.loadStates(MarioState.values(), factory, this, setup);
+        StateAnimationUtil.loadStates(MarioState.values(), factory, this, setup);
         handler.changeState(MarioState.IDLE);
 
         final Context context = services.get(Context.class);
