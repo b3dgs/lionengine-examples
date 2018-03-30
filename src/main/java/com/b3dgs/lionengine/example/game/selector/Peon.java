@@ -35,7 +35,7 @@ import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.game.feature.collidable.selector.SelectorListener;
-import com.b3dgs.lionengine.geom.Rectangle;
+import com.b3dgs.lionengine.geom.Area;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.SpriteAnimated;
 
@@ -105,17 +105,17 @@ class Peon extends FeaturableModel implements SelectorListener
      */
 
     @Override
-    public void notifySelectionStarted(Rectangle selection)
+    public void notifySelectionStarted(Area selection)
     {
         selected = false;
     }
 
     @Override
-    public void notifySelectionDone(Rectangle selection)
+    public void notifySelectionDone(Area selection)
     {
-        for (final Rectangle rectangle : collidable.getCollisionBounds())
+        for (final Area area : collidable.getCollisionBounds())
         {
-            if (selection.contains(rectangle) || selection.intersects(rectangle))
+            if (selection.contains(area) || selection.intersects(area))
             {
                 selected = true;
                 break;
