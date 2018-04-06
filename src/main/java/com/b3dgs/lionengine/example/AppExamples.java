@@ -34,8 +34,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.b3dgs.lionengine.Constant;
+import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Verbose;
-import com.b3dgs.lionengine.core.Engine;
 import com.b3dgs.lionengine.example.core.drawable.AppDrawable;
 import com.b3dgs.lionengine.example.game.action.AppAction;
 import com.b3dgs.lionengine.example.game.assign.AppAssign;

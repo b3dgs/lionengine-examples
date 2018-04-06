@@ -17,9 +17,9 @@
  */
 package com.b3dgs.lionengine.example.game.handler;
 
+import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Version;
-import com.b3dgs.lionengine.core.Engine;
-import com.b3dgs.lionengine.core.awt.EngineAwt;
+import com.b3dgs.lionengine.awt.graphic.EngineAwt;
 import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
 import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
 import com.b3dgs.lionengine.game.feature.Handler;

@@ -19,15 +19,15 @@ package com.b3dgs.lionengine.example.core.dpi;
 
 import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Timing;
-import com.b3dgs.lionengine.core.Medias;
-import com.b3dgs.lionengine.core.awt.KeyboardAwt;
-import com.b3dgs.lionengine.core.drawable.Drawable;
-import com.b3dgs.lionengine.core.sequence.Sequence;
+import com.b3dgs.lionengine.awt.Keyboard;
+import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Image;
-import com.b3dgs.lionengine.io.awt.Keyboard;
+import com.b3dgs.lionengine.graphic.drawable.Drawable;
+import com.b3dgs.lionengine.graphic.drawable.Image;
+import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * This is where the game loop is running.

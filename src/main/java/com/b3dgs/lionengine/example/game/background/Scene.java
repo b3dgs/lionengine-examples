@@ -18,14 +18,14 @@
 package com.b3dgs.lionengine.example.game.background;
 
 import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Resolution;
-import com.b3dgs.lionengine.core.Engine;
-import com.b3dgs.lionengine.core.awt.KeyboardAwt;
-import com.b3dgs.lionengine.core.sequence.Sequence;
+import com.b3dgs.lionengine.UtilMath;
+import com.b3dgs.lionengine.awt.Keyboard;
+import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.game.background.BackgroundAbstract;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.io.awt.Keyboard;
-import com.b3dgs.lionengine.util.UtilMath;
+import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Game loop designed to handle our world.

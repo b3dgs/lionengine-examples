@@ -19,21 +19,21 @@ package com.b3dgs.lionengine.example.core.drawable;
 
 import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.Engine;
+import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Mirror;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Resolution;
-import com.b3dgs.lionengine.core.Engine;
-import com.b3dgs.lionengine.core.Medias;
-import com.b3dgs.lionengine.core.awt.KeyboardAwt;
-import com.b3dgs.lionengine.core.drawable.Drawable;
-import com.b3dgs.lionengine.core.sequence.Sequence;
+import com.b3dgs.lionengine.awt.Keyboard;
+import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Image;
-import com.b3dgs.lionengine.graphic.Sprite;
-import com.b3dgs.lionengine.graphic.SpriteAnimated;
-import com.b3dgs.lionengine.graphic.SpriteTiled;
-import com.b3dgs.lionengine.io.awt.Keyboard;
+import com.b3dgs.lionengine.graphic.drawable.Drawable;
+import com.b3dgs.lionengine.graphic.drawable.Image;
+import com.b3dgs.lionengine.graphic.drawable.Sprite;
+import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.graphic.drawable.SpriteTiled;
+import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * This is where the game loop is running.

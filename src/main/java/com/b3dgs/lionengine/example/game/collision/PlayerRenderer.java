@@ -24,7 +24,7 @@ import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Sprite;
+import com.b3dgs.lionengine.graphic.drawable.Sprite;
 
 /**
  * Player rendering implementation.

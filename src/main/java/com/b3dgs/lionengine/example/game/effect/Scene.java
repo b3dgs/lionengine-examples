@@ -18,11 +18,12 @@
 package com.b3dgs.lionengine.example.game.effect;
 
 import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Resolution;
-import com.b3dgs.lionengine.core.Engine;
-import com.b3dgs.lionengine.core.awt.KeyboardAwt;
-import com.b3dgs.lionengine.core.awt.MouseAwt;
-import com.b3dgs.lionengine.core.sequence.Sequence;
+import com.b3dgs.lionengine.awt.Keyboard;
+import com.b3dgs.lionengine.awt.KeyboardAwt;
+import com.b3dgs.lionengine.awt.Mouse;
+import com.b3dgs.lionengine.awt.MouseAwt;
 import com.b3dgs.lionengine.game.feature.Camera;
 import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
 import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
@@ -30,8 +31,7 @@ import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.io.awt.Keyboard;
-import com.b3dgs.lionengine.io.awt.Mouse;
+import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Scene implementation.

@@ -18,10 +18,10 @@
 package com.b3dgs.lionengine.example.game.collision;
 
 import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.core.drawable.Drawable;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.graphic.Sprite;
+import com.b3dgs.lionengine.graphic.drawable.Drawable;
+import com.b3dgs.lionengine.graphic.drawable.Sprite;
 
 /**
  * Player model implementation.

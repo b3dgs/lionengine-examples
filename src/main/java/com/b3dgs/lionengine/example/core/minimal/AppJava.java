@@ -19,8 +19,8 @@ package com.b3dgs.lionengine.example.core.minimal;
 
 import com.b3dgs.lionengine.Config;
 import com.b3dgs.lionengine.Version;
-import com.b3dgs.lionengine.core.awt.EngineAwt;
-import com.b3dgs.lionengine.core.sequence.Loader;
+import com.b3dgs.lionengine.awt.graphic.EngineAwt;
+import com.b3dgs.lionengine.graphic.engine.Loader;
 
 /**
  * Program starts here. When you start the JVM, ensure that this main function is called.
