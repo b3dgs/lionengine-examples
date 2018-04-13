@@ -10,6 +10,9 @@
     <artifactId>lionengine-examples</artifactId>
     <packaging>jar</packaging>
     <name>LionEngine Examples</name>
+    <properties>
+        <checkstyle.skip>true</checkstyle.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.b3dgs.lionengine</groupId>
