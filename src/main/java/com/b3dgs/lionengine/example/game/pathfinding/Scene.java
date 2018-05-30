@@ -74,7 +74,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

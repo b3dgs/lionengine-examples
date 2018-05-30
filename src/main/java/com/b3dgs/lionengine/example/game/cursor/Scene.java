@@ -76,7 +76,7 @@ class Scene extends Sequence
         super(context, NATIVE);
 
         setSystemCursorVisible(false);
-        keyboard.addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     /**
@@ -129,7 +129,6 @@ class Scene extends Sequence
     public void update(double extrp)
     {
         mouse.update(extrp);
-        cursor.update(extrp);
 
         if (keyboard.isPressedOnce(KeyboardAwt.UP))
         {
@@ -147,6 +146,7 @@ class Scene extends Sequence
         {
             camera.moveLocation(extrp, 64, 0);
         }
+        cursor.update(extrp);
         text.update(camera);
     }
 

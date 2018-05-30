@@ -20,10 +20,11 @@ package com.b3dgs.lionengine.example.pong;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Updatable;
 import com.b3dgs.lionengine.UtilRandom;
 import com.b3dgs.lionengine.Viewer;
+import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
@@ -31,30 +32,21 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableListener;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
+import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.graphic.ColorRgba;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Renderable;
 
 /**
  * Racket implementation.
  */
-class Racket extends FeaturableModel implements Updatable, Renderable, CollidableListener
+class Racket extends FeaturableModel implements CollidableListener
 {
     /** Racket media. */
     public static final Media MEDIA = Medias.create("Racket.xml");
     /** Racket color. */
     private static final ColorRgba COLOR = ColorRgba.YELLOW;
 
-    /** Transformable model. */
     private final Transformable transformable;
-    /** Collidable model. */
-    private final Collidable collidable;
-    /** Move speed. */
-    private final double speed;
-    /** Ball reference. */
     private Transformable target;
-    /** Viewer reference. */
-    private final Viewer viewer;
 
     /**
      * Create an object.
@@ -66,15 +58,45 @@ class Racket extends FeaturableModel implements Updatable, Renderable, Collidabl
     {
         super();
 
-        viewer = services.get(Viewer.class);
+        final Viewer viewer = services.get(Viewer.class);
 
         transformable = addFeatureAndGet(new TransformableModel(setup));
-        collidable = addFeatureAndGet(new CollidableModel(services, setup));
+        final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
+        collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.MIDDLE);
+        collidable.addAccept(1);
+        collidable.setGroup(0);
 
-        transformable.teleportY(240 / 2);
+        transformable.teleportY(Scene.NATIVE.getHeight() / 2
+                                - transformable.getHeight() / 2
+                                + UtilRandom.getRandomInteger(10));
+        final double speed = UtilRandom.getRandomDouble() + 0.5;
 
-        speed = UtilRandom.getRandomDouble() + 2.0;
+        addFeature(new RefreshableModel(extrp ->
+        {
+            final double diffY = target.getY() - transformable.getY();
+            if (diffY < -transformable.getHeight() / 4)
+            {
+                transformable.moveLocation(extrp, 0.0, -speed);
+            }
+            else if (diffY > transformable.getHeight() / 4)
+            {
+                transformable.moveLocation(extrp, 0.0, speed);
+            }
+        }));
+
+        addFeature(new DisplayableModel(g ->
+        {
+            g.setColor(COLOR);
+            g.drawRect(viewer,
+                       Origin.MIDDLE,
+                       (int) transformable.getX(),
+                       (int) transformable.getY(),
+                       transformable.getWidth(),
+                       transformable.getHeight(),
+                       true);
+            collidable.render(g);
+        }));
     }
 
     /**
@@ -104,33 +126,9 @@ class Racket extends FeaturableModel implements Updatable, Renderable, Collidabl
         target = ball.getFeature(Transformable.class);
     }
 
-    @Override
-    public void update(double extrp)
-    {
-        final double diffY = target.getY() - transformable.getY();
-        if (diffY < 0)
-        {
-            transformable.moveLocation(extrp, 0.0, -speed);
-        }
-        else if (diffY > 0)
-        {
-            transformable.moveLocation(extrp, 0.0, speed);
-        }
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        g.setColor(COLOR);
-        g.drawRect(viewer,
-                   Origin.MIDDLE,
-                   (int) transformable.getX(),
-                   (int) transformable.getY(),
-                   transformable.getWidth(),
-                   transformable.getHeight(),
-                   true);
-        collidable.render(g);
-    }
+    /*
+     * CollidableListener
+     */
 
     @Override
     public void notifyCollided(Collidable collidable)

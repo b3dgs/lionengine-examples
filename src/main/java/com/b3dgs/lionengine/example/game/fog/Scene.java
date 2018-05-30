@@ -52,7 +52,8 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
  */
 class Scene extends Sequence
 {
-    private static final Resolution NATIVE = new Resolution(320, 240, 60);
+    /** Native resoltion. */
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Collection<Fovable> fovables = new ArrayList<>();
     private final FogOfWar fogOfWar = new FogOfWar();
@@ -73,7 +74,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

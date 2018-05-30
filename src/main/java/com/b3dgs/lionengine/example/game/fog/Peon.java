@@ -20,7 +20,7 @@ package com.b3dgs.lionengine.example.game.fog;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Timing;
+import com.b3dgs.lionengine.Tick;
 import com.b3dgs.lionengine.UtilRandom;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
@@ -66,18 +66,19 @@ class Peon extends FeaturableModel
         surface.setOrigin(Origin.BOTTOM_LEFT);
         surface.setFrameOffsets(8, 8);
 
-        final Timing timing = new Timing();
-        timing.start();
+        final Tick tick = new Tick();
+        tick.start();
 
         final Viewer viewer = services.get(Viewer.class);
 
         addFeature(new RefreshableModel(extrp ->
         {
             surface.setLocation(viewer, transformable);
-            if (timing.elapsed(1000))
+            tick.update(extrp);
+            if (tick.elapsed(Scene.NATIVE.getRate()))
             {
                 transformable.teleport(UtilRandom.getRandomInteger(19) * 16, UtilRandom.getRandomInteger(14) * 16);
-                timing.restart();
+                tick.restart();
             }
         }));
 

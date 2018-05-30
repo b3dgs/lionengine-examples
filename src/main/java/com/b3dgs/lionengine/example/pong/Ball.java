@@ -20,11 +20,12 @@ package com.b3dgs.lionengine.example.pong;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Updatable;
 import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
@@ -32,30 +33,25 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableListener;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
+import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.graphic.ColorRgba;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Renderable;
 
 /**
  * Ball implementation.
  */
-class Ball extends FeaturableModel implements Updatable, Renderable, CollidableListener
+class Ball extends FeaturableModel implements CollidableListener
 {
     /** Racket media. */
     public static final Media MEDIA = Medias.create("Ball.xml");
     /** Ball color. */
     private static final ColorRgba COLOR = ColorRgba.GRAY;
 
-    /** Transformable model. */
-    private final Transformable transformable;
-    /** Collidable model. */
+    /** Collidable reference. */
     private final Collidable collidable;
     /** Current force. */
     private final Force force;
     /** Speed. */
     private final double speed;
-    /** Viewer reference. */
-    private final Viewer viewer;
 
     /**
      * Create an object.
@@ -67,11 +63,14 @@ class Ball extends FeaturableModel implements Updatable, Renderable, CollidableL
     {
         super();
 
-        viewer = services.get(Viewer.class);
+        final Viewer viewer = services.get(Viewer.class);
 
-        transformable = addFeatureAndGet(new TransformableModel(setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
         collidable = addFeatureAndGet(new CollidableModel(services, setup));
+        collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.MIDDLE);
+        collidable.setGroup(1);
+        collidable.addAccept(0);
 
         speed = 3.0;
         force = new Force(-speed, 0.0);
@@ -79,57 +78,62 @@ class Ball extends FeaturableModel implements Updatable, Renderable, CollidableL
         force.setVelocity(speed);
 
         transformable.teleport(320 / 2, 220 / 2);
-    }
 
-    @Override
-    public void update(double extrp)
-    {
-        force.update(extrp);
-        transformable.moveLocation(extrp, force);
-        if (transformable.getY() < transformable.getHeight() / 2)
+        addFeature(new RefreshableModel(extrp ->
         {
-            transformable.teleportY(transformable.getHeight() / 2);
-            force.setDestination(force.getDirectionHorizontal(), -force.getDirectionVertical());
-        }
-        if (transformable.getY() > 240 - transformable.getHeight() / 2)
+            force.update(extrp);
+            transformable.moveLocation(extrp, force);
+            if (transformable.getY() < transformable.getHeight() / 2)
+            {
+                transformable.teleportY(transformable.getHeight() / 2);
+                force.setDestination(force.getDirectionHorizontal(), -force.getDirectionVertical());
+            }
+            if (transformable.getY() > 240 - transformable.getHeight() / 2)
+            {
+                transformable.teleportY(240.0 - transformable.getHeight() / 2);
+                force.setDestination(force.getDirectionHorizontal(), -force.getDirectionVertical());
+            }
+        }));
+
+        addFeature(new DisplayableModel(g ->
         {
-            transformable.teleportY(240.0 - transformable.getHeight() / 2);
-            force.setDestination(force.getDirectionHorizontal(), -force.getDirectionVertical());
-        }
+            g.setColor(COLOR);
+            g.drawOval(viewer,
+                       Origin.MIDDLE,
+                       (int) transformable.getX(),
+                       (int) transformable.getY(),
+                       transformable.getWidth(),
+                       transformable.getHeight(),
+                       true);
+            collidable.render(g);
+        }));
     }
 
-    @Override
-    public void render(Graphic g)
-    {
-        g.setColor(COLOR);
-        g.drawOval(viewer,
-                   Origin.MIDDLE,
-                   (int) transformable.getX(),
-                   (int) transformable.getY(),
-                   transformable.getWidth(),
-                   transformable.getHeight(),
-                   true);
-        collidable.render(g);
-    }
+    /*
+     * CollidableListener
+     */
 
     @Override
-    public void notifyCollided(Collidable collidable)
+    public void notifyCollided(Collidable other)
     {
         final Transformable transformable = collidable.getFeature(Transformable.class);
+        final Transformable racket = other.getFeature(Transformable.class);
+
         int side = 0;
         if (transformable.getX() < transformable.getOldX())
         {
-            transformable.teleportX(transformable.getX() + transformable.getWidth() / 2 + transformable.getWidth() / 2);
+            transformable.teleportX(racket.getX() + racket.getWidth() / 2 + transformable.getWidth() / 2);
             side = 1;
+
         }
         if (transformable.getX() > transformable.getOldX())
         {
-            transformable.teleportX(transformable.getX() - transformable.getWidth() / 2 - transformable.getWidth() / 2);
+            transformable.teleportX(racket.getX() - racket.getWidth() / 2 - transformable.getWidth() - 2);
             side = -1;
         }
 
-        final double diff = transformable.getY() - transformable.getY();
-        final int angle = (int) Math.round(diff * 10);
+        final double diff = transformable.getY() - racket.getY();
+        final int angle = (int) Math.round(diff * 2);
         force.setDestination(speed * UtilMath.cos(angle) * side, speed * UtilMath.sin(angle));
     }
 }

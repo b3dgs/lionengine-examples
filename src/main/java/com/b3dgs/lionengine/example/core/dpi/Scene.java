@@ -17,11 +17,10 @@
  */
 package com.b3dgs.lionengine.example.core.dpi;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
-import com.b3dgs.lionengine.Timing;
+import com.b3dgs.lionengine.Tick;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.graphic.Graphic;
@@ -38,7 +37,7 @@ class Scene extends Sequence
 {
     private static final Resolution NATIVE = new Resolution(640, 360, 60);
 
-    private final Timing timing = new Timing();
+    private final Tick tick = new Tick();
     private final Image image;
 
     /**
@@ -52,8 +51,9 @@ class Scene extends Sequence
 
         Drawable.setDpi(NATIVE, getConfig());
         image = Drawable.loadImage(Medias.create("lionengine.png"));
-        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
-        timing.start();
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
+        tick.addAction(this::end, NATIVE.getRate());
+        tick.start();
     }
 
     @Override
@@ -67,10 +67,7 @@ class Scene extends Sequence
     @Override
     public void update(double extrp)
     {
-        if (timing.elapsed(Constant.THOUSAND))
-        {
-            end();
-        }
+        tick.update(extrp);
     }
 
     @Override

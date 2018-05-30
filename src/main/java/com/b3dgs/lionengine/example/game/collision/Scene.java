@@ -67,7 +67,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
 
-        services.add(getInputDevice(Keyboard.class)).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        services.add(getInputDevice(Keyboard.class)).addActionPressed(KeyboardAwt.ESCAPE, this::end);
         services.add(context);
     }
 

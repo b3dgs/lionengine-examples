@@ -222,7 +222,7 @@ public class AppExamples
         {
             try
             {
-                Thread.sleep(Constant.THOUSAND);
+                Thread.sleep(Constant.HUNDRED);
             }
             catch (final InterruptedException exception)
             {

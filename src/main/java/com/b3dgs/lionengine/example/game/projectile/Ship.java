@@ -25,7 +25,6 @@ import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.UtilRandom;
 import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.FramesConfig;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
@@ -41,7 +40,7 @@ import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableListener;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.graphic.drawable.Sprite;
 
 /**
  * Ship implementation.
@@ -54,7 +53,7 @@ class Ship extends FeaturableModel implements CollidableListener
 
     private final double speed = UtilRandom.getRandomDouble() / 1.5 + 0.75;
     private final Transformable transformable = addFeatureAndGet(new TransformableModel());
-    private final SpriteAnimated sprite;
+    private final Sprite sprite;
     private final Weapon weapon;
     private final Collidable collidable;
 
@@ -75,9 +74,7 @@ class Ship extends FeaturableModel implements CollidableListener
 
         addFeature(new LayerableModel(1));
 
-        final FramesConfig config = FramesConfig.imports(setup);
-        sprite = Drawable.loadSpriteAnimated(setup.getSurface(), config.getHorizontal(), config.getVertical());
-        sprite.setFrame(3);
+        sprite = Drawable.loadSprite(setup.getSurface());
         sprite.setOrigin(Origin.MIDDLE);
 
         transformable.teleport(x + UtilMath.cos(location * 1.5) * 60, y + UtilMath.sin(location * 2) * 30);
@@ -88,7 +85,6 @@ class Ship extends FeaturableModel implements CollidableListener
 
         final Factory factory = services.get(Factory.class);
         weapon = factory.create(Weapon.PULSE_CANNON);
-        weapon.setOffset(6, -6);
         weapon.setOwner(this);
 
         final Handler handler = services.get(Handler.class);

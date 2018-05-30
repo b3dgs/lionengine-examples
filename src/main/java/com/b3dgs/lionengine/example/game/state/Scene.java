@@ -73,7 +73,7 @@ class Scene extends Sequence
         handler.add(mario);
 
         final Keyboard keyboard = services.add(getInputDevice(Keyboard.class));
-        keyboard.addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
         mario.addInput(keyboard);
     }
 

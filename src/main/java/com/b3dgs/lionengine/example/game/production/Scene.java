@@ -79,7 +79,7 @@ class Scene extends Sequence
         services.add(Integer.valueOf(getConfig().getSource().getRate()));
 
         setSystemCursorVisible(false);
-        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

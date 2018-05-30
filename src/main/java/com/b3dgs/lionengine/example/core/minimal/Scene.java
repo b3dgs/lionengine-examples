@@ -45,7 +45,7 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
-        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

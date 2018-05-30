@@ -40,17 +40,12 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 class Scene extends Sequence
 {
     /** Native resolution. */
-    private static final Resolution NATIVE = new Resolution(320, 240, 60);
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    /** Services reference. */
     private final Services services = new Services();
-    /** Game factory. */
     private final Factory factory = services.create(Factory.class);
-    /** Handler. */
     private final Handler handler = services.create(Handler.class);
-    /** Camera. */
     private final Camera camera = services.create(Camera.class);
-    /** Keyboard reference. */
     private final Keyboard keyboard = getInputDevice(Keyboard.class);
 
     /**
@@ -66,7 +61,7 @@ class Scene extends Sequence
         handler.addComponent(new ComponentDisplayable());
         handler.addComponent(new ComponentCollision());
 
-        keyboard.addActionPressed(KeyboardAwt.ESCAPE, () -> end());
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override
