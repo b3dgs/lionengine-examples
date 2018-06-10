@@ -20,7 +20,6 @@ package com.b3dgs.lionengine.example.game.world;
 import java.io.IOException;
 
 import com.b3dgs.lionengine.Constant;
-import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.graphic.ColorRgba;
@@ -42,18 +41,11 @@ class World extends WorldGame
     /**
      * Create a new world.
      * 
-     * @param context The context reference.
      * @param services The services reference.
      */
-    public World(Context context, Services services)
+    public World(Services services)
     {
-        super(context, services);
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        // Nothing to update
+        super(services);
     }
 
     @Override

@@ -37,8 +37,8 @@ class Scene extends Sequence
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final BackgroundAbstract background = new Swamp(getConfig().getSource(), 1.0, 1.0);
-    private final Foreground foreground = new Foreground(getConfig().getSource());
+    private final BackgroundAbstract background = new Swamp(NATIVE, 1.0, 1.0);
+    private final Foreground foreground = new Foreground(NATIVE);
 
     private double y;
 

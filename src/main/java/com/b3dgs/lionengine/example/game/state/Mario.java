@@ -17,7 +17,6 @@
  */
 package com.b3dgs.lionengine.example.game.state;
 
-import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.InputDevice;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
@@ -81,13 +80,12 @@ class Mario extends FeaturableModel
         StateAnimationUtil.loadStates(MarioState.values(), factory, this, setup);
         handler.changeState(MarioState.IDLE);
 
-        final Context context = services.get(Context.class);
         final Camera camera = services.get(Camera.class);
 
         final Body body = addFeatureAndGet(new BodyModel());
         body.setVectors(movement, jump);
         body.setGravity(GRAVITY);
-        body.setDesiredFps(context.getConfig().getSource().getRate());
+        body.setDesiredFps(60);
 
         addFeature(new RefreshableModel(extrp ->
         {

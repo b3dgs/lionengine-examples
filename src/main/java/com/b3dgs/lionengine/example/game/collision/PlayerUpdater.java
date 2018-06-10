@@ -17,7 +17,6 @@
  */
 package com.b3dgs.lionengine.example.game.collision;
 
-import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.Force;
@@ -41,7 +40,6 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
 
     private final Force movement;
     private final Force jump;
-    private final Context context;
 
     @FeatureGet private Body body;
     @FeatureGet private Transformable transformable;
@@ -56,8 +54,6 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
      */
     public PlayerUpdater(Services services, PlayerModel model)
     {
-        context = services.get(Context.class);
-
         movement = model.getMovement();
         jump = model.getJump();
     }
@@ -69,7 +65,7 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
 
         transformable.teleport(100, 0);
 
-        body.setDesiredFps(context.getConfig().getSource().getRate());
+        body.setDesiredFps(60);
         body.setGravity(GRAVITY);
         body.setVectors(movement, jump);
     }

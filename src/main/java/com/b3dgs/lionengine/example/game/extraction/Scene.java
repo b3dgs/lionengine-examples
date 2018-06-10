@@ -17,50 +17,21 @@
  */
 package com.b3dgs.lionengine.example.game.extraction;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
-import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
-import com.b3dgs.lionengine.awt.Mouse;
-import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.feature.Camera;
-import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
-import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
-import com.b3dgs.lionengine.game.feature.Factory;
-import com.b3dgs.lionengine.game.feature.Handler;
-import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroupModel;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePathModel;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Graphics;
-import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.TextStyle;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.Image;
-import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our little world.
  * 
  * @see com.b3dgs.lionengine.example.core.minimal
  */
-class Scene extends Sequence
+class Scene extends SequenceGame
 {
     private static final Resolution NATIVE = new Resolution(320, 200, 60);
-
-    private final Services services = new Services();
-    private final Text text = services.add(Graphics.createText(Constant.FONT_SANS_SERIF, 9, TextStyle.NORMAL));
-    private final Handler handler = services.create(Handler.class);
-    private final Cursor cursor = services.create(Cursor.class);
-    private final Mouse mouse = getInputDevice(Mouse.class);
-    private final Image hud;
 
     /**
      * Constructor.
@@ -69,12 +40,7 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, NATIVE);
-
-        hud = Drawable.loadImage(Medias.create("hud.png"));
-
-        handler.addComponent(new ComponentRefreshable());
-        handler.addComponent(new ComponentDisplayable());
+        super(context, NATIVE, services -> new World(services));
 
         setSystemCursorVisible(false);
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
@@ -83,56 +49,7 @@ class Scene extends Sequence
     @Override
     public void load()
     {
-        final Camera camera = services.create(Camera.class);
-        camera.setView(72, 12, 240, 176, getHeight());
-        camera.setLocation(192, 96);
-
-        final MapTile map = services.create(MapTileGame.class);
-        map.addFeature(new MapTileViewerModel(services));
-        map.create(Medias.create("map", "level.png"));
-        map.addFeatureAndGet(new MapTileGroupModel()).loadGroups(Medias.create("map", "groups.xml"));
-        map.addFeatureAndGet(new MapTilePathModel(services)).loadPathfinding(Medias.create("map", "pathfinding.xml"));
-        camera.setLimits(map);
-        handler.add(map);
-
-        hud.load();
-        hud.prepare();
-        text.setLocation(74, 192);
-
-        cursor.addImage(0, Medias.create("cursor.png"));
-        cursor.addImage(1, Medias.create("cursor_order.png"));
-        cursor.load();
-        cursor.setGrid(map.getTileWidth(), map.getTileHeight());
-        cursor.setInputDevice(mouse);
-        cursor.setViewer(camera);
-
-        services.add(Integer.valueOf(getConfig().getSource().getRate()));
-
-        final Factory factory = services.create(Factory.class);
-        handler.add(factory.create(Button.EXTRACT));
-        handler.add(factory.create(GoldMine.GOLD_MINE));
-
-        final Peon peon = factory.create(Peon.MEDIA);
-        peon.getFeature(Pathfindable.class).setLocation(13, 10);
-        handler.add(peon);
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        text.setText(Constant.EMPTY_STRING);
-        mouse.update(extrp);
-        cursor.update(extrp);
-        handler.update(extrp);
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        hud.render(g);
-        handler.render(g);
-        text.render(g);
-        cursor.render(g);
+        // Nothing to do
     }
 
     @Override

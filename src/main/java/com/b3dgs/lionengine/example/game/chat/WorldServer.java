@@ -17,7 +17,7 @@
  */
 package com.b3dgs.lionengine.example.game.chat;
 
-import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.network.NetworkedWorldModelServer;
 import com.b3dgs.lionengine.network.NetworkedWorldServer;
@@ -28,11 +28,12 @@ import com.b3dgs.lionengine.network.NetworkedWorldServer;
 class WorldServer extends World<NetworkedWorldModelServer> implements NetworkedWorldServer
 {
     /**
-     * @see WorldGame#WorldGame(Context)
+     * @see WorldGame#WorldGame(Services)
      */
-    public WorldServer(Context context)
+    public WorldServer(Services services)
     {
-        super(context);
+        super(services);
+
         networkedWorld = new NetworkedWorldModelServer(new MessageDecoder());
         networkedWorld.addListener(this);
         networkedWorld.addListener(chat);

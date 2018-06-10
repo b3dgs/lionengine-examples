@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import com.b3dgs.lionengine.Align;
 import com.b3dgs.lionengine.Constant;
-import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
@@ -56,11 +56,12 @@ abstract class World<N extends NetworkedWorld> extends WorldGame implements Netw
     protected N networkedWorld;
 
     /**
-     * @see WorldGame#WorldGame(Context)
+     * @see WorldGame#WorldGame(Services)
      */
-    public World(Context context)
+    public World(Services services)
     {
-        super(context);
+        super(services);
+
         text = Graphics.createText(Constant.FONT_SANS_SERIF, 10, TextStyle.NORMAL);
         chat = new Chat(this);
         networkableModel = new NetworkableModel();
@@ -93,7 +94,7 @@ abstract class World<N extends NetworkedWorld> extends WorldGame implements Netw
     public void render(Graphic g)
     {
         fill(g, ColorRgba.BLACK);
-        text.draw(g, config.getSource().getWidth(), 0, Align.RIGHT, "Bandwidth=" + getBandwidth() + "byte/sec");
+        text.draw(g, Scene.NATIVE.getWidth(), 0, Align.RIGHT, "Bandwidth=" + getBandwidth() + "byte/sec");
         text.draw(g, 0, 0, "Number of connected clients: " + clients.size());
         text.draw(g, 0, 12, "Clients:");
         int i = 0;

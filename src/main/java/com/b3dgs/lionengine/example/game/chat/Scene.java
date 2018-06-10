@@ -20,8 +20,10 @@ package com.b3dgs.lionengine.example.game.chat;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Resolution;
+import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.graphic.engine.SourceResolutionProvider;
 
 /**
  * Game loop designed to handle our little world.
@@ -29,7 +31,7 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 class Scene extends Sequence
 {
     /** Native resolution. */
-    private static final Resolution NATIVE = new Resolution(320, 240, 60);
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     /** World reference. */
     private final World<?> world;
@@ -43,16 +45,37 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
+        final Services services = new Services();
+        services.add(new SourceResolutionProvider()
+        {
+            @Override
+            public int getWidth()
+            {
+                return Scene.this.getWidth();
+            }
+
+            @Override
+            public int getHeight()
+            {
+                return Scene.this.getHeight();
+            }
+
+            @Override
+            public int getRate()
+            {
+                return Scene.this.getRate();
+            }
+        });
         final boolean server = true;
         if (server)
         {
-            final WorldServer worldServer = new WorldServer(context);
+            final WorldServer worldServer = new WorldServer(services);
             worldServer.startServer("Test", 7777, "Welcome !");
             world = worldServer;
         }
         else
         {
-            final WorldClient worldClient = new WorldClient(context);
+            final WorldClient worldClient = new WorldClient(services);
             addKeyListener(worldClient.getChat());
             worldClient.setName("Unnamed");
             worldClient.connect("127.0.0.1", 7777);

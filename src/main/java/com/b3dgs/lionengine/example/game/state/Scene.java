@@ -66,7 +66,6 @@ class Scene extends Sequence
     public void load()
     {
         camera.setView(0, 0, getWidth(), getHeight(), getHeight());
-        services.add(Integer.valueOf(getConfig().getSource().getRate()));
 
         final Factory factory = services.create(Factory.class);
         final Mario mario = factory.create(Mario.MEDIA);

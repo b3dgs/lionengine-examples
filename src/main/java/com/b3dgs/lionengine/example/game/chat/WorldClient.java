@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import com.b3dgs.lionengine.Align;
-import com.b3dgs.lionengine.Context;
+import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.io.FileReading;
 import com.b3dgs.lionengine.network.NetworkedWorldClient;
@@ -41,11 +41,12 @@ class WorldClient extends World<NetworkedWorldModelClient> implements NetworkedW
     /**
      * Constructor.
      * 
-     * @param context The context reference.
+     * @param services The services reference.
      */
-    public WorldClient(Context context)
+    public WorldClient(Services services)
     {
-        super(context);
+        super(services);
+
         networkableModel = new NetworkableModel();
         networkedWorld = new NetworkedWorldModelClient(new MessageDecoder());
         networkedWorld.addListener(this);
@@ -80,7 +81,7 @@ class WorldClient extends World<NetworkedWorldModelClient> implements NetworkedW
     public void render(Graphic g)
     {
         super.render(g);
-        text.draw(g, config.getSource().getWidth(), 12, Align.RIGHT, "Ping=" + getPing() + "ms");
+        text.draw(g, Scene.NATIVE.getWidth(), 12, Align.RIGHT, "Ping=" + getPing() + "ms");
     }
 
     @Override
