@@ -17,7 +17,6 @@
  */
 package com.b3dgs.lionengine.example.game.state;
 
-import com.b3dgs.lionengine.InputDevice;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
@@ -40,6 +39,7 @@ import com.b3dgs.lionengine.game.state.StateFactory;
 import com.b3dgs.lionengine.game.state.StateHandler;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Implementation of our controllable entity.
@@ -52,11 +52,10 @@ class Mario extends FeaturableModel
     static final int GROUND = 32;
     private static final double GRAVITY = 6.0;
 
-    private final StateFactory factory = new StateFactory();
-    private final StateHandler handler = new StateHandler(factory);
     private final Force movement = new Force();
     private final Force jump = new Force();
     private final SpriteAnimated surface;
+    private final InputDeviceDirectional input;
 
     /**
      * Constructor.
@@ -68,6 +67,8 @@ class Mario extends FeaturableModel
     {
         super();
 
+        input = services.get(InputDeviceDirectional.class);
+
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         transformable.teleport(160, GROUND);
 
@@ -77,7 +78,10 @@ class Mario extends FeaturableModel
         surface.setOrigin(Origin.CENTER_BOTTOM);
         surface.setFrameOffsets(-1, 0);
 
+        final StateFactory factory = new StateFactory();
         StateAnimationUtil.loadStates(MarioState.values(), factory, this, setup);
+
+        final StateHandler handler = new StateHandler(factory);
         handler.changeState(MarioState.IDLE);
 
         final Camera camera = services.get(Camera.class);
@@ -109,16 +113,6 @@ class Mario extends FeaturableModel
     }
 
     /**
-     * Add an input controller.
-     * 
-     * @param input The input reference.
-     */
-    public void addInput(InputDevice input)
-    {
-        handler.addInput(input);
-    }
-
-    /**
      * Get the movement force.
      * 
      * @return The movement force.
@@ -146,5 +140,15 @@ class Mario extends FeaturableModel
     public SpriteAnimated getSurface()
     {
         return surface;
+    }
+
+    /**
+     * Get input.
+     * 
+     * @return The input.
+     */
+    public InputDeviceDirectional getInput()
+    {
+        return input;
     }
 }

@@ -23,28 +23,19 @@ import com.b3dgs.lionengine.Mirror;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Mirrorable;
 import com.b3dgs.lionengine.game.state.StateAbstract;
-import com.b3dgs.lionengine.game.state.StateInputDirectionalUpdater;
-import com.b3dgs.lionengine.game.state.StateTransition;
-import com.b3dgs.lionengine.game.state.StateTransitionInputDirectionalChecker;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Jump state implementation.
  */
-class StateJump extends StateAbstract implements StateInputDirectionalUpdater
+class StateJump extends StateAbstract
 {
-    /** Jump force. */
     private final Force jump;
-    /** Mirrorable reference. */
     private final Mirrorable mirrorable;
-    /** Animator reference. */
     private final Animator animator;
-    /** Animation reference. */
     private final Animation animation;
-    /** Movement force. */
     private final Force movement;
-    /** Movement side. */
-    private double side;
+    private final InputDeviceDirectional input;
 
     /**
      * Create the state.
@@ -55,12 +46,15 @@ class StateJump extends StateAbstract implements StateInputDirectionalUpdater
     public StateJump(Mario mario, Animation animation)
     {
         super(MarioState.JUMP);
+
         this.animation = animation;
         mirrorable = mario.getFeature(Mirrorable.class);
         animator = mario.getSurface();
         movement = mario.getMovement();
         jump = mario.getJump();
-        addTransition(new TransitionJumpToIdle());
+        input = mario.getInput();
+
+        addTransition(MarioState.IDLE, () -> jump.getDirectionVertical() == 0);
     }
 
     @Override
@@ -68,42 +62,16 @@ class StateJump extends StateAbstract implements StateInputDirectionalUpdater
     {
         animator.play(animation);
         jump.setDirection(0.0, 8.0);
-        side = 0;
-    }
-
-    @Override
-    public void updateInput(InputDeviceDirectional input)
-    {
-        side = input.getHorizontalDirection();
     }
 
     @Override
     public void update(double extrp)
     {
-        movement.setDestination(side * 3, 0);
+        final double side = input.getHorizontalDirection();
+        movement.setDestination(side * 3.0, 0);
         if (movement.getDirectionHorizontal() != 0)
         {
             mirrorable.mirror(movement.getDirectionHorizontal() < 0 ? Mirror.HORIZONTAL : Mirror.NONE);
-        }
-    }
-
-    /**
-     * Transition from {@link StateJump} to {@link StateIdle}.
-     */
-    private class TransitionJumpToIdle extends StateTransition implements StateTransitionInputDirectionalChecker
-    {
-        /**
-         * Create the transition.
-         */
-        public TransitionJumpToIdle()
-        {
-            super(MarioState.IDLE);
-        }
-
-        @Override
-        public boolean check(InputDeviceDirectional input)
-        {
-            return jump.getDirectionVertical() == 0;
         }
     }
 }

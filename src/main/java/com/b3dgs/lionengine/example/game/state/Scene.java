@@ -67,13 +67,12 @@ class Scene extends Sequence
     {
         camera.setView(0, 0, getWidth(), getHeight(), getHeight());
 
+        final Keyboard keyboard = services.add(getInputDevice(Keyboard.class));
+        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
+
         final Factory factory = services.create(Factory.class);
         final Mario mario = factory.create(Mario.MEDIA);
         handler.add(mario);
-
-        final Keyboard keyboard = services.add(getInputDevice(Keyboard.class));
-        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
-        mario.addInput(keyboard);
     }
 
     @Override

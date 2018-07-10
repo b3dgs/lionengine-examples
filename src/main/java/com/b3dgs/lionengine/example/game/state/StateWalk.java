@@ -23,26 +23,18 @@ import com.b3dgs.lionengine.Mirror;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Mirrorable;
 import com.b3dgs.lionengine.game.state.StateAbstract;
-import com.b3dgs.lionengine.game.state.StateInputDirectionalUpdater;
-import com.b3dgs.lionengine.game.state.StateTransition;
-import com.b3dgs.lionengine.game.state.StateTransitionInputDirectionalChecker;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Walk state implementation.
  */
-class StateWalk extends StateAbstract implements StateInputDirectionalUpdater
+class StateWalk extends StateAbstract
 {
-    /** Movement force. */
     private final Force movement;
-    /** Mirrorable reference. */
     private final Mirrorable mirrorable;
-    /** Animator reference. */
     private final Animator animator;
-    /** Animation reference. */
     private final Animation animation;
-    /** Movement side. */
-    private double side;
+    private final InputDeviceDirectional input;
 
     /**
      * Create the walk state.
@@ -53,13 +45,18 @@ class StateWalk extends StateAbstract implements StateInputDirectionalUpdater
     public StateWalk(Mario mario, Animation animation)
     {
         super(MarioState.WALK);
+
         this.animation = animation;
         mirrorable = mario.getFeature(Mirrorable.class);
         animator = mario.getSurface();
         movement = mario.getMovement();
-        addTransition(new TransitionWalkToIdle());
-        addTransition(new TransitionWalkToTurn());
-        addTransition(new TransitionWalkToJump());
+        input = mario.getInput();
+
+        addTransition(MarioState.IDLE, () -> input.getHorizontalDirection() == 0 && input.getVerticalDirection() == 0);
+        addTransition(MarioState.TURN,
+                      () -> input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() > 0
+                            || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() < 0);
+        addTransition(MarioState.JUMP, () -> input.getVerticalDirection() > 0);
     }
 
     @Override
@@ -68,20 +65,15 @@ class StateWalk extends StateAbstract implements StateInputDirectionalUpdater
         animator.play(animation);
         movement.setVelocity(0.5);
         movement.setSensibility(0.1);
-        side = 0;
-    }
-
-    @Override
-    public void updateInput(InputDeviceDirectional input)
-    {
-        side = input.getHorizontalDirection();
     }
 
     @Override
     public void update(double extrp)
     {
-        movement.setDestination(side * 3, 0);
+        final double side = input.getHorizontalDirection();
+        movement.setDestination(side * 3.0, 0);
         animator.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
+
         if (side < 0 && movement.getDirectionHorizontal() < 0)
         {
             mirrorable.mirror(Mirror.HORIZONTAL);
@@ -89,67 +81,6 @@ class StateWalk extends StateAbstract implements StateInputDirectionalUpdater
         else if (side > 0 && movement.getDirectionHorizontal() > 0)
         {
             mirrorable.mirror(Mirror.NONE);
-        }
-    }
-
-    /**
-     * Transition from {@link StateWalk} to {@link StateIdle}.
-     */
-    private class TransitionWalkToIdle extends StateTransition implements StateTransitionInputDirectionalChecker
-    {
-        /**
-         * Create the transition.
-         */
-        public TransitionWalkToIdle()
-        {
-            super(MarioState.IDLE);
-        }
-
-        @Override
-        public boolean check(InputDeviceDirectional input)
-        {
-            return input.getHorizontalDirection() == 0 && input.getVerticalDirection() == 0;
-        }
-    }
-
-    /**
-     * Transition from {@link StateWalk} to {@link StateTurn}.
-     */
-    private class TransitionWalkToTurn extends StateTransition implements StateTransitionInputDirectionalChecker
-    {
-        /**
-         * Create the transition.
-         */
-        public TransitionWalkToTurn()
-        {
-            super(MarioState.TURN);
-        }
-
-        @Override
-        public boolean check(InputDeviceDirectional input)
-        {
-            return input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() > 0
-                   || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() < 0;
-        }
-    }
-
-    /**
-     * Transition from {@link StateWalk} to {@link StateJump}.
-     */
-    private class TransitionWalkToJump extends StateTransition implements StateTransitionInputDirectionalChecker
-    {
-        /**
-         * Create the transition.
-         */
-        public TransitionWalkToJump()
-        {
-            super(MarioState.JUMP);
-        }
-
-        @Override
-        public boolean check(InputDeviceDirectional input)
-        {
-            return input.getVerticalDirection() > 0;
         }
     }
 }
