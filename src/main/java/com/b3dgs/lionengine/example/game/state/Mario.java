@@ -17,9 +17,11 @@
  */
 package com.b3dgs.lionengine.example.game.state;
 
+import java.util.Locale;
+
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Camera;
@@ -34,12 +36,9 @@ import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.body.Body;
 import com.b3dgs.lionengine.game.feature.body.BodyModel;
-import com.b3dgs.lionengine.game.state.StateAnimationUtil;
-import com.b3dgs.lionengine.game.state.StateFactory;
-import com.b3dgs.lionengine.game.state.StateHandler;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
+import com.b3dgs.lionengine.game.feature.state.State;
+import com.b3dgs.lionengine.game.feature.state.StateHandler;
 import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
-import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Implementation of our controllable entity.
@@ -50,12 +49,8 @@ class Mario extends FeaturableModel
     public static final Media MEDIA = Medias.create("Mario.xml");
     /** Ground location y. */
     static final int GROUND = 32;
-    private static final double GRAVITY = 6.0;
 
-    private final Force movement = new Force();
-    private final Force jump = new Force();
-    private final SpriteAnimated surface;
-    private final InputDeviceDirectional input;
+    private static final double GRAVITY = 6.0;
 
     /**
      * Constructor.
@@ -67,29 +62,30 @@ class Mario extends FeaturableModel
     {
         super();
 
-        input = services.get(InputDeviceDirectional.class);
-
+        final MarioModel model = addFeatureAndGet(new MarioModel(services, setup));
+        final Mirrorable mirrorable = addFeatureAndGet(new MirrorableModel());
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         transformable.teleport(160, GROUND);
 
-        final Mirrorable mirrorable = addFeatureAndGet(new MirrorableModel());
+        final StateHandler handler = addFeatureAndGet(new StateHandler(setup)
+        {
+            @Override
+            protected String getAnimationName(Class<? extends State> state)
+            {
+                return state.getSimpleName().replace("State", Constant.EMPTY_STRING).toLowerCase(Locale.ENGLISH);
+            }
+        });
 
-        surface = Drawable.loadSpriteAnimated(setup.getSurface(), 7, 1);
-        surface.setOrigin(Origin.CENTER_BOTTOM);
-        surface.setFrameOffsets(-1, 0);
-
-        final StateFactory factory = new StateFactory();
-        StateAnimationUtil.loadStates(MarioState.values(), factory, this, setup);
-
-        final StateHandler handler = new StateHandler(factory);
-        handler.changeState(MarioState.IDLE);
-
-        final Camera camera = services.get(Camera.class);
+        final Force movement = model.getMovement();
+        final Force jump = model.getJump();
 
         final Body body = addFeatureAndGet(new BodyModel());
         body.setVectors(movement, jump);
         body.setGravity(GRAVITY);
         body.setDesiredFps(60);
+
+        final SpriteAnimated surface = model.getSurface();
+        final Camera camera = services.get(Camera.class);
 
         addFeature(new RefreshableModel(extrp ->
         {
@@ -110,45 +106,5 @@ class Mario extends FeaturableModel
         }));
 
         addFeature(new DisplayableModel(surface::render));
-    }
-
-    /**
-     * Get the movement force.
-     * 
-     * @return The movement force.
-     */
-    public Force getMovement()
-    {
-        return movement;
-    }
-
-    /**
-     * Get the jump force.
-     * 
-     * @return The jump force.
-     */
-    public Force getJump()
-    {
-        return jump;
-    }
-
-    /**
-     * Get the surface.
-     * 
-     * @return The surface reference.
-     */
-    public SpriteAnimated getSurface()
-    {
-        return surface;
-    }
-
-    /**
-     * Get input.
-     * 
-     * @return The input.
-     */
-    public InputDeviceDirectional getInput()
-    {
-        return input;
     }
 }

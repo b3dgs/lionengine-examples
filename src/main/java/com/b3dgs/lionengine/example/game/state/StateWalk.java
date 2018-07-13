@@ -22,7 +22,7 @@ import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.Mirror;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Mirrorable;
-import com.b3dgs.lionengine.game.state.StateAbstract;
+import com.b3dgs.lionengine.game.feature.state.StateAbstract;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
@@ -42,9 +42,9 @@ class StateWalk extends StateAbstract
      * @param mario The mario reference.
      * @param animation The associated animation.
      */
-    public StateWalk(Mario mario, Animation animation)
+    public StateWalk(MarioModel mario, Animation animation)
     {
-        super(MarioState.WALK);
+        super();
 
         this.animation = animation;
         mirrorable = mario.getFeature(Mirrorable.class);
@@ -52,11 +52,11 @@ class StateWalk extends StateAbstract
         movement = mario.getMovement();
         input = mario.getInput();
 
-        addTransition(MarioState.IDLE, () -> input.getHorizontalDirection() == 0 && input.getVerticalDirection() == 0);
-        addTransition(MarioState.TURN,
+        addTransition(StateIdle.class, () -> input.getHorizontalDirection() == 0 && input.getVerticalDirection() == 0);
+        addTransition(StateTurn.class,
                       () -> input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() > 0
                             || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() < 0);
-        addTransition(MarioState.JUMP, () -> input.getVerticalDirection() > 0);
+        addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
     }
 
     @Override

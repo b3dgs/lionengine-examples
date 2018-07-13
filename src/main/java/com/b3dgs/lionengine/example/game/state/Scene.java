@@ -28,6 +28,7 @@ import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
 import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.state.StateHandler;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
 
@@ -72,6 +73,7 @@ class Scene extends Sequence
 
         final Factory factory = services.create(Factory.class);
         final Mario mario = factory.create(Mario.MEDIA);
+        mario.getFeature(StateHandler.class).changeState(StateIdle.class);
         handler.add(mario);
     }
 

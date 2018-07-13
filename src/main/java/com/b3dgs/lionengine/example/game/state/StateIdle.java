@@ -20,7 +20,7 @@ package com.b3dgs.lionengine.example.game.state;
 import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.game.Force;
-import com.b3dgs.lionengine.game.state.StateAbstract;
+import com.b3dgs.lionengine.game.feature.state.StateAbstract;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
@@ -38,17 +38,17 @@ class StateIdle extends StateAbstract
      * @param mario The mario reference.
      * @param animation The associated animation.
      */
-    public StateIdle(Mario mario, Animation animation)
+    public StateIdle(MarioModel mario, Animation animation)
     {
-        super(MarioState.IDLE);
+        super();
 
         this.animation = animation;
         animator = mario.getSurface();
         movement = mario.getMovement();
 
         final InputDeviceDirectional input = mario.getInput();
-        addTransition(MarioState.WALK, () -> input.getHorizontalDirection() != 0);
-        addTransition(MarioState.JUMP, () -> input.getVerticalDirection() > 0);
+        addTransition(StateWalk.class, () -> input.getHorizontalDirection() != 0);
+        addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
     }
 
     @Override

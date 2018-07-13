@@ -17,6 +17,6 @@
  */
 
 /**
- * This example will show how to use the {@link com.b3dgs.lionengine.game.state} API.
+ * This example will show how to use the {@link com.b3dgs.lionengine.game.feature.state} API.
  */
 package com.b3dgs.lionengine.example.game.state;

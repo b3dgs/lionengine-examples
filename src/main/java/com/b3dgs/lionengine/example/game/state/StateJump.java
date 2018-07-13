@@ -22,7 +22,7 @@ import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.Mirror;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.Mirrorable;
-import com.b3dgs.lionengine.game.state.StateAbstract;
+import com.b3dgs.lionengine.game.feature.state.StateAbstract;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
@@ -43,9 +43,9 @@ class StateJump extends StateAbstract
      * @param mario The mario reference.
      * @param animation The associated animation.
      */
-    public StateJump(Mario mario, Animation animation)
+    public StateJump(MarioModel mario, Animation animation)
     {
-        super(MarioState.JUMP);
+        super();
 
         this.animation = animation;
         mirrorable = mario.getFeature(Mirrorable.class);
@@ -54,7 +54,7 @@ class StateJump extends StateAbstract
         jump = mario.getJump();
         input = mario.getInput();
 
-        addTransition(MarioState.IDLE, () -> jump.getDirectionVertical() == 0);
+        addTransition(StateIdle.class, () -> jump.getDirectionVertical() == 0);
     }
 
     @Override
