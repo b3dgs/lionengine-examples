@@ -26,6 +26,7 @@ import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.game.background.BackgroundAbstract;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.graphic.engine.SourceResolutionProvider;
 
 /**
  * Game loop designed to handle our world.
@@ -37,8 +38,27 @@ class Scene extends Sequence
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final BackgroundAbstract background = new Swamp(NATIVE, 1.0, 1.0);
     private final Foreground foreground = new Foreground(NATIVE);
+    private final BackgroundAbstract background = new Swamp(new SourceResolutionProvider()
+    {
+        @Override
+        public int getWidth()
+        {
+            return NATIVE.getWidth();
+        }
+
+        @Override
+        public int getHeight()
+        {
+            return NATIVE.getHeight();
+        }
+
+        @Override
+        public int getRate()
+        {
+            return NATIVE.getRate();
+        }
+    }, 1.0, 1.0);
 
     private double y;
 
