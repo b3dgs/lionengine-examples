@@ -1,2 +1,2 @@
 # lionengine-examples
-LionEngine examples and showcases
+LionEngine examples and showcases grouped by thematics.
