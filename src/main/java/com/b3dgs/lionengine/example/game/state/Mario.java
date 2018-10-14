@@ -19,7 +19,6 @@ package com.b3dgs.lionengine.example.game.state;
 
 import java.util.Locale;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.game.DirectionNone;
@@ -50,7 +49,19 @@ class Mario extends FeaturableModel
     /** Ground location y. */
     static final int GROUND = 32;
 
+    private static final int PREFIX = State.class.getSimpleName().length();
     private static final double GRAVITY = 6.0;
+
+    /**
+     * Get animation name from state class.
+     * 
+     * @param state The state class.
+     * @return The animation name.
+     */
+    private static String getAnimationName(Class<? extends State> state)
+    {
+        return state.getSimpleName().substring(PREFIX).toLowerCase(Locale.ENGLISH);
+    }
 
     /**
      * Constructor.
@@ -67,15 +78,6 @@ class Mario extends FeaturableModel
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         transformable.teleport(160, GROUND);
 
-        final StateHandler handler = addFeatureAndGet(new StateHandler(setup)
-        {
-            @Override
-            protected String getAnimationName(Class<? extends State> state)
-            {
-                return state.getSimpleName().replace("State", Constant.EMPTY_STRING).toLowerCase(Locale.ENGLISH);
-            }
-        });
-
         final Force movement = model.getMovement();
         final Force jump = model.getJump();
 
@@ -87,6 +89,7 @@ class Mario extends FeaturableModel
         final SpriteAnimated surface = model.getSurface();
         final Camera camera = services.get(Camera.class);
 
+        final StateHandler handler = addFeatureAndGet(new StateHandler(setup, Mario::getAnimationName));
         addFeature(new RefreshableModel(extrp ->
         {
             handler.update(extrp);
