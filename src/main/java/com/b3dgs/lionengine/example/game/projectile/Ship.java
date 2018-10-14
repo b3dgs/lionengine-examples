@@ -39,6 +39,7 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableListener;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
+import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.Sprite;
 
@@ -151,7 +152,7 @@ class Ship extends FeaturableModel implements CollidableListener
     }
 
     @Override
-    public void notifyCollided(Collidable collidable)
+    public void notifyCollided(Collidable collidable, Collision collision)
     {
         collidable.getFeature(Identifiable.class).destroy();
     }

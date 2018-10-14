@@ -131,7 +131,7 @@ class Racket extends FeaturableModel implements CollidableListener
      */
 
     @Override
-    public void notifyCollided(Collidable collidable)
+    public void notifyCollided(Collidable collidable, Collision collision)
     {
         // Nothing to do
     }

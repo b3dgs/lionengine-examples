@@ -114,7 +114,7 @@ class Ball extends FeaturableModel implements CollidableListener
      */
 
     @Override
-    public void notifyCollided(Collidable other)
+    public void notifyCollided(Collidable other, Collision collision)
     {
         final Transformable transformable = collidable.getFeature(Transformable.class);
         final Transformable racket = other.getFeature(Transformable.class);
