@@ -18,7 +18,6 @@
 package com.b3dgs.lionengine.example.helloworld;
 
 import com.b3dgs.lionengine.Align;
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Resolution;
@@ -27,7 +26,6 @@ import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.TextStyle;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
@@ -39,7 +37,7 @@ class Scene extends Sequence
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final Text text = Graphics.createText(Constant.FONT_SANS_SERIF, 12, TextStyle.NORMAL);
+    private final Text text = Graphics.createText(12);
 
     /**
      * Constructor.

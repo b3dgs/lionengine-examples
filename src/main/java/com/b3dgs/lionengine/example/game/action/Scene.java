@@ -34,7 +34,6 @@ import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.TextStyle;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.Image;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
@@ -49,7 +48,7 @@ class Scene extends Sequence
     private static final Resolution NATIVE = new Resolution(320, 200, 60);
 
     private final Services services = new Services();
-    private final Text text = services.add(Graphics.createText(Constant.FONT_SANS_SERIF, 9, TextStyle.NORMAL));
+    private final Text text = services.add(Graphics.createText(9));
     private final Handler handler = services.create(Handler.class);
     private final Cursor cursor = services.create(Cursor.class);
     private final Mouse mouse = getInputDevice(Mouse.class);

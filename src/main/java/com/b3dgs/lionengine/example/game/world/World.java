@@ -19,14 +19,12 @@ package com.b3dgs.lionengine.example.game.world;
 
 import java.io.IOException;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.TextStyle;
 import com.b3dgs.lionengine.io.FileReading;
 import com.b3dgs.lionengine.io.FileWriting;
 
@@ -35,7 +33,7 @@ import com.b3dgs.lionengine.io.FileWriting;
  */
 class World extends WorldGame
 {
-    private final Text text = Graphics.createText(Constant.FONT_SERIF, 12, TextStyle.NORMAL);
+    private final Text text = Graphics.createText(12);
     private String str;
 
     /**
