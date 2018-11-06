@@ -17,18 +17,20 @@
  */
 package com.b3dgs.lionengine.example.game.collision;
 
+import com.b3dgs.lionengine.Updatable;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
-import com.b3dgs.lionengine.game.feature.Refreshable;
 import com.b3dgs.lionengine.game.feature.Services;
 
 /**
  * Player controlling implementation.
  */
-class PlayerController extends FeatureModel implements Refreshable
+@FeatureInterface
+class PlayerController extends FeatureModel implements Updatable
 {
     private static final double SPEED = 3;
     private static final double JUMP = 8.0;

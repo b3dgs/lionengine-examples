@@ -20,6 +20,7 @@ package com.b3dgs.lionengine.example.game.collision;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.Displayable;
 import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Transformable;
@@ -29,6 +30,7 @@ import com.b3dgs.lionengine.graphic.drawable.Sprite;
 /**
  * Player rendering implementation.
  */
+@FeatureInterface
 class PlayerRenderer extends FeatureModel implements Displayable
 {
     private final Sprite surface;

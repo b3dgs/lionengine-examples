@@ -19,6 +19,7 @@ package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
@@ -29,6 +30,7 @@ import com.b3dgs.lionengine.io.InputDeviceDirectional;
 /**
  * Data model of our object.
  */
+@FeatureInterface
 class MarioModel extends FeatureModel
 {
     private final Force movement = new Force();

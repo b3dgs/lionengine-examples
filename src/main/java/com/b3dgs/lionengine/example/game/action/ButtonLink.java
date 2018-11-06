@@ -20,13 +20,15 @@ package com.b3dgs.lionengine.example.game.action;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Identifiable;
 
 /**
  * Button linking implementation.
  */
-public class ButtonLink extends FeatureModel
+@FeatureInterface
+class ButtonLink extends FeatureModel
 {
     private final Collection<Button> toDelete = new ArrayList<>();
 

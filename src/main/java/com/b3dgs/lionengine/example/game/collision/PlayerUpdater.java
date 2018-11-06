@@ -21,6 +21,7 @@ import com.b3dgs.lionengine.game.DirectionNone;
 import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.Force;
 import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Refreshable;
 import com.b3dgs.lionengine.game.feature.Services;
@@ -35,6 +36,7 @@ import com.b3dgs.lionengine.game.feature.tile.map.collision.TileCollidableListen
 /**
  * Player updating implementation.
  */
+@FeatureInterface
 class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableListener
 {
     private static final double GRAVITY = 5.0;

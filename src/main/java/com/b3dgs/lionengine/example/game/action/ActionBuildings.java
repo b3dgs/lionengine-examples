@@ -19,6 +19,7 @@ package com.b3dgs.lionengine.example.game.action;
 
 import com.b3dgs.lionengine.game.Action;
 import com.b3dgs.lionengine.game.feature.Factory;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
@@ -26,6 +27,7 @@ import com.b3dgs.lionengine.game.feature.Setup;
 /**
  * Buildings action implementation.
  */
+@FeatureInterface
 class ActionBuildings extends ActionFeature
 {
     /**
