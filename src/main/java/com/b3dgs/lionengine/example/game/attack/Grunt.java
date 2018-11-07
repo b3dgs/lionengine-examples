@@ -20,6 +20,7 @@ package com.b3dgs.lionengine.example.game.attack;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
+import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.AnimatableModel;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
@@ -75,7 +76,7 @@ class Grunt extends FeaturableModel implements AttackerChecker, AttackerListener
         attacker.setAttackDistance(16, 16);
         attacker.setAttackDamages(1, 5);
         attacker.setAttackFrame(1);
-        attacker.setAttackTimer(1000);
+        attacker.setAttackTimer(60);
 
         final Viewer viewer = services.get(Viewer.class);
 
@@ -126,7 +127,7 @@ class Grunt extends FeaturableModel implements AttackerChecker, AttackerListener
     @Override
     public void notifyAttackStarted(Transformable target)
     {
-        System.out.println("Attack !");
+        Verbose.info("Attack !");
     }
 
     @Override
