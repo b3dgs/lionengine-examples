@@ -21,6 +21,7 @@ import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.UtilMath;
+import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.Tiled;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
@@ -119,14 +120,14 @@ class Peon extends FeaturableModel implements ExtractorListener
     @Override
     public void notifyStartExtraction(Enum<?> type, Tiled resourceLocation)
     {
-        System.out.println("Started !");
+        Verbose.info("Started !");
         visible = false;
     }
 
     @Override
     public void notifyExtracted(Enum<?> type, int currentQuantity)
     {
-        System.out.println("Extracted ! " + currentQuantity);
+        Verbose.info("Extracted ! " + currentQuantity);
     }
 
     @Override
@@ -144,6 +145,6 @@ class Peon extends FeaturableModel implements ExtractorListener
     @Override
     public void notifyDroppedOff(Enum<?> type, int droppedQuantity)
     {
-        System.out.println("done !" + droppedQuantity);
+        Verbose.info("done !" + droppedQuantity);
     }
 }
