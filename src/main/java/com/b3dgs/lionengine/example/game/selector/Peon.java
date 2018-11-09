@@ -33,8 +33,8 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collision;
-import com.b3dgs.lionengine.game.feature.collidable.selector.SelectorListener;
-import com.b3dgs.lionengine.geom.Area;
+import com.b3dgs.lionengine.game.feature.collidable.selector.Selectable;
+import com.b3dgs.lionengine.game.feature.collidable.selector.SelectableModel;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
@@ -42,13 +42,10 @@ import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 /**
  * Peon entity implementation.
  */
-class Peon extends FeaturableModel implements SelectorListener
+class Peon extends FeaturableModel
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
-
-    private final Collidable collidable;
-    private boolean selected;
 
     /**
      * Create a peon.
@@ -63,7 +60,7 @@ class Peon extends FeaturableModel implements SelectorListener
         addFeature(new LayerableModel(services, setup));
 
         final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
-        collidable = addFeatureAndGet(new CollidableModel(services, setup));
+        final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
 
         final FramesConfig config = FramesConfig.imports(setup);
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(),
@@ -75,6 +72,7 @@ class Peon extends FeaturableModel implements SelectorListener
         transformable.teleport(432, 272);
         collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.BOTTOM_LEFT);
+        collidable.setGroup(1);
 
         final Viewer viewer = services.get(Viewer.class);
 
@@ -83,10 +81,12 @@ class Peon extends FeaturableModel implements SelectorListener
             surface.setLocation(viewer, transformable);
         }));
 
+        final Selectable selectable = addFeatureAndGet(new SelectableModel());
+
         addFeature(new DisplayableModel(g ->
         {
             surface.render(g);
-            if (selected)
+            if (selectable.isSelected())
             {
                 g.setColor(ColorRgba.GREEN);
                 g.drawRect(viewer,
@@ -98,28 +98,5 @@ class Peon extends FeaturableModel implements SelectorListener
                            false);
             }
         }));
-    }
-
-    /*
-     * SelectorListener
-     */
-
-    @Override
-    public void notifySelectionStarted(Area selection)
-    {
-        selected = false;
-    }
-
-    @Override
-    public void notifySelectionDone(Area selection)
-    {
-        for (final Area area : collidable.getCollisionBounds())
-        {
-            if (selection.contains(area) || selection.intersects(area))
-            {
-                selected = true;
-                break;
-            }
-        }
     }
 }

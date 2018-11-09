@@ -33,6 +33,8 @@ import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.LayerableModel;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.collidable.Collidable;
+import com.b3dgs.lionengine.game.feature.collidable.ComponentCollision;
 import com.b3dgs.lionengine.game.feature.collidable.selector.Selector;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
@@ -75,6 +77,7 @@ class Scene extends Sequence
 
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
+        handler.addComponent(new ComponentCollision());
 
         keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
 
@@ -109,7 +112,7 @@ class Scene extends Sequence
         selector.setClickableArea(camera);
         selector.setSelectionColor(ColorRgba.GREEN);
         selector.setClickSelection(MouseAwt.LEFT);
-        selector.addListener(peon);
+        selector.getFeature(Collidable.class).addAccept(1);
         handler.add(selector);
     }
 
