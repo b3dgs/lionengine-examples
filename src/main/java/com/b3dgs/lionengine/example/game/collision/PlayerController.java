@@ -47,6 +47,8 @@ class PlayerController extends FeatureModel implements Updatable
      */
     public PlayerController(Services services, PlayerModel model)
     {
+        super();
+
         movement = model.getMovement();
         jump = model.getJump();
         keyboard = services.get(Keyboard.class);

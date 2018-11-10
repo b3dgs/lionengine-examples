@@ -68,7 +68,7 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
 
         transformable.teleport(100, 0);
 
-        body.setDesiredFps(60);
+        body.setDesiredFps(Scene.NATIVE.getRate());
         body.setGravity(GRAVITY);
         body.setVectors(movement, jump);
     }
@@ -77,8 +77,8 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
     public void update(double extrp)
     {
         controller.update(extrp);
-        movement.update(extrp);
         jump.update(extrp);
+        movement.update(extrp);
         body.update(extrp);
         tileCollidable.update(extrp);
 

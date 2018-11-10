@@ -41,6 +41,8 @@ public class PlayerModel
      */
     public PlayerModel(Setup setup)
     {
+        super();
+
         surface = Drawable.loadSprite(setup.getSurface());
         surface.setOrigin(Origin.CENTER_BOTTOM);
 
