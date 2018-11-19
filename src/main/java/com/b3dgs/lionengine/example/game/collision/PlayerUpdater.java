@@ -39,7 +39,7 @@ import com.b3dgs.lionengine.game.feature.tile.map.collision.TileCollidableListen
 @FeatureInterface
 class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableListener
 {
-    private static final double GRAVITY = 5.0;
+    private static final double GRAVITY = 5.5;
 
     private final Force movement;
     private final Force jump;
@@ -66,10 +66,11 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
     {
         super.prepare(provider);
 
-        transformable.teleport(100, 0);
+        transformable.teleport(190, 0);
 
         body.setDesiredFps(Scene.NATIVE.getRate());
         body.setGravity(GRAVITY);
+        body.setGravityMax(6.5);
         body.setVectors(movement, jump);
     }
 

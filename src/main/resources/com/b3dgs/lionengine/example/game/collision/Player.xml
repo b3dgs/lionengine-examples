@@ -9,5 +9,7 @@
         <lionengine:group>slope_left_1</lionengine:group>
         <lionengine:group>slope_right_0</lionengine:group>
         <lionengine:group>slope_right_1</lionengine:group>
+        <lionengine:group>steep_left</lionengine:group>
+        <lionengine:group>steep_right</lionengine:group>
     </lionengine:category>
 </lionengine:object>

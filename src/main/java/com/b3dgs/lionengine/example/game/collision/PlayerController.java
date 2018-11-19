@@ -32,7 +32,7 @@ import com.b3dgs.lionengine.game.feature.Services;
 @FeatureInterface
 class PlayerController extends FeatureModel implements Updatable
 {
-    private static final double SPEED = 3;
+    private static final double SPEED = 1;
     private static final double JUMP = 8.0;
 
     private final Force movement;
