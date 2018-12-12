@@ -45,9 +45,6 @@ public class PlayerModel
 
         surface = Drawable.loadSprite(setup.getSurface());
         surface.setOrigin(Origin.CENTER_BOTTOM);
-
-        jump.setVelocity(0.1);
-        jump.setDestination(0.0, 0.0);
     }
 
     /**

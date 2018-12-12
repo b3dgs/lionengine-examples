@@ -82,21 +82,22 @@ class Mario extends FeaturableModel
         final Force jump = model.getJump();
 
         final Body body = addFeatureAndGet(new BodyModel());
-        body.setVectors(movement, jump);
         body.setGravity(GRAVITY);
         body.setDesiredFps(60);
 
         final SpriteAnimated surface = model.getSurface();
         final Camera camera = services.get(Camera.class);
 
-        final StateHandler handler = addFeatureAndGet(new StateHandler(setup, Mario::getAnimationName));
+        final StateHandler state = addFeatureAndGet(new StateHandler(setup, Mario::getAnimationName));
         addFeature(new RefreshableModel(extrp ->
         {
-            handler.update(extrp);
+            state.update(extrp);
             mirrorable.update(extrp);
             movement.update(extrp);
             jump.update(extrp);
             body.update(extrp);
+            state.postUpdate();
+            transformable.moveLocation(extrp, body, movement, jump);
             if (transformable.getY() < GROUND)
             {
                 transformable.teleportY(GROUND);

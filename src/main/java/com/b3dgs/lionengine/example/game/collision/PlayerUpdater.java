@@ -27,9 +27,9 @@ import com.b3dgs.lionengine.game.feature.Refreshable;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.body.Body;
-import com.b3dgs.lionengine.game.feature.tile.Tile;
 import com.b3dgs.lionengine.game.feature.tile.map.collision.Axis;
 import com.b3dgs.lionengine.game.feature.tile.map.collision.CollisionCategory;
+import com.b3dgs.lionengine.game.feature.tile.map.collision.CollisionResult;
 import com.b3dgs.lionengine.game.feature.tile.map.collision.TileCollidable;
 import com.b3dgs.lionengine.game.feature.tile.map.collision.TileCollidableListener;
 
@@ -57,6 +57,8 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
      */
     public PlayerUpdater(Services services, PlayerModel model)
     {
+        super();
+
         movement = model.getMovement();
         jump = model.getJump();
     }
@@ -68,10 +70,11 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
 
         transformable.teleport(190, 0);
 
+        jump.setVelocity(0.1);
+
         body.setDesiredFps(Scene.NATIVE.getRate());
         body.setGravity(GRAVITY);
-        body.setGravityMax(6.5);
-        body.setVectors(movement, jump);
+        body.setGravityMax(GRAVITY);
     }
 
     @Override
@@ -81,6 +84,7 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
         jump.update(extrp);
         movement.update(extrp);
         body.update(extrp);
+        transformable.moveLocation(extrp, body, movement, jump);
         tileCollidable.update(extrp);
 
         if (transformable.getY() < 0)
@@ -91,12 +95,13 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
     }
 
     @Override
-    public void notifyTileCollided(Tile tile, CollisionCategory category)
+    public void notifyTileCollided(CollisionResult result, CollisionCategory category)
     {
         if (Axis.Y == category.getAxis() && transformable.getY() < transformable.getOldY())
         {
             body.resetGravity();
             jump.setDirection(DirectionNone.INSTANCE);
+            tileCollidable.apply(result);
         }
     }
 }
