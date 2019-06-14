@@ -1,10 +1,10 @@
 /*
  * Copyright (C) 2013-2017 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,8 +12,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.b3dgs.lionengine.example.pong;
 
@@ -64,8 +63,8 @@ class Racket extends FeaturableModel implements CollidableListener
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.MIDDLE);
-        collidable.addAccept(1);
-        collidable.setGroup(0);
+        collidable.addAccept(Integer.valueOf(1));
+        collidable.setGroup(Integer.valueOf(0));
 
         transformable.teleportY(Scene.NATIVE.getHeight() / 2
                                 - transformable.getHeight() / 2
@@ -131,7 +130,7 @@ class Racket extends FeaturableModel implements CollidableListener
      */
 
     @Override
-    public void notifyCollided(Collidable collidable, Collision collision)
+    public void notifyCollided(Collidable collidable, Collision with, Collision by)
     {
         // Nothing to do
     }

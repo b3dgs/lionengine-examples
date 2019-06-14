@@ -1,10 +1,10 @@
 /*
  * Copyright (C) 2013-2017 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,8 +12,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.b3dgs.lionengine.example.game.raster;
 
@@ -21,6 +20,7 @@ import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Medias;
+import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.awt.Keyboard;
@@ -106,14 +106,15 @@ class Scene extends Sequence
                                                                     Medias.create("raster.xml"));
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 4, 4);
         surface.play(new Animation("default", 1, 10, 0.2, false, true));
+
         final Featurable featurable = new FeaturableModel();
         featurable.addFeature(new LayerableModel(1));
         featurable.addFeature(new MirrorableModel());
         featurable.addFeature(new AnimatableModel(surface));
 
         final Transformable transformable = featurable.addFeatureAndGet(new TransformableModel());
-        final Rasterable rasterable = new RasterableModel(services, setup);
-        featurable.addFeature(rasterable);
+        final Rasterable rasterable = featurable.addFeatureAndGet(new RasterableModel(services, setup));
+        rasterable.setOrigin(Origin.TOP_LEFT);
         featurable.addFeature(new RefreshableModel(extrp ->
         {
             transformable.setLocationY(UtilMath.sin(count) * 120 + 160);
