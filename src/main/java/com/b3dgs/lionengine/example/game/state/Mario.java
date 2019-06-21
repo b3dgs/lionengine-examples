@@ -88,14 +88,17 @@ class Mario extends FeaturableModel
         final Camera camera = services.get(Camera.class);
 
         final StateHandler state = addFeatureAndGet(new StateHandler(setup, Mario::getAnimationName));
+        state.changeState(StateIdle.class);
+
         addFeature(new RefreshableModel(extrp ->
         {
             state.update(extrp);
-            mirrorable.update(extrp);
             movement.update(extrp);
             jump.update(extrp);
             body.update(extrp);
             state.postUpdate();
+            mirrorable.update(extrp);
+
             transformable.moveLocation(extrp, body, movement, jump);
             if (transformable.getY() < GROUND)
             {

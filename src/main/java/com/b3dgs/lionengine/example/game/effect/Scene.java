@@ -18,6 +18,7 @@ package com.b3dgs.lionengine.example.game.effect;
 
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
+import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
@@ -34,11 +35,12 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Scene implementation.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
+    /** Native resolution. */
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
+
     private final Services services = new Services();
     private final Factory factory = services.create(Factory.class);
     private final Camera camera = services.create(Camera.class);
@@ -52,10 +54,11 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, new Resolution(320, 240, 60));
+        super(context, NATIVE);
 
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
+        handler.addListener(factory);
 
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
@@ -64,6 +67,7 @@ class Scene extends Sequence
     public void load()
     {
         camera.setView(0, 0, getWidth(), getHeight(), getHeight());
+        factory.createCache(Medias.create(""), 20);
     }
 
     @Override

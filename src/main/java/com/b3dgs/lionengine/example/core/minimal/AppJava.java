@@ -33,13 +33,11 @@ public class AppJava
      */
     public static void main(String[] args)
     {
-        // Start engine EngineAwt.start("AppJava", Version.create(1, 0, 0), "resources");
         // The engine is initialized with our parameters:
         // - The name of our program: "AppJava"
         // - The program version: "1.0.0"
-        // - The main resources directory, relative to the execution directory: ./resources/
+        // - The resources location, relative to the class package: AppJava
         // This mean that any resources loaded with Media.get(...) will have this directory as prefix.
-        // To load resources from JAR, this alternative is preferred if external folder is not possible:
         EngineAwt.start(AppJava.class.getSimpleName(), Version.create(1, 0, 0), AppJava.class);
 
         // Final configuration (rendering will be scaled by 2 considering source and output resolution).

@@ -28,8 +28,6 @@ import com.b3dgs.lionengine.graphic.Graphics;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppHandler
 {

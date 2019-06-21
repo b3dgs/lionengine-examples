@@ -16,6 +16,6 @@
  */
 
 /**
- * This example will show how to make a simple pong game, playing against the CPU.
+ * This example will show how to make a simple pong game, playing against the computer.
  */
 package com.b3dgs.lionengine.example.pong;

@@ -17,15 +17,12 @@
 package com.b3dgs.lionengine.example.game.effect;
 
 import com.b3dgs.lionengine.Config;
-import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Version;
 import com.b3dgs.lionengine.awt.graphic.EngineAwt;
 import com.b3dgs.lionengine.graphic.engine.Loader;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppEffect
 {
@@ -37,7 +34,6 @@ public class AppEffect
     public static void main(String[] args)
     {
         EngineAwt.start(AppEffect.class.getSimpleName(), Version.create(1, 0, 0), AppEffect.class);
-        final Resolution output = new Resolution(640, 480, 60);
-        Loader.start(Config.windowed(output), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
     }
 }

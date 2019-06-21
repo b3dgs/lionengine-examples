@@ -17,15 +17,12 @@
 package com.b3dgs.lionengine.example.game.projectile;
 
 import com.b3dgs.lionengine.Config;
-import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Version;
 import com.b3dgs.lionengine.awt.graphic.EngineAwt;
 import com.b3dgs.lionengine.graphic.engine.Loader;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppProjectile
 {
@@ -37,7 +34,6 @@ public class AppProjectile
     public static void main(String[] args)
     {
         EngineAwt.start(AppProjectile.class.getSimpleName(), Version.create(1, 0, 0), AppProjectile.class);
-        final Resolution output = new Resolution(640, 480, 60);
-        Loader.start(Config.windowed(output), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
     }
 }

@@ -17,24 +17,13 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.Mirror;
-import com.b3dgs.lionengine.game.Force;
-import com.b3dgs.lionengine.game.feature.Mirrorable;
-import com.b3dgs.lionengine.game.feature.state.StateAbstract;
-import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Walk state implementation.
  */
-class StateWalk extends StateAbstract
+class StateWalk extends StateBase
 {
-    private final Force movement;
-    private final Mirrorable mirrorable;
-    private final Animator animator;
-    private final Animation animation;
-    private final InputDeviceDirectional input;
-
     /**
      * Create the walk state.
      * 
@@ -43,15 +32,9 @@ class StateWalk extends StateAbstract
      */
     public StateWalk(MarioModel mario, Animation animation)
     {
-        super();
+        super(mario, animation);
 
-        this.animation = animation;
-        mirrorable = mario.getFeature(Mirrorable.class);
-        animator = mario.getSurface();
-        movement = mario.getMovement();
-        input = mario.getInput();
-
-        addTransition(StateIdle.class, () -> input.getHorizontalDirection() == 0 && input.getVerticalDirection() == 0);
+        addTransition(StateIdle.class, () -> Double.compare(movement.getDirectionHorizontal(), 0.0) == 0);
         addTransition(StateTurn.class,
                       () -> input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() > 0
                             || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() < 0);
@@ -61,7 +44,8 @@ class StateWalk extends StateAbstract
     @Override
     public void enter()
     {
-        animator.play(animation);
+        super.enter();
+
         movement.setVelocity(0.5);
         movement.setSensibility(0.1);
     }

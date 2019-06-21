@@ -56,11 +56,11 @@ class Projectile extends FeaturableModel
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         final Launchable launchable = addFeatureAndGet(new LaunchableModel());
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
-        collidable.setOrigin(Origin.MIDDLE);
+        collidable.setOrigin(Origin.CENTER_BOTTOM);
         collidable.setGroup(Integer.valueOf(0));
 
         final Sprite sprite = Drawable.loadSprite(setup.getSurface());
-        sprite.setOrigin(Origin.MIDDLE);
+        sprite.setOrigin(Origin.CENTER_BOTTOM);
 
         final Viewer viewer = services.get(Viewer.class);
 

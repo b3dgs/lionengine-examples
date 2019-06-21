@@ -33,11 +33,12 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Scene implementation.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
+    /** Native resolution. */
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
+
     private final Services services = new Services();
     private final Handler handler = services.create(Handler.class);
 
@@ -48,7 +49,7 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, new Resolution(320, 240, 60));
+        super(context, NATIVE);
 
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
@@ -65,13 +66,13 @@ class Scene extends Sequence
 
         final Factory factory = services.create(Factory.class);
         final Ship ship1 = factory.create(Ship.MEDIA);
-        final Ship ship2 = factory.create(Ship.MEDIA);
-        handler.add(ship1);
-        handler.add(ship2);
-
         ship1.mirror();
+        handler.add(ship1);
+
+        final Ship ship2 = factory.create(Ship.MEDIA);
         ship1.setTarget(ship2);
         ship2.setTarget(ship1);
+        handler.add(ship2);
     }
 
     @Override

@@ -49,6 +49,7 @@ class Ship extends FeaturableModel implements CollidableListener
 {
     /** Media. */
     public static final Media MEDIA = Medias.create("Ship.xml");
+    
     private static int group = 1;
 
     private final double speed = UtilRandom.getRandomDouble() / 1.5 + 0.75;
@@ -75,12 +76,12 @@ class Ship extends FeaturableModel implements CollidableListener
         addFeature(new LayerableModel(1));
 
         sprite = Drawable.loadSprite(setup.getSurface());
-        sprite.setOrigin(Origin.MIDDLE);
+        sprite.setOrigin(Origin.CENTER_BOTTOM);
 
         transformable.teleport(x + UtilMath.cos(location * 1.5) * 60, y + UtilMath.sin(location * 2) * 30);
 
         collidable = addFeatureAndGet(new CollidableModel(services, setup));
-        collidable.setOrigin(Origin.MIDDLE);
+        collidable.setOrigin(Origin.CENTER_BOTTOM);
         collidable.setGroup(Integer.valueOf(group++));
 
         final Factory factory = services.get(Factory.class);

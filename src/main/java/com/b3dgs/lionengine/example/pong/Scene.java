@@ -33,13 +33,11 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * This is where the game loop is running.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
     /** Native resolution. */
-    static final Resolution NATIVE = new Resolution(320, 240, 60);
+    public static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Services services = new Services();
     private final Factory factory = services.create(Factory.class);

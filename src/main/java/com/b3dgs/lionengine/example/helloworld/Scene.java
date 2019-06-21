@@ -34,8 +34,9 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
  */
 class Scene extends Sequence
 {
+    /** Native resolution. */
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
-
+    /** Text output. */
     private final Text text = Graphics.createText(12);
 
     /**

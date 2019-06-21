@@ -57,17 +57,18 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Game loop designed to handle our world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
-    private static final Resolution NATIVE = new Resolution(320, 240, 60);
+    /** Native resolution. */
+    static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Services services = new Services();
     private final Camera camera = services.create(Camera.class);
     private final Handler handler = services.create(Handler.class);
     private final MapTile map = services.create(MapTileGame.class);
+    private final MapTileViewer mapViewer = map.addFeatureAndGet(new MapTileViewerModel(services));
+    private final MapTileRastered mapRaster = map.addFeatureAndGet(new MapTileRasteredModel(services));
     private final Mouse mouse;
 
     private boolean useRaster = true;
@@ -92,8 +93,6 @@ class Scene extends Sequence
     @Override
     public void load()
     {
-        final MapTileViewer mapViewer = map.addFeatureAndGet(new MapTileViewerModel(services));
-        final MapTileRastered mapRaster = map.addFeatureAndGet(new MapTileRasteredModel(services));
         handler.add(map);
         map.create(Medias.create("level.png"), 16, 16, 16);
         mapRaster.loadSheets(Medias.create("raster.xml"), false);
@@ -105,22 +104,22 @@ class Scene extends Sequence
         final SetupSurfaceRastered setup = new SetupSurfaceRastered(Medias.create("object.xml"),
                                                                     Medias.create("raster.xml"));
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 4, 4);
-        surface.play(new Animation("default", 1, 10, 0.2, false, true));
 
         final Featurable featurable = new FeaturableModel();
         featurable.addFeature(new LayerableModel(1));
         featurable.addFeature(new MirrorableModel());
         featurable.addFeature(new AnimatableModel(surface));
+        surface.play(new Animation(Animation.DEFAULT_NAME, 1, 10, 0.2, false, true));
 
         final Transformable transformable = featurable.addFeatureAndGet(new TransformableModel());
         final Rasterable rasterable = featurable.addFeatureAndGet(new RasterableModel(services, setup));
-        rasterable.setOrigin(Origin.TOP_LEFT);
+        rasterable.setOrigin(Origin.MIDDLE);
         featurable.addFeature(new RefreshableModel(extrp ->
         {
-            transformable.setLocationY(UtilMath.sin(count) * 120 + 160);
-            surface.setLocation(camera, transformable);
+            transformable.setLocationY(UtilMath.sin(count) * 100 + 130);
             rasterable.update(extrp);
             surface.update(extrp);
+            surface.setLocation(camera, transformable);
         }));
         featurable.addFeature(new DisplayableModel(g ->
         {
@@ -148,11 +147,11 @@ class Scene extends Sequence
             useRaster = !useRaster;
             if (useRaster)
             {
-                map.getFeature(MapTileViewer.class).addRenderer(map.getFeature(MapTileRastered.class));
+                mapViewer.addRenderer(mapRaster);
             }
             else
             {
-                map.getFeature(MapTileViewer.class).removeRenderer(map.getFeature(MapTileRastered.class));
+                mapViewer.removeRenderer(mapRaster);
             }
         }
     }

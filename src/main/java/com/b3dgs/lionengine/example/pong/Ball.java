@@ -42,15 +42,15 @@ class Ball extends FeaturableModel implements CollidableListener
 {
     /** Racket media. */
     public static final Media MEDIA = Medias.create("Ball.xml");
-    /** Ball color. */
-    private static final ColorRgba COLOR = ColorRgba.GRAY;
 
+    /** Transformable reference. */
+    private final Transformable transformable;
     /** Collidable reference. */
     private final Collidable collidable;
-    /** Current force. */
-    private final Force force;
     /** Speed. */
-    private final double speed;
+    private final double speed = 3.0;
+    /** Current force. */
+    private final Force force = new Force(-speed, 0.0);
 
     /**
      * Create an object.
@@ -64,19 +64,18 @@ class Ball extends FeaturableModel implements CollidableListener
 
         final Viewer viewer = services.get(Viewer.class);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
+        transformable = addFeatureAndGet(new TransformableModel(setup));
         collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.MIDDLE);
         collidable.setGroup(Integer.valueOf(1));
         collidable.addAccept(Integer.valueOf(0));
+        collidable.setCollisionVisibility(false);
 
-        speed = 3.0;
-        force = new Force(-speed, 0.0);
         force.setDestination(-speed, 0.0);
         force.setVelocity(speed);
 
-        transformable.teleport(320 / 2, 220 / 2);
+        transformable.teleport(320.0 / 2.0, 220.0 / 2.0);
 
         addFeature(new RefreshableModel(extrp ->
         {
@@ -96,7 +95,7 @@ class Ball extends FeaturableModel implements CollidableListener
 
         addFeature(new DisplayableModel(g ->
         {
-            g.setColor(COLOR);
+            g.setColor(ColorRgba.GRAY);
             g.drawOval(viewer,
                        Origin.MIDDLE,
                        (int) transformable.getX(),
@@ -108,26 +107,20 @@ class Ball extends FeaturableModel implements CollidableListener
         }));
     }
 
-    /*
-     * CollidableListener
-     */
-
     @Override
     public void notifyCollided(Collidable other, Collision with, Collision by)
     {
-        final Transformable transformable = collidable.getFeature(Transformable.class);
         final Transformable racket = other.getFeature(Transformable.class);
 
         int side = 0;
         if (transformable.getX() < transformable.getOldX())
         {
-            transformable.teleportX(racket.getX() + racket.getWidth() / 2 + transformable.getWidth() / 2);
+            transformable.teleportX(racket.getX() + racket.getWidth() / 2 + transformable.getWidth() / 2 + 1);
             side = 1;
-
         }
         if (transformable.getX() > transformable.getOldX())
         {
-            transformable.teleportX(racket.getX() - racket.getWidth() / 2 - transformable.getWidth() - 2);
+            transformable.teleportX(racket.getX() - transformable.getWidth());
             side = -1;
         }
 

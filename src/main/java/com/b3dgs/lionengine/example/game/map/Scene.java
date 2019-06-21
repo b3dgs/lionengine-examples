@@ -35,8 +35,6 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * Game loop designed to handle our world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
@@ -49,7 +47,7 @@ class Scene extends Sequence
     private final MapTileViewer mapViewer = map.addFeatureAndGet(new MapTileViewerModel(services));
     private final Minimap minimap = new Minimap(map);
 
-    private double speed;
+    private double speed = 3;
     private int size;
 
     /**
@@ -77,7 +75,6 @@ class Scene extends Sequence
         camera.setLimits(map);
 
         size = map.getWidth() - camera.getWidth();
-        speed = 3;
     }
 
     @Override

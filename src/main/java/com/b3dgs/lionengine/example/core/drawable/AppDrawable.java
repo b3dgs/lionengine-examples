@@ -24,8 +24,6 @@ import com.b3dgs.lionengine.graphic.engine.Loader;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppDrawable
 {
@@ -37,7 +35,6 @@ public class AppDrawable
     public static void main(String[] args)
     {
         EngineAwt.start(AppDrawable.class.getSimpleName(), Version.create(1, 0, 0), AppDrawable.class);
-        final Resolution output = new Resolution(640, 480, 60);
-        Loader.start(Config.windowed(output), Scene.class);
+        Loader.start(Config.windowed(new Resolution(640, 480, 60)), Scene.class);
     }
 }

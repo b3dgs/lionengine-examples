@@ -29,8 +29,6 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * This is where the game loop is running.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
@@ -72,7 +70,6 @@ class Scene extends Sequence
     @Override
     public void render(Graphic g)
     {
-        g.clear(0, 0, getWidth(), getHeight());
         image.render(g);
     }
 }

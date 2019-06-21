@@ -17,6 +17,7 @@
 package com.b3dgs.lionengine.example.core.drawable;
 
 import com.b3dgs.lionengine.Animation;
+import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Medias;
@@ -36,8 +37,6 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
  * This is where the game loop is running.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends Sequence
 {
@@ -84,14 +83,19 @@ class Scene extends Sequence
         // If this function is not called, there won't have any surface to display
         image.load();
         image.prepare();
+
         sprite.load();
         sprite.prepare();
+
         animation.load();
         animation.prepare();
+
         animationMirror.load();
         animationMirror.prepare();
+
         tilesheets.load();
         tilesheets.prepare();
+
         tilesheet.load();
         tilesheet.prepare();
 
@@ -126,7 +130,8 @@ class Scene extends Sequence
         tilesheet.setTile((int) tile);
 
         // Rotate sprite
-        sprite.rotate((int) tile * (360 / (tilesheet.getTilesHorizontal() * tilesheet.getTilesVertical())));
+        sprite.rotate((int) tile
+                      * (Constant.MAX_DEGREE / (tilesheet.getTilesHorizontal() * tilesheet.getTilesVertical())));
     }
 
     @Override

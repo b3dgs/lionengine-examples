@@ -17,41 +17,51 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
+import com.b3dgs.lionengine.Animator;
+import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.game.feature.Mirrorable;
+import com.b3dgs.lionengine.game.feature.state.StateAbstract;
 import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
- * Idle state implementation.
+ * Base state.
  */
-class StateIdle extends StateBase
+abstract class StateBase extends StateAbstract
 {
+    /** Movement force. */
+    protected final Force movement;
+    /** Jump force. */
+    protected final Force jump;
+    /** Mirrorable model. */
+    protected final Mirrorable mirrorable;
+    /** Animator model. */
+    protected final Animator animator;
+    /** Input device reference. */
+    protected final InputDeviceDirectional input;
+    /** Associated animation. */
+    private final Animation animation;
+
     /**
-     * Create the state.
+     * Create state.
      * 
      * @param mario The mario reference.
      * @param animation The associated animation.
      */
-    public StateIdle(MarioModel mario, Animation animation)
+    protected StateBase(MarioModel mario, Animation animation)
     {
-        super(mario, animation);
+        super();
 
-        final InputDeviceDirectional input = mario.getInput();
-        addTransition(StateWalk.class, () -> Double.compare(input.getHorizontalDirection(), 0.0) != 0);
-        addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
+        this.animation = animation;
+        mirrorable = mario.getFeature(Mirrorable.class);
+        animator = mario.getSurface();
+        movement = mario.getMovement();
+        jump = mario.getJump();
+        input = mario.getInput();
     }
 
     @Override
     public void enter()
     {
-        super.enter();
-
-        movement.setDestination(0.0, 0.0);
-        movement.setVelocity(0.3);
-        movement.setSensibility(0.01);
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        animator.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
+        animator.play(animation);
     }
 }

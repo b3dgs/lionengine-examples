@@ -34,6 +34,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Engine;
+import com.b3dgs.lionengine.UtilReflection;
 import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.example.core.drawable.AppDrawable;
 import com.b3dgs.lionengine.example.game.action.AppAction;
@@ -70,7 +71,7 @@ public class AppExamples
      * 
      * @param args The arguments (none).
      */
-    public static void main(final String[] args)
+    public static void main(String[] args)
     {
         setThemeSystem();
 
@@ -190,7 +191,7 @@ public class AppExamples
      * @param panel The panel reference.
      * @param example The example class.
      */
-    private static void addExample(final JPanel panel, final Class<?> example)
+    private static void addExample(JPanel panel, Class<?> example)
     {
         final JButton drawable = new JButton(example.getSimpleName().substring(3));
         drawable.addActionListener(event ->
@@ -198,7 +199,10 @@ public class AppExamples
             setEnabled(panel.getComponents(), false);
             try
             {
-                example.getDeclaredMethod("main", String[].class).invoke(example, (Object[]) new String[1]);
+                UtilReflection.getMethod(example, "main", new Object[]
+                {
+                    new String[0]
+                });
                 EXECUTOR.execute(() -> waitClose(panel));
             }
             catch (final Exception exception)

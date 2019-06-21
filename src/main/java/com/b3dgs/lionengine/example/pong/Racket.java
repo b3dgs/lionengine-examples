@@ -29,7 +29,6 @@ import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
-import com.b3dgs.lionengine.game.feature.collidable.CollidableListener;
 import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.graphic.ColorRgba;
@@ -37,14 +36,14 @@ import com.b3dgs.lionengine.graphic.ColorRgba;
 /**
  * Racket implementation.
  */
-class Racket extends FeaturableModel implements CollidableListener
+class Racket extends FeaturableModel
 {
     /** Racket media. */
     public static final Media MEDIA = Medias.create("Racket.xml");
-    /** Racket color. */
-    private static final ColorRgba COLOR = ColorRgba.YELLOW;
 
+    /** Transformable reference. */
     private final Transformable transformable;
+    /** Target reference. */
     private Transformable target;
 
     /**
@@ -60,11 +59,13 @@ class Racket extends FeaturableModel implements CollidableListener
         final Viewer viewer = services.get(Viewer.class);
 
         transformable = addFeatureAndGet(new TransformableModel(setup));
+
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.addCollision(Collision.AUTOMATIC);
-        collidable.setOrigin(Origin.MIDDLE);
+        collidable.setOrigin(Origin.CENTER_BOTTOM);
         collidable.addAccept(Integer.valueOf(1));
         collidable.setGroup(Integer.valueOf(0));
+        collidable.setCollisionVisibility(false);
 
         transformable.teleportY(Scene.NATIVE.getHeight() / 2
                                 - transformable.getHeight() / 2
@@ -86,7 +87,7 @@ class Racket extends FeaturableModel implements CollidableListener
 
         addFeature(new DisplayableModel(g ->
         {
-            g.setColor(COLOR);
+            g.setColor(ColorRgba.YELLOW);
             g.drawRect(viewer,
                        Origin.MIDDLE,
                        (int) transformable.getX(),
@@ -123,15 +124,5 @@ class Racket extends FeaturableModel implements CollidableListener
     public void setBall(Ball ball)
     {
         target = ball.getFeature(Transformable.class);
-    }
-
-    /*
-     * CollidableListener
-     */
-
-    @Override
-    public void notifyCollided(Collidable collidable, Collision with, Collision by)
-    {
-        // Nothing to do
     }
 }

@@ -17,25 +17,13 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.Mirror;
-import com.b3dgs.lionengine.game.Force;
-import com.b3dgs.lionengine.game.feature.Mirrorable;
-import com.b3dgs.lionengine.game.feature.state.StateAbstract;
-import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Jump state implementation.
  */
-class StateJump extends StateAbstract
+class StateJump extends StateBase
 {
-    private final Force jump;
-    private final Mirrorable mirrorable;
-    private final Animator animator;
-    private final Animation animation;
-    private final Force movement;
-    private final InputDeviceDirectional input;
-
     /**
      * Create the state.
      * 
@@ -44,14 +32,7 @@ class StateJump extends StateAbstract
      */
     public StateJump(MarioModel mario, Animation animation)
     {
-        super();
-
-        this.animation = animation;
-        mirrorable = mario.getFeature(Mirrorable.class);
-        animator = mario.getSurface();
-        movement = mario.getMovement();
-        jump = mario.getJump();
-        input = mario.getInput();
+        super(mario, animation);
 
         addTransition(StateIdle.class, () -> jump.getDirectionVertical() == 0);
     }
@@ -59,7 +40,8 @@ class StateJump extends StateAbstract
     @Override
     public void enter()
     {
-        animator.play(animation);
+        super.enter();
+
         jump.setDirection(0.0, 8.0);
     }
 

@@ -25,8 +25,6 @@ import com.b3dgs.lionengine.graphic.engine.Loader;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppDpi
 {

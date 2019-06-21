@@ -17,25 +17,14 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.Animator;
 import com.b3dgs.lionengine.Mirror;
-import com.b3dgs.lionengine.game.Force;
-import com.b3dgs.lionengine.game.feature.Mirrorable;
-import com.b3dgs.lionengine.game.feature.state.StateAbstract;
 import com.b3dgs.lionengine.game.feature.state.StateChecker;
-import com.b3dgs.lionengine.io.InputDeviceDirectional;
 
 /**
  * Turn state implementation.
  */
-class StateTurn extends StateAbstract
+class StateTurn extends StateBase
 {
-    private final Force movement;
-    private final Mirrorable mirrorable;
-    private final Animator animator;
-    private final Animation animation;
-    private final InputDeviceDirectional input;
-
     /**
      * Create the walk state.
      * 
@@ -44,22 +33,16 @@ class StateTurn extends StateAbstract
      */
     public StateTurn(MarioModel mario, Animation animation)
     {
-        super();
-
-        this.animation = animation;
-        animator = mario.getSurface();
-        movement = mario.getMovement();
-        mirrorable = mario.getFeature(Mirrorable.class);
-        input = mario.getInput();
+        super(mario, animation);
 
         addTransition(StateIdle.class, new StateChecker()
         {
             @Override
             public boolean getAsBoolean()
             {
-                return input.getHorizontalDirection() == 0
-                       && movement.getDirectionHorizontal() == 0
-                       && input.getVerticalDirection() == 0;
+                return Double.compare(input.getHorizontalDirection(), 0.0) == 0
+                       && Double.compare(movement.getDirectionHorizontal(), 0.0) == 0
+                       && Double.compare(input.getVerticalDirection(), 0.0) == 0;
             }
 
             @Override
@@ -71,14 +54,15 @@ class StateTurn extends StateAbstract
         addTransition(StateWalk.class,
                       () -> (input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() < 0
                              || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() > 0)
-                            && input.getVerticalDirection() == 0);
+                            && Double.compare(input.getVerticalDirection(), 0.0) == 0);
         addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
     }
 
     @Override
     public void enter()
     {
-        animator.play(animation);
+        super.enter();
+
         movement.setVelocity(0.28);
         movement.setSensibility(0.005);
     }

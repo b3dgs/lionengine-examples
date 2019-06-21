@@ -35,7 +35,6 @@ public class AppSequence
     public static void main(String[] args)
     {
         EngineAwt.start(AppSequence.class.getSimpleName(), Version.create(1, 0, 0), AppSequence.class);
-        final Resolution output = new Resolution(640, 480, 60);
-        Loader.start(Config.windowed(output), SequenceFirst.class);
+        Loader.start(Config.windowed(new Resolution(640, 480, 60)), SequenceFirst.class);
     }
 }

@@ -26,8 +26,6 @@ import com.b3dgs.lionengine.game.feature.Services;
 
 /**
  * Main class.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 public class AppFactory
 {

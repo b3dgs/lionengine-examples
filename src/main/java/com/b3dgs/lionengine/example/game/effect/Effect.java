@@ -18,6 +18,7 @@ package com.b3dgs.lionengine.example.game.effect;
 
 import com.b3dgs.lionengine.AnimState;
 import com.b3dgs.lionengine.Animation;
+import com.b3dgs.lionengine.AnimatorStateListener;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
@@ -58,7 +59,7 @@ class Effect extends FeaturableModel
      */
     public Effect(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         viewer = services.get(Viewer.class);
 
@@ -71,16 +72,15 @@ class Effect extends FeaturableModel
         surface = Drawable.loadSpriteAnimated(setup.getSurface(), config.getHorizontal(), config.getVertical());
         surface.stretch(scale, scale);
         surface.setOrigin(Origin.MIDDLE);
-
-        addFeature(new RefreshableModel(extrp ->
+        surface.addListener((AnimatorStateListener) state ->
         {
-            surface.update(extrp);
             if (AnimState.FINISHED == surface.getAnimState())
             {
                 getFeature(Identifiable.class).destroy();
             }
-        }));
+        });
 
+        addFeature(new RefreshableModel(surface::update));
         addFeature(new DisplayableModel(surface::render));
     }
 
