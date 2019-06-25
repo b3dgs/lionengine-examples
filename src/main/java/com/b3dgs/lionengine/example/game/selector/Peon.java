@@ -88,13 +88,7 @@ class Peon extends FeaturableModel
             if (selectable.isSelected())
             {
                 g.setColor(ColorRgba.GREEN);
-                g.drawRect(viewer,
-                           Origin.BOTTOM_LEFT,
-                           transformable.getX(),
-                           transformable.getY(),
-                           transformable.getWidth(),
-                           transformable.getHeight(),
-                           false);
+                g.drawRect(viewer, Origin.BOTTOM_LEFT, transformable, false);
             }
         }));
     }

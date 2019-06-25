@@ -88,13 +88,7 @@ class Racket extends FeaturableModel
         addFeature(new DisplayableModel(g ->
         {
             g.setColor(ColorRgba.YELLOW);
-            g.drawRect(viewer,
-                       Origin.MIDDLE,
-                       (int) transformable.getX(),
-                       (int) transformable.getY(),
-                       transformable.getWidth(),
-                       transformable.getHeight(),
-                       true);
+            g.drawRect(viewer, Origin.MIDDLE, transformable, true);
             collidable.render(g);
         }));
     }

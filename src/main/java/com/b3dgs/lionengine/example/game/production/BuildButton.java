@@ -137,7 +137,7 @@ class BuildButton extends FeaturableModel
             if (area != null && viewer.isViewable((Localizable) cursor, 0, 0))
             {
                 g.setColor(ColorRgba.GREEN);
-                g.drawRect(viewer, Origin.TOP_LEFT, area.getX(), area.getY(), area.getWidth(), area.getHeight(), false);
+                g.drawRect(viewer, Origin.TOP_LEFT, area, false);
             }
         }));
     }
