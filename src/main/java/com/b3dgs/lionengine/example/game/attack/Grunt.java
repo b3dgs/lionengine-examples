@@ -19,6 +19,7 @@ package com.b3dgs.lionengine.example.game.attack;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
+import com.b3dgs.lionengine.Range;
 import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.AnimatableModel;
@@ -31,7 +32,6 @@ import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.attackable.Attacker;
-import com.b3dgs.lionengine.game.feature.attackable.AttackerChecker;
 import com.b3dgs.lionengine.game.feature.attackable.AttackerListener;
 import com.b3dgs.lionengine.game.feature.attackable.AttackerModel;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
@@ -42,7 +42,7 @@ import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 /**
  * Grunt entity implementation.
  */
-class Grunt extends FeaturableModel implements AttackerChecker, AttackerListener
+class Grunt extends FeaturableModel implements AttackerListener
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Grunt.xml");
@@ -72,8 +72,8 @@ class Grunt extends FeaturableModel implements AttackerChecker, AttackerListener
         addFeature(new AnimatableModel(surface));
 
         attacker = addFeatureAndGet(new AttackerModel());
-        attacker.setAttackDistance(16, 16);
-        attacker.setAttackDamages(1, 5);
+        attacker.setAttackDistance(new Range(16, 16));
+        attacker.setAttackDamages(new Range(1, 5));
         attacker.setAttackFrame(1);
         attacker.setAttackTimer(60);
 
@@ -109,12 +109,6 @@ class Grunt extends FeaturableModel implements AttackerChecker, AttackerListener
     public void teleport(int tx, int ty)
     {
         pathfindable.setLocation(tx, ty);
-    }
-
-    @Override
-    public boolean canAttack()
-    {
-        return true;
     }
 
     @Override
