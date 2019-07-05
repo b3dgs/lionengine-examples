@@ -22,7 +22,7 @@ import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.UtilReflection;
 import com.b3dgs.lionengine.awt.MouseAwt;
-import com.b3dgs.lionengine.game.ActionConfig;
+import com.b3dgs.lionengine.game.feature.ActionConfig;
 import com.b3dgs.lionengine.game.feature.Actionable;
 import com.b3dgs.lionengine.game.feature.ActionableModel;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;

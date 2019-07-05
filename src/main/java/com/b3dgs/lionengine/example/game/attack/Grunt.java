@@ -75,7 +75,7 @@ class Grunt extends FeaturableModel implements AttackerListener
         attacker.setAttackDistance(new Range(16, 16));
         attacker.setAttackDamages(new Range(1, 5));
         attacker.setAttackFrame(1);
-        attacker.setAttackTimer(60);
+        attacker.setAttackDelay(60);
 
         final Viewer viewer = services.get(Viewer.class);
 
