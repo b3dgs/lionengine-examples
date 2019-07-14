@@ -67,9 +67,9 @@ class Peon extends FeaturableModel implements ExtractorListener
         surface.setOrigin(Origin.BOTTOM_LEFT);
         surface.setFrameOffsets(8, 8);
 
-        final Extractor extractor = addFeatureAndGet(new ExtractorModel(services));
-        extractor.setExtractionPerSecond(1.0);
-        extractor.setDropOffPerSecond(1.0);
+        final Extractor extractor = addFeatureAndGet(new ExtractorModel(services, setup));
+        extractor.setExtractionSpeed(0.05);
+        extractor.setDropOffSpeed(0.05);
         extractor.setCapacity(5);
         extractor.setChecker(new ExtractorChecker()
         {

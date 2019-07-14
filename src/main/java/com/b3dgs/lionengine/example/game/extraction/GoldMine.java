@@ -60,7 +60,7 @@ class GoldMine extends FeaturableModel
         final Sprite surface = Drawable.loadSprite(setup.getSurface());
         surface.setOrigin(Origin.BOTTOM_LEFT);
 
-        final Extractable extractable = addFeatureAndGet(new ExtractableModel(services));
+        final Extractable extractable = addFeatureAndGet(new ExtractableModel(services, setup));
         extractable.setResourcesQuantity(100);
 
         final Viewer viewer = services.get(Viewer.class);
