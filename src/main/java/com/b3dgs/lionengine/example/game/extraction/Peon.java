@@ -111,38 +111,38 @@ class Peon extends FeaturableModel implements ExtractorListener
     }
 
     @Override
-    public void notifyStartGoToRessources(Enum<?> type, Tiled resourceLocation)
+    public void notifyStartGoToRessources(String type, Tiled resourceLocation)
     {
         pathfindable.setDestination(resourceLocation);
     }
 
     @Override
-    public void notifyStartExtraction(Enum<?> type, Tiled resourceLocation)
+    public void notifyStartExtraction(String type, Tiled resourceLocation)
     {
         Verbose.info("Started !");
         visible = false;
     }
 
     @Override
-    public void notifyExtracted(Enum<?> type, int currentQuantity)
+    public void notifyExtracted(String type, int currentQuantity)
     {
         Verbose.info("Extracted ! " + currentQuantity);
     }
 
     @Override
-    public void notifyStartCarry(Enum<?> type, int totalQuantity)
+    public void notifyStartCarry(String type, int totalQuantity)
     {
         visible = true;
     }
 
     @Override
-    public void notifyStartDropOff(Enum<?> type, int totalQuantity)
+    public void notifyStartDropOff(String type, int totalQuantity)
     {
         // Nothing to do
     }
 
     @Override
-    public void notifyDroppedOff(Enum<?> type, int droppedQuantity)
+    public void notifyDroppedOff(String type, int droppedQuantity)
     {
         Verbose.info("done !" + droppedQuantity);
     }
