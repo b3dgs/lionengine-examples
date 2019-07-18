@@ -77,7 +77,7 @@ class Peon extends FeaturableModel implements ProducerListener
         transformable.teleport(640, 860);
 
         final Producer producer = addFeatureAndGet(new ProducerModel(services));
-        producer.setStepsPerSecond(1.0);
+        producer.setStepsSpeed(0.02);
         producer.setChecker(featurable ->
         {
             final Producible producible = featurable.getFeature(Producible.class);
