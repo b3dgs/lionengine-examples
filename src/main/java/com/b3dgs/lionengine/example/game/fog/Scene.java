@@ -32,6 +32,8 @@ import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
 import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.Transformable;
+import com.b3dgs.lionengine.game.feature.TransformableListener;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTileRendererModel;
@@ -51,14 +53,14 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
  */
 class Scene extends Sequence
 {
-    /** Native resoltion. */
+    /** Native resolution. */
     static final Resolution NATIVE = new Resolution(320, 240, 60);
 
-    private final Collection<Fovable> fovables = new ArrayList<>();
-    private final FogOfWar fogOfWar = new FogOfWar();
     private final Services services = new Services();
     private final Handler handler = services.create(Handler.class);
+    private final FogOfWar fogOfWar = new FogOfWar();
     private final Mouse mouse = getInputDevice(Mouse.class);
+    private final Collection<Fovable> fovables = new ArrayList<>();
 
     /**
      * Constructor.
@@ -107,8 +109,16 @@ class Scene extends Sequence
 
         final Factory factory = services.create(Factory.class);
         final Peon peon = factory.create(Peon.MEDIA);
-        handler.add(peon);
         fovables.add(peon.getFeature(Fovable.class));
+        peon.getFeature(Transformable.class).addListener(new TransformableListener()
+        {
+            @Override
+            public void notifyTransformed(Transformable transformable)
+            {
+                fogOfWar.updateHidden(transformable.getFeature(Fovable.class));
+            }
+        });
+        handler.add(peon);
     }
 
     @Override
@@ -116,7 +126,7 @@ class Scene extends Sequence
     {
         mouse.update(extrp);
         handler.update(extrp);
-        fogOfWar.update(fovables);
+        fogOfWar.updateFog(fovables);
     }
 
     @Override

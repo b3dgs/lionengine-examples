@@ -86,8 +86,8 @@ class Scene extends Sequence
         handler.add(tracker);
 
         map.addFeatureAndGet(new MapTileGroupModel()).loadGroups(Medias.create("groups.xml"));
-        map.addFeatureAndGet(new MapTileCollisionModel(services)).loadCollisions(Medias.create("formulas.xml"),
-                                                                                 Medias.create("collisions.xml"));
+        map.addFeatureAndGet(new MapTileCollisionModel(services))
+           .loadCollisions(Medias.create("formulas.xml"), Medias.create("collisions.xml"));
         final MapTileCollisionRenderer mapCollisionRenderer;
         mapCollisionRenderer = map.addFeatureAndGet(new MapTileCollisionRendererModel(services));
         mapCollisionRenderer.createCollisionDraw();

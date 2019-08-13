@@ -104,6 +104,7 @@ class Scene extends Sequence
         final SetupSurfaceRastered setup = new SetupSurfaceRastered(Medias.create("object.xml"),
                                                                     Medias.create("raster.xml"));
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 4, 4);
+        surface.setOrigin(Origin.MIDDLE);
 
         final Featurable featurable = new FeaturableModel();
         featurable.addFeature(new LayerableModel(1));

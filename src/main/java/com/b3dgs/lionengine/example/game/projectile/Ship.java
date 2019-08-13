@@ -49,7 +49,7 @@ class Ship extends FeaturableModel implements CollidableListener
 {
     /** Media. */
     public static final Media MEDIA = Medias.create("Ship.xml");
-    
+
     private static int group = 1;
 
     private final double speed = UtilRandom.getRandomDouble() / 1.5 + 0.75;

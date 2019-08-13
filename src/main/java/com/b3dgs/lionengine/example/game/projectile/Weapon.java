@@ -56,8 +56,11 @@ class Weapon extends FeaturableModel implements LaunchableListener
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         launcher = addFeatureAndGet(new LauncherModel(services, setup));
 
-        addFeature(new RefreshableModel(extrp -> transformable.teleport(ownerLocalizable.getX(),
-                                                                        ownerLocalizable.getY())));
+        addFeature(new RefreshableModel(extrp ->
+        {
+            launcher.update(extrp);
+            transformable.teleport(ownerLocalizable.getX(), ownerLocalizable.getY());
+        }));
     }
 
     /**

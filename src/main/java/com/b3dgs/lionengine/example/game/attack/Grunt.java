@@ -16,12 +16,14 @@
  */
 package com.b3dgs.lionengine.example.game.attack;
 
+import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Range;
 import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.Viewer;
+import com.b3dgs.lionengine.game.feature.Animatable;
 import com.b3dgs.lionengine.game.feature.AnimatableModel;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
@@ -46,9 +48,12 @@ class Grunt extends FeaturableModel implements AttackerListener
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Grunt.xml");
+    private static final Animation IDLE = new Animation("idle", 1, 1, 1.0, false, false);
+    private static final Animation ATTACK = new Animation("attack", 31, 34, 0.1875, true, false);
 
     private final Pathfindable pathfindable;
     private final Attacker attacker;
+    private final Animatable animatable;
 
     /**
      * Create a peon.
@@ -69,12 +74,13 @@ class Grunt extends FeaturableModel implements AttackerListener
         surface.setOrigin(Origin.MIDDLE);
         surface.setFrameOffsets(-8, -8);
 
-        addFeature(new AnimatableModel(surface));
+        animatable = addFeatureAndGet(new AnimatableModel(surface));
+        animatable.play(IDLE);
 
         attacker = addFeatureAndGet(new AttackerModel());
-        attacker.setAttackDistance(new Range(16, 16));
+        attacker.setAttackDistance(new Range(0, 0));
         attacker.setAttackDamages(new Range(1, 5));
-        attacker.setAttackFrame(1);
+        attacker.setAttackFrame(ATTACK.getLast());
         attacker.setAttackDelay(60);
 
         final Viewer viewer = services.get(Viewer.class);
@@ -84,6 +90,7 @@ class Grunt extends FeaturableModel implements AttackerListener
             pathfindable.update(extrp);
             attacker.update(extrp);
             surface.setLocation(viewer, transformable);
+            animatable.update(extrp);
         }));
 
         addFeature(new DisplayableModel(surface::render));
@@ -120,19 +127,19 @@ class Grunt extends FeaturableModel implements AttackerListener
     @Override
     public void notifyAttackStarted(Transformable target)
     {
-        Verbose.info("Attack !");
+        animatable.play(ATTACK);
     }
 
     @Override
     public void notifyAttackEnded(int damages, Transformable target)
     {
-        // Nothing to do
+        Verbose.info("Attack: " + damages);
     }
 
     @Override
     public void notifyAttackAnimEnded()
     {
-        // Nothing to do
+        animatable.play(IDLE);
     }
 
     @Override

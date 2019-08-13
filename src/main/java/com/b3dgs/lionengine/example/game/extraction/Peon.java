@@ -146,4 +146,10 @@ class Peon extends FeaturableModel implements ExtractorListener
     {
         Verbose.info("done !" + droppedQuantity);
     }
+
+    @Override
+    public void notifyStopped()
+    {
+        // Nothing to do
+    }
 }

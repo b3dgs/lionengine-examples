@@ -84,14 +84,14 @@ class Scene extends Sequence
         handler.add(map);
 
         final Grunt grunt1 = factory.create(Grunt.MEDIA);
-        grunt1.teleport(2, 6);
+        grunt1.teleport(4, 10);
         handler.add(grunt1);
 
         final Grunt grunt2 = factory.create(Grunt.MEDIA);
-        grunt2.teleport(4, 10);
+        grunt2.teleport(2, 6);
         handler.add(grunt2);
 
-        grunt1.attack(grunt2.getFeature(Transformable.class));
+        grunt2.attack(grunt1.getFeature(Transformable.class));
     }
 
     @Override

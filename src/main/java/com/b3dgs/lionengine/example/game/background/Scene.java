@@ -83,7 +83,7 @@ class Scene extends Sequence
     public void update(double extrp)
     {
         y = UtilMath.wrapDouble(y + 1, 0.0, 360.0);
-        final double dy = UtilMath.sin(y) * 100 + 100;
+        final double dy = UtilMath.sin(y) * 100 + 130;
         background.update(extrp, 1.0, dy);
         foreground.update(extrp, 1.0, dy);
     }
