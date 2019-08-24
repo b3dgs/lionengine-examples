@@ -33,7 +33,6 @@ import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableListener;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTileRendererModel;
@@ -110,14 +109,8 @@ class Scene extends Sequence
         final Factory factory = services.create(Factory.class);
         final Peon peon = factory.create(Peon.MEDIA);
         fovables.add(peon.getFeature(Fovable.class));
-        peon.getFeature(Transformable.class).addListener(new TransformableListener()
-        {
-            @Override
-            public void notifyTransformed(Transformable transformable)
-            {
-                fogOfWar.updateHidden(transformable.getFeature(Fovable.class));
-            }
-        });
+        peon.getFeature(Transformable.class)
+            .addListener(transformable -> fogOfWar.updateHidden(transformable.getFeature(Fovable.class)));
         handler.add(peon);
     }
 

@@ -58,7 +58,7 @@ class Peon extends FeaturableModel
         final Transformable transformable = addFeatureAndGet(new TransformableModel());
         transformable.teleport(64, 64);
 
-        final Fovable fovable = addFeatureAndGet(new FovableModel(services));
+        final Fovable fovable = addFeatureAndGet(new FovableModel(services, setup));
         fovable.setFov(3);
 
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
