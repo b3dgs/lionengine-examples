@@ -16,9 +16,6 @@
  */
 package com.b3dgs.lionengine.example.game.fog;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Medias;
@@ -59,7 +56,6 @@ class Scene extends Sequence
     private final Handler handler = services.create(Handler.class);
     private final FogOfWar fogOfWar = new FogOfWar();
     private final Mouse mouse = getInputDevice(Mouse.class);
-    private final Collection<Fovable> fovables = new ArrayList<>();
 
     /**
      * Constructor.
@@ -108,9 +104,8 @@ class Scene extends Sequence
 
         final Factory factory = services.create(Factory.class);
         final Peon peon = factory.create(Peon.MEDIA);
-        fovables.add(peon.getFeature(Fovable.class));
         peon.getFeature(Transformable.class)
-            .addListener(transformable -> fogOfWar.updateHidden(transformable.getFeature(Fovable.class)));
+            .addListener(transformable -> fogOfWar.update(transformable.getFeature(Fovable.class)));
         handler.add(peon);
     }
 
@@ -119,7 +114,6 @@ class Scene extends Sequence
     {
         mouse.update(extrp);
         handler.update(extrp);
-        fogOfWar.updateFog(fovables);
     }
 
     @Override
