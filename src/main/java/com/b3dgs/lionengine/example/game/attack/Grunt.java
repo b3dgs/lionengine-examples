@@ -147,4 +147,10 @@ class Grunt extends FeaturableModel implements AttackerListener
     {
         // Nothing to do
     }
+
+    @Override
+    public void notifyAttackStopped()
+    {
+        // Nothing to do
+    }
 }
