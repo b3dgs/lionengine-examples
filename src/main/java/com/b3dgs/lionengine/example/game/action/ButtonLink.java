@@ -22,6 +22,8 @@ import java.util.Collection;
 import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Identifiable;
+import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.Setup;
 
 /**
  * Button linking implementation.
@@ -29,6 +31,17 @@ import com.b3dgs.lionengine.game.feature.Identifiable;
 @FeatureInterface
 class ButtonLink extends FeatureModel
 {
+    /**
+     * Create feature.
+     * 
+     * @param services The services reference.
+     * @param setup The setup reference.
+     */
+    public ButtonLink(Services services, Setup setup)
+    {
+        super(services, setup);
+    }
+
     private final Collection<Button> toDelete = new ArrayList<>();
 
     /**

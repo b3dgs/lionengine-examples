@@ -59,9 +59,9 @@ class Peon extends FeaturableModel implements ExtractorListener
      */
     public Peon(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(2));
+        addFeatureAndGet(new LayerableModel(2));
 
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
         surface.setOrigin(Origin.BOTTOM_LEFT);
@@ -89,7 +89,7 @@ class Peon extends FeaturableModel implements ExtractorListener
             }
         });
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
 
         final Viewer viewer = services.get(Viewer.class);

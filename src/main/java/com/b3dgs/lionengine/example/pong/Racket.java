@@ -54,11 +54,11 @@ class Racket extends FeaturableModel
      */
     public Racket(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         final Viewer viewer = services.get(Viewer.class);
 
-        transformable = addFeatureAndGet(new TransformableModel(setup));
+        transformable = addFeatureAndGet(new TransformableModel(services, setup));
 
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.addCollision(Collision.AUTOMATIC);

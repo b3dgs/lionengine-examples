@@ -20,12 +20,9 @@ import java.io.IOException;
 
 import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Medias;
+import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.awt.Mouse;
 import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.Featurable;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.WorldGame;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
@@ -37,8 +34,6 @@ import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.Image;
 import com.b3dgs.lionengine.io.FileReading;
 import com.b3dgs.lionengine.io.FileWriting;
 
@@ -60,8 +55,8 @@ class World extends WorldGame
     {
         super(services);
 
-        camera.setView(72, 12, 240, 176, camera.getHeight());
-        camera.setLocation(192, 96);
+        camera.setView(source, 0, 0, Origin.TOP_LEFT);
+        camera.setLocation(128, 80);
 
         final MapTile map = services.create(MapTileGame.class);
         map.addFeature(new MapTileViewerModel(services));
@@ -79,15 +74,6 @@ class World extends WorldGame
         cursor.setGrid(map.getTileWidth(), map.getTileHeight());
         cursor.setInputDevice(mouse);
         cursor.setViewer(camera);
-
-        final Image hudImage = Drawable.loadImage(Medias.create("hud.png"));
-        hudImage.load();
-        hudImage.prepare();
-
-        final Featurable hud = new FeaturableModel();
-        hud.addFeature(new LayerableModel(1));
-        hud.addFeature(new DisplayableModel(hudImage::render));
-        handler.add(hud);
 
         handler.add(factory.create(Button.EXTRACT));
         handler.add(factory.create(GoldMine.GOLD_MINE));

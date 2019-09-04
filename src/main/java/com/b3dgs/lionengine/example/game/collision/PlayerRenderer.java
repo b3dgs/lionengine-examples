@@ -22,6 +22,7 @@ import com.b3dgs.lionengine.game.feature.FeatureGet;
 import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.drawable.Sprite;
@@ -41,11 +42,12 @@ class PlayerRenderer extends FeatureModel implements Displayable
      * Constructor.
      * 
      * @param services The services reference.
+     * @param setup The setup reference.
      * @param model The model reference.
      */
-    public PlayerRenderer(Services services, PlayerModel model)
+    public PlayerRenderer(Services services, Setup setup, PlayerModel model)
     {
-        super();
+        super(services, setup);
 
         viewer = services.get(Viewer.class);
         surface = model.getSurface();

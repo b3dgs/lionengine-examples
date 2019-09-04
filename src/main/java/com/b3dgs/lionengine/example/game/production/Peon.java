@@ -63,20 +63,20 @@ class Peon extends FeaturableModel implements ProducerListener
      */
     public Peon(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         map = services.get(MapTile.class);
 
-        addFeature(new LayerableModel(2));
+        addFeatureAndGet(new LayerableModel(2));
 
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
         surface.setOrigin(Origin.BOTTOM_LEFT);
         surface.setFrameOffsets(8, 8);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         transformable.teleport(640, 860);
 
-        final Producer producer = addFeatureAndGet(new ProducerModel(services));
+        final Producer producer = addFeatureAndGet(new ProducerModel(services, setup));
         producer.setStepsSpeed(0.02);
         producer.setChecker(featurable ->
         {

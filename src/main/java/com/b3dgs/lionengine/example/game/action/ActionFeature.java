@@ -36,11 +36,12 @@ class ActionFeature extends FeatureModel
     /**
      * Create feature.
      * 
+     * @param services The services reference.
      * @param setup The setup reference.
      */
-    public ActionFeature(Setup setup)
+    public ActionFeature(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         name = ActionConfig.imports(setup).getName();
     }

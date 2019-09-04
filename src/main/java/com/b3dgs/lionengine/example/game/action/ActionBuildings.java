@@ -32,11 +32,12 @@ class ActionBuildings extends ActionFeature
     /**
      * Create feature.
      * 
+     * @param services The services reference.
      * @param setup The setup reference.
      */
-    public ActionBuildings(Setup setup)
+    public ActionBuildings(Services services, Setup setup)
     {
-        super(setup);
+        super(services, setup);
     }
 
     @Override

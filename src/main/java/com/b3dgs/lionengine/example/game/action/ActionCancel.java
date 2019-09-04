@@ -32,11 +32,12 @@ class ActionCancel extends ActionFeature
     /**
      * Create feature.
      * 
+     * @param services The services reference.
      * @param setup The setup reference.
      */
-    public ActionCancel(Setup setup)
+    public ActionCancel(Services services, Setup setup)
     {
-        super(setup);
+        super(services, setup);
     }
 
     @Override

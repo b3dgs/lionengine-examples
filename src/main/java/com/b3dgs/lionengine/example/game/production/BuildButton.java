@@ -69,15 +69,15 @@ class BuildButton extends FeaturableModel
      */
     public BuildButton(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(3));
+        addFeatureAndGet(new LayerableModel(3));
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
         actionable.setClickAction(MouseAwt.LEFT);
         state = actionable;
 
-        final Assignable assignable = addFeatureAndGet(new AssignableModel(services));
+        final Assignable assignable = addFeatureAndGet(new AssignableModel(services, setup));
         assignable.setClickAssign(MouseAwt.LEFT);
 
         final Media target = Medias.create(setup.getText("media"));

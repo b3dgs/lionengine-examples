@@ -44,14 +44,14 @@ class Player extends FeaturableModel
     {
         super(services, setup);
 
-        addFeature(new LayerableModel(1));
-        addFeature(new TransformableModel());
-        addFeature(new BodyModel());
+        addFeatureAndGet(new LayerableModel(1));
+        addFeature(new TransformableModel(services, setup));
+        addFeature(new BodyModel(services, setup));
         addFeature(new TileCollidableModel(services, setup));
 
         final PlayerModel model = new PlayerModel(setup);
-        addFeature(new PlayerController(services, model));
-        addFeature(new PlayerUpdater(services, model));
-        addFeature(new PlayerRenderer(services, model));
+        addFeature(new PlayerController(services, setup, model));
+        addFeature(new PlayerUpdater(services, setup, model));
+        addFeature(new PlayerRenderer(services, setup, model));
     }
 }

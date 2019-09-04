@@ -106,13 +106,13 @@ class Scene extends Sequence
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 4, 4);
         surface.setOrigin(Origin.MIDDLE);
 
-        final Featurable featurable = new FeaturableModel();
-        featurable.addFeature(new LayerableModel(1));
-        featurable.addFeature(new MirrorableModel());
-        featurable.addFeature(new AnimatableModel(surface));
+        final Featurable featurable = new FeaturableModel(services, setup);
+        featurable.addFeatureAndGet(new LayerableModel(1));
+        featurable.addFeature(new MirrorableModel(services, setup));
+        featurable.addFeature(new AnimatableModel(services, setup, surface));
         surface.play(new Animation(Animation.DEFAULT_NAME, 1, 10, 0.2, false, true));
 
-        final Transformable transformable = featurable.addFeatureAndGet(new TransformableModel());
+        final Transformable transformable = featurable.addFeatureAndGet(new TransformableModel(services, setup));
         final Rasterable rasterable = featurable.addFeatureAndGet(new RasterableModel(services, setup));
         rasterable.setOrigin(Origin.MIDDLE);
         featurable.addFeature(new RefreshableModel(extrp ->

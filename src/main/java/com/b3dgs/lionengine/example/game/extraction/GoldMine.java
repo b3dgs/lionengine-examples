@@ -51,9 +51,9 @@ class GoldMine extends FeaturableModel
      */
     public GoldMine(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         final Pathfindable pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
         pathfindable.setLocation(21, 10);
 
@@ -65,7 +65,7 @@ class GoldMine extends FeaturableModel
 
         final Viewer viewer = services.get(Viewer.class);
 
-        addFeature(new LayerableModel(1));
+        addFeatureAndGet(new LayerableModel(1));
         addFeature(new RefreshableModel(extrp -> surface.setLocation(viewer, transformable)));
         addFeature(new DisplayableModel(surface::render));
     }

@@ -45,7 +45,7 @@ class MarioModel extends FeatureModel
      */
     public MarioModel(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         input = services.get(InputDeviceDirectional.class);
 

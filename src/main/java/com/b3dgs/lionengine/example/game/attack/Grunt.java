@@ -63,21 +63,21 @@ class Grunt extends FeaturableModel implements AttackerListener
      */
     public Grunt(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(1));
+        addFeatureAndGet(new LayerableModel(1));
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
 
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 8, 7);
         surface.setOrigin(Origin.MIDDLE);
         surface.setFrameOffsets(-8, -8);
 
-        animatable = addFeatureAndGet(new AnimatableModel(surface));
+        animatable = addFeatureAndGet(new AnimatableModel(services, setup, surface));
         animatable.play(IDLE);
 
-        attacker = addFeatureAndGet(new AttackerModel());
+        attacker = addFeatureAndGet(new AttackerModel(services, setup));
         attacker.setAttackDistance(new Range(0, 0));
         attacker.setAttackDamages(new Range(1, 5));
         attacker.setAttackFrame(ATTACK.getLast());
@@ -131,7 +131,7 @@ class Grunt extends FeaturableModel implements AttackerListener
     }
 
     @Override
-    public void notifyAttackEnded(int damages, Transformable target)
+    public void notifyAttackEnded(Transformable target, int damages)
     {
         Verbose.info("Attack: " + damages);
     }
@@ -143,7 +143,7 @@ class Grunt extends FeaturableModel implements AttackerListener
     }
 
     @Override
-    public void notifyPreparingAttack()
+    public void notifyPreparingAttack(Transformable target)
     {
         // Nothing to do
     }

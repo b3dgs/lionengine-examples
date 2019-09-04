@@ -57,17 +57,17 @@ class Building extends FeaturableModel implements ProducibleListener
      */
     public Building(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         viewer = services.get(Viewer.class);
 
-        transformable = addFeatureAndGet(new TransformableModel(setup));
+        transformable = addFeatureAndGet(new TransformableModel(services, setup));
 
         surface = Drawable.loadSpriteAnimated(setup.getSurface(), 2, 1);
         surface.setOrigin(Origin.TOP_LEFT);
 
-        addFeature(new LayerableModel(1));
-        addFeature(new ProducibleModel(setup));
+        addFeatureAndGet(new LayerableModel(1));
+        addFeature(new ProducibleModel(services, setup));
         addFeature(new DisplayableModel(g ->
         {
             if (visible)

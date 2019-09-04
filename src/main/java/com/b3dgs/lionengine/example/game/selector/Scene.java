@@ -106,7 +106,7 @@ class Scene extends Sequence
         handler.add(peon);
 
         final Selector selector = new Selector(services);
-        selector.addFeature(new LayerableModel(2));
+        selector.addFeatureAndGet(new LayerableModel(2));
         selector.setClickableArea(camera);
         selector.setSelectionColor(ColorRgba.GREEN);
         selector.setClickSelection(MouseAwt.LEFT);

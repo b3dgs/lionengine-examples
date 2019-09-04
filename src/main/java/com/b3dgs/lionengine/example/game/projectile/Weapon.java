@@ -51,9 +51,9 @@ class Weapon extends FeaturableModel implements LaunchableListener
      */
     public Weapon(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         launcher = addFeatureAndGet(new LauncherModel(services, setup));
 
         addFeature(new RefreshableModel(extrp ->

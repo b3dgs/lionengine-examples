@@ -53,7 +53,7 @@ class Ship extends FeaturableModel implements CollidableListener
     private static int group = 1;
 
     private final double speed = UtilRandom.getRandomDouble() / 1.5 + 0.75;
-    private final Transformable transformable = addFeatureAndGet(new TransformableModel());
+    private final Transformable transformable;
     private final Sprite sprite;
     private final Weapon weapon;
     private final Collidable collidable;
@@ -71,13 +71,13 @@ class Ship extends FeaturableModel implements CollidableListener
      */
     public Ship(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(1));
+        addFeatureAndGet(new LayerableModel(1));
 
         sprite = Drawable.loadSprite(setup.getSurface());
         sprite.setOrigin(Origin.CENTER_BOTTOM);
-
+        transformable = addFeatureAndGet(new TransformableModel(services, setup));
         transformable.teleport(x + UtilMath.cos(location * 1.5) * 60, y + UtilMath.sin(location * 2) * 30);
 
         collidable = addFeatureAndGet(new CollidableModel(services, setup));

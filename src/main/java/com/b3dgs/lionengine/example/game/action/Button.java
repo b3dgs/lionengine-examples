@@ -56,16 +56,17 @@ class Button extends FeaturableModel
      */
     public Button(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new ButtonLink());
+        addFeature(new ButtonLink(services, setup));
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
         actionable.setClickAction(MouseAwt.LEFT);
 
         final ActionFeature action = addFeatureAndGet(setup.getImplementation(ActionFeature.class,
-                                                                              UtilReflection.getParamTypes(setup),
-                                                                              Arrays.asList(setup),
+                                                                              UtilReflection.getParamTypes(services,
+                                                                                                           setup),
+                                                                              Arrays.asList(services, setup),
                                                                               ActionConfig.NODE_ACTION));
         actionable.setAction(action.create(services));
 

@@ -61,11 +61,11 @@ class Button extends FeaturableModel
      */
     public Button(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(3));
+        addFeatureAndGet(new LayerableModel(3));
 
-        final Assignable assignable = addFeatureAndGet(new AssignableModel(services));
+        final Assignable assignable = addFeatureAndGet(new AssignableModel(services, setup));
         assignable.setClickAssign(MouseAwt.LEFT);
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));

@@ -60,11 +60,11 @@ class Ball extends FeaturableModel implements CollidableListener
      */
     public Ball(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         final Viewer viewer = services.get(Viewer.class);
 
-        transformable = addFeatureAndGet(new TransformableModel(setup));
+        transformable = addFeatureAndGet(new TransformableModel(services, setup));
         collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.addCollision(Collision.AUTOMATIC);
         collidable.setOrigin(Origin.MIDDLE);

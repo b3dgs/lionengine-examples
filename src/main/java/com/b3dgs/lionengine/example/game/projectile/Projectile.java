@@ -51,10 +51,10 @@ class Projectile extends FeaturableModel
      */
     public Projectile(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
-        final Launchable launchable = addFeatureAndGet(new LaunchableModel());
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
+        final Launchable launchable = addFeatureAndGet(new LaunchableModel(services, setup));
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
         collidable.setOrigin(Origin.CENTER_BOTTOM);
         collidable.setGroup(Integer.valueOf(0));

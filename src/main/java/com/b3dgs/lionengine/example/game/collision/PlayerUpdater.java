@@ -24,6 +24,7 @@ import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Refreshable;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.body.Body;
 import com.b3dgs.lionengine.game.feature.tile.map.collision.Axis;
@@ -52,11 +53,12 @@ class PlayerUpdater extends FeatureModel implements Refreshable, TileCollidableL
      * Create updater.
      * 
      * @param services The services reference.
+     * @param setup The setup reference.
      * @param model The model reference.
      */
-    public PlayerUpdater(Services services, PlayerModel model)
+    public PlayerUpdater(Services services, Setup setup, PlayerModel model)
     {
-        super();
+        super(services, setup);
 
         movement = model.getMovement();
         jump = model.getJump();

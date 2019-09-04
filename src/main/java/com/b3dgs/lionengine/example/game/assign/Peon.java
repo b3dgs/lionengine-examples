@@ -49,11 +49,11 @@ class Peon extends FeaturableModel
      */
     public Peon(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
-        addFeature(new LayerableModel(1));
+        addFeatureAndGet(new LayerableModel(1));
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         final Pathfindable pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
         pathfindable.setLocation(27, 17);
 

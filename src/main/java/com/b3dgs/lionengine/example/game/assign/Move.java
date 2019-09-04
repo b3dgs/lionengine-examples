@@ -54,7 +54,7 @@ class Move extends FeaturableModel
      */
     public Move(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
         actionable.setClickAction(MouseAwt.LEFT);
@@ -66,7 +66,7 @@ class Move extends FeaturableModel
 
         final AtomicReference<Updatable> state = new AtomicReference<>(actionable);
 
-        final Assignable assignable = addFeatureAndGet(new AssignableModel(services));
+        final Assignable assignable = addFeatureAndGet(new AssignableModel(services, setup));
         assignable.setClickAssign(MouseAwt.LEFT);
 
         actionable.setAction(() ->

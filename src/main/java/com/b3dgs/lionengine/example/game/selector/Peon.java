@@ -54,11 +54,11 @@ class Peon extends FeaturableModel
      */
     public Peon(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         addFeature(new LayerableModel(services, setup));
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
 
         final FramesConfig config = FramesConfig.imports(setup);
@@ -80,7 +80,7 @@ class Peon extends FeaturableModel
             surface.setLocation(viewer, transformable);
         }));
 
-        final Selectable selectable = addFeatureAndGet(new SelectableModel());
+        final Selectable selectable = addFeatureAndGet(new SelectableModel(services, setup));
 
         addFeature(new DisplayableModel(g ->
         {

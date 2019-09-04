@@ -46,7 +46,7 @@ class Effect extends FeaturableModel
     /** Explode media. */
     public static final Media EXPLODE = Medias.create("Explode.xml");
 
-    private final Transformable transformable = addFeatureAndGet(new TransformableModel());
+    private final Transformable transformable;
     private final SpriteAnimated surface;
     private final Animation animExplode;
     private final Viewer viewer;
@@ -80,6 +80,7 @@ class Effect extends FeaturableModel
             }
         });
 
+        transformable = addFeatureAndGet(new TransformableModel(services, setup));
         addFeature(new RefreshableModel(surface::update));
         addFeature(new DisplayableModel(surface::render));
     }

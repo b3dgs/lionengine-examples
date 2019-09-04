@@ -70,24 +70,24 @@ class Mario extends FeaturableModel
      */
     public Mario(Services services, Setup setup)
     {
-        super();
+        super(services, setup);
 
         final MarioModel model = addFeatureAndGet(new MarioModel(services, setup));
-        final Mirrorable mirrorable = addFeatureAndGet(new MirrorableModel());
-        final Transformable transformable = addFeatureAndGet(new TransformableModel());
+        final Mirrorable mirrorable = addFeatureAndGet(new MirrorableModel(services, setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         transformable.teleport(160, GROUND);
 
         final Force movement = model.getMovement();
         final Force jump = model.getJump();
 
-        final Body body = addFeatureAndGet(new BodyModel());
+        final Body body = addFeatureAndGet(new BodyModel(services, setup));
         body.setGravity(GRAVITY);
         body.setDesiredFps(60);
 
         final SpriteAnimated surface = model.getSurface();
         final Camera camera = services.get(Camera.class);
 
-        final StateHandler state = addFeatureAndGet(new StateHandler(setup, Mario::getAnimationName));
+        final StateHandler state = addFeatureAndGet(new StateHandler(services, setup, Mario::getAnimationName));
         state.changeState(StateIdle.class);
 
         addFeature(new RefreshableModel(extrp ->
