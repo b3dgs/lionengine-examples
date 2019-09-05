@@ -19,6 +19,7 @@ package com.b3dgs.lionengine.example.game.attack;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Medias;
+import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
@@ -72,7 +73,7 @@ class Scene extends Sequence
     public void load()
     {
         final Camera camera = services.create(Camera.class);
-        camera.setView(0, 0, getWidth(), getHeight(), getHeight());
+        camera.setView(this, 0, 0, Origin.TOP_LEFT);
 
         final MapTile map = services.create(MapTileGame.class);
         map.addFeature(new MapTileViewerModel(services));
@@ -84,11 +85,11 @@ class Scene extends Sequence
         handler.add(map);
 
         final Grunt grunt1 = factory.create(Grunt.MEDIA);
-        grunt1.teleport(4, 10);
+        grunt1.teleport(4, 10, true);
         handler.add(grunt1);
 
         final Grunt grunt2 = factory.create(Grunt.MEDIA);
-        grunt2.teleport(2, 6);
+        grunt2.teleport(4, 6, false);
         handler.add(grunt2);
 
         grunt2.attack(grunt1.getFeature(Transformable.class));

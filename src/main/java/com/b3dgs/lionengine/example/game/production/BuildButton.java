@@ -123,7 +123,7 @@ class BuildButton extends FeaturableModel
             if (area != null)
             {
                 area.set(UtilMath.getRounded(cursor.getX(), cursor.getWidth()),
-                         UtilMath.getRoundedC(cursor.getY(), cursor.getHeight()),
+                         UtilMath.getRounded(cursor.getY(), cursor.getHeight()),
                          area.getWidthReal(),
                          area.getHeightReal());
             }

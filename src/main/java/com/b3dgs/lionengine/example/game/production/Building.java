@@ -23,13 +23,17 @@ import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
 import com.b3dgs.lionengine.game.feature.LayerableModel;
+import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.producible.Producer;
+import com.b3dgs.lionengine.game.feature.producible.Producible;
 import com.b3dgs.lionengine.game.feature.producible.ProducibleListener;
 import com.b3dgs.lionengine.game.feature.producible.ProducibleModel;
+import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
+import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
@@ -43,9 +47,9 @@ class Building extends FeaturableModel implements ProducibleListener
     /** Barracks media reference. */
     public static final Media BARRACKS = Medias.create("Barracks.xml");
 
-    private final Transformable transformable;
     private final SpriteAnimated surface;
-    private final Viewer viewer;
+    private final Pathfindable pathfindable;
+    private final Producible producible;
 
     private boolean visible;
 
@@ -59,15 +63,21 @@ class Building extends FeaturableModel implements ProducibleListener
     {
         super(services, setup);
 
-        viewer = services.get(Viewer.class);
+        final Viewer viewer = services.get(Viewer.class);
 
-        transformable = addFeatureAndGet(new TransformableModel(services, setup));
+        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
 
         surface = Drawable.loadSpriteAnimated(setup.getSurface(), 2, 1);
         surface.setOrigin(Origin.TOP_LEFT);
 
         addFeatureAndGet(new LayerableModel(1));
-        addFeature(new ProducibleModel(services, setup));
+        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
+        producible = addFeatureAndGet(new ProducibleModel(services, setup));
+        addFeature(new RefreshableModel(extrp ->
+        {
+            pathfindable.update(extrp);
+            surface.setLocation(viewer, transformable);
+        }));
         addFeature(new DisplayableModel(g ->
         {
             if (visible)
@@ -80,7 +90,7 @@ class Building extends FeaturableModel implements ProducibleListener
     @Override
     public void notifyProductionStarted(Producer producer)
     {
-        surface.setLocation(viewer, transformable);
+        pathfindable.setLocation((int) producible.getX() / 16, (int) producible.getY() / 16);
         visible = true;
     }
 

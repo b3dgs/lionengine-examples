@@ -19,7 +19,6 @@ package com.b3dgs.lionengine.example.game.production;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.Featurable;
@@ -33,7 +32,6 @@ import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.producible.Producer;
 import com.b3dgs.lionengine.game.feature.producible.ProducerListener;
 import com.b3dgs.lionengine.game.feature.producible.ProducerModel;
-import com.b3dgs.lionengine.game.feature.producible.Producible;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.CoordTile;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePath;
@@ -74,22 +72,13 @@ class Peon extends FeaturableModel implements ProducerListener
         surface.setFrameOffsets(8, 8);
 
         final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        transformable.teleport(640, 860);
+        transformable.teleport(860, 860);
+
+        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
 
         final Producer producer = addFeatureAndGet(new ProducerModel(services, setup));
         producer.setStepsSpeed(0.02);
-        producer.setChecker(featurable ->
-        {
-            final Producible producible = featurable.getFeature(Producible.class);
-            return UtilMath.isBetween(transformable.getX(),
-                                      producible.getX(),
-                                      producible.getX() + producible.getWidth())
-                   && UtilMath.isBetween(transformable.getY(),
-                                         producible.getY() - producible.getHeight(),
-                                         producible.getY());
-        });
-
-        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
+        producer.setChecker(featurable -> pathfindable.isDestinationReached());
 
         final Viewer viewer = services.get(Viewer.class);
 
@@ -130,18 +119,10 @@ class Peon extends FeaturableModel implements ProducerListener
     @Override
     public void notifyProduced(Featurable featurable)
     {
-        final MapTilePath mapPath = map.getFeature(MapTilePath.class);
-        final Producible producible = featurable.getFeature(Producible.class);
-        final CoordTile coord = mapPath.getFreeTileAround(pathfindable,
-                                                          (int) producible.getX() / map.getTileWidth(),
-                                                          (int) producible.getY() / map.getTileHeight(),
-                                                          producible.getWidth() / map.getTileWidth(),
-                                                          producible.getHeight() / map.getTileHeight(),
-                                                          map.getInTileRadius());
-        if (coord != null)
-        {
-            pathfindable.setLocation(coord.getX(), coord.getY());
-        }
+        final Pathfindable source = featurable.getFeature(Pathfindable.class);
+        final CoordTile coord = map.getFeature(MapTilePath.class).getFreeTileAround(pathfindable, source);
+        pathfindable.setLocation(coord);
+
         visible = true;
     }
 }

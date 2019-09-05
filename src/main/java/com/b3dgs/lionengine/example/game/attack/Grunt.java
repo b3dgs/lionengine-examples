@@ -27,6 +27,7 @@ import com.b3dgs.lionengine.game.feature.Animatable;
 import com.b3dgs.lionengine.game.feature.AnimatableModel;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.feature.Layerable;
 import com.b3dgs.lionengine.game.feature.LayerableModel;
 import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
@@ -49,11 +50,14 @@ class Grunt extends FeaturableModel implements AttackerListener
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Grunt.xml");
     private static final Animation IDLE = new Animation("idle", 1, 1, 1.0, false, false);
-    private static final Animation ATTACK = new Animation("attack", 31, 34, 0.1875, true, false);
+    private static final Animation IDLE_SOUTH = new Animation("idle", 5, 5, 1.0, false, false);
+    private static final Animation WALK = new Animation("walk", 6, 10, 0.15, true, false);
+    private static final Animation ATTACK = new Animation("attack", 31, 34, 0.15, true, false);
 
     private final Pathfindable pathfindable;
     private final Attacker attacker;
     private final Animatable animatable;
+    private final Layerable layerable;
 
     /**
      * Create a peon.
@@ -65,7 +69,7 @@ class Grunt extends FeaturableModel implements AttackerListener
     {
         super(services, setup);
 
-        addFeatureAndGet(new LayerableModel(1));
+        layerable = addFeatureAndGet(new LayerableModel(2));
 
         final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
@@ -78,7 +82,7 @@ class Grunt extends FeaturableModel implements AttackerListener
         animatable.play(IDLE);
 
         attacker = addFeatureAndGet(new AttackerModel(services, setup));
-        attacker.setAttackDistance(new Range(0, 0));
+        attacker.setAttackDistance(new Range(1, 1));
         attacker.setAttackDamages(new Range(1, 5));
         attacker.setAttackFrame(ATTACK.getLast());
         attacker.setAttackDelay(60);
@@ -105,6 +109,7 @@ class Grunt extends FeaturableModel implements AttackerListener
     {
         pathfindable.setDestination(target);
         attacker.attack(target);
+        animatable.play(WALK);
     }
 
     /**
@@ -112,10 +117,16 @@ class Grunt extends FeaturableModel implements AttackerListener
      * 
      * @param tx The horizontal tile.
      * @param ty The vertical tile.
+     * @param mirror The mirror flag.
      */
-    public void teleport(int tx, int ty)
+    public void teleport(int tx, int ty, boolean mirror)
     {
         pathfindable.setLocation(tx, ty);
+        if (mirror)
+        {
+            animatable.play(IDLE_SOUTH);
+            layerable.setLayer(Integer.valueOf(1), Integer.valueOf(1));
+        }
     }
 
     @Override

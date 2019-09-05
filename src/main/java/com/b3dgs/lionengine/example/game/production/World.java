@@ -56,7 +56,7 @@ class World extends WorldGame
         super(services);
 
         camera.setView(source, 0, 0, Origin.TOP_LEFT);
-        camera.teleport(576, 768);
+        camera.teleport(768, 768);
 
         final MapTile map = services.create(MapTileGame.class);
         map.addFeature(new MapTileViewerModel(services));
@@ -72,7 +72,7 @@ class World extends WorldGame
         cursor.setInputDevice(mouse);
         cursor.setViewer(camera);
 
-        text.setLocation(74, 192);
+        text.setLocation(4, 192);
 
         final Factory factory = services.create(Factory.class);
         handler.add(factory.create(BuildButton.FARM));

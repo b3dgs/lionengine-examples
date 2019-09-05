@@ -19,6 +19,7 @@ package com.b3dgs.lionengine.example.game.selector;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Medias;
+import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
@@ -39,8 +40,6 @@ import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
 import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
 import com.b3dgs.lionengine.graphic.ColorRgba;
 import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.Image;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
@@ -60,7 +59,6 @@ class Scene extends Sequence
     private final MapTile map = services.create(MapTileGame.class);
     private final Keyboard keyboard = getInputDevice(Keyboard.class);
     private final Mouse mouse = getInputDevice(Mouse.class);
-    private final Image hud;
 
     /**
      * Constructor.
@@ -70,8 +68,6 @@ class Scene extends Sequence
     public Scene(Context context)
     {
         super(context, NATIVE);
-
-        hud = Drawable.loadImage(Medias.create("hud.png"));
 
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
@@ -85,16 +81,13 @@ class Scene extends Sequence
     @Override
     public void load()
     {
-        camera.setView(72, 12, 248, 188, getHeight());
-        camera.setLocation(320, 208);
+        camera.setView(this, 0, 0, Origin.TOP_LEFT);
+        camera.setLocation(272, 192);
 
         map.addFeature(new MapTileViewerModel(services));
         map.create(Medias.create("level.png"), 16, 16, 16);
         camera.setLimits(map);
         handler.add(map);
-
-        hud.load();
-        hud.prepare();
 
         cursor.addImage(0, Medias.create("cursor.png"));
         cursor.load();
@@ -142,7 +135,6 @@ class Scene extends Sequence
     public void render(Graphic g)
     {
         handler.render(g);
-        hud.render(g);
         cursor.render(g);
     }
 
