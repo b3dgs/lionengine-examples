@@ -53,6 +53,7 @@ import com.b3dgs.lionengine.example.game.projectile.AppProjectile;
 import com.b3dgs.lionengine.example.game.raster.AppRaster;
 import com.b3dgs.lionengine.example.game.selector.AppSelector;
 import com.b3dgs.lionengine.example.game.state.AppState;
+import com.b3dgs.lionengine.example.game.transition.AppTransition;
 import com.b3dgs.lionengine.example.helloworld.AppHelloWorld;
 import com.b3dgs.lionengine.example.pong.AppPong;
 
@@ -63,8 +64,28 @@ public class AppExamples
 {
     /** Application name. */
     public static final String NAME = Constant.ENGINE_NAME + " Examples";
+    /** Main function name. */
+    private static final String MAIN = "main";
+    /** Exit button. */
+    private static final String EXIT = "Exit";
+    /** BUtton width. */
+    private static final int BUTTON_WIDTH = 96;
+    /** Button height. */
+    private static final int BUTTON_HEIGHT = 64;
+    /** Horizontal buttons. */
+    private static final int HORIZONTALS = 3;
+    /** Vertical buttons. */
+    private static final int VERTICALS = 7;
     /** Executor. */
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    /** Example classes. */
+    private static final Class<?>[] EXAMPLES = new Class<?>[]
+    {
+        AppHelloWorld.class, AppDrawable.class, AppAction.class, AppAssign.class, AppAttack.class, AppBackground.class,
+        AppCollision.class, AppCursor.class, AppEffect.class, AppFog.class, AppMap.class, AppPathfinding.class,
+        AppProduction.class, AppExtraction.class, AppProjectile.class, AppRaster.class, AppSelector.class,
+        AppTransition.class, AppState.class, AppPong.class
+    };
 
     /**
      * Main function.
@@ -76,14 +97,17 @@ public class AppExamples
         setThemeSystem();
 
         final JFrame frame = new JFrame(NAME);
-        frame.setPreferredSize(new Dimension(576, 256));
+        frame.setPreferredSize(new Dimension(HORIZONTALS * BUTTON_WIDTH, VERTICALS * BUTTON_HEIGHT));
 
         final JPanel panel = new JPanel(true);
-        panel.setLayout(new GridLayout(4, 4));
+        panel.setLayout(new GridLayout(VERTICALS, HORIZONTALS));
 
-        addExamples(panel);
+        for (final Class<?> example : EXAMPLES)
+        {
+            addExample(panel, example);
+        }
 
-        final JButton exit = new JButton("Exit");
+        final JButton exit = new JButton(EXIT);
         exit.addActionListener(event -> terminate(frame));
         panel.add(exit);
 
@@ -108,32 +132,9 @@ public class AppExamples
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
-        catch (ClassNotFoundException
-               | InstantiationException
-               | IllegalAccessException
-               | UnsupportedLookAndFeelException exception)
+        catch (ReflectiveOperationException | UnsupportedLookAndFeelException exception)
         {
             Verbose.exception(exception);
-        }
-    }
-
-    /**
-     * Add all examples.
-     * 
-     * @param panel The panel reference.
-     */
-    private static void addExamples(JPanel panel)
-    {
-        final Class<?>[] examples = new Class<?>[]
-        {
-            AppHelloWorld.class, AppDrawable.class, AppAction.class, AppAssign.class, AppAttack.class,
-            AppBackground.class, AppCollision.class, AppCursor.class, AppEffect.class, AppFog.class, AppMap.class,
-            AppPathfinding.class, AppProduction.class, AppExtraction.class, AppProjectile.class, AppRaster.class,
-            AppSelector.class, AppState.class, AppPong.class
-        };
-        for (final Class<?> example : examples)
-        {
-            addExample(panel, example);
         }
     }
 
@@ -186,20 +187,20 @@ public class AppExamples
     }
 
     /**
-     * Add a example with its button and action.
+     * Add an example with its button and action.
      * 
      * @param panel The panel reference.
      * @param example The example class.
      */
     private static void addExample(JPanel panel, Class<?> example)
     {
-        final JButton drawable = new JButton(example.getSimpleName().substring(3));
-        drawable.addActionListener(event ->
+        final JButton button = new JButton(example.getSimpleName().substring(3));
+        button.addActionListener(event ->
         {
             setEnabled(panel.getComponents(), false);
             try
             {
-                UtilReflection.getMethod(example, "main", new Object[]
+                UtilReflection.getMethod(example, MAIN, new Object[]
                 {
                     new String[0]
                 });
@@ -211,7 +212,7 @@ public class AppExamples
                 SwingUtilities.invokeLater(() -> setEnabled(panel.getComponents(), true));
             }
         });
-        panel.add(drawable);
+        panel.add(button);
     }
 
     /**
