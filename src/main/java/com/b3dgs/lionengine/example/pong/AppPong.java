@@ -34,6 +34,6 @@ public class AppPong
     public static void main(String[] args)
     {
         EngineAwt.start(AppPong.class.getSimpleName(), Version.create(1, 0, 0), AppPong.class);
-        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get3x()), Scene.class);
     }
 }

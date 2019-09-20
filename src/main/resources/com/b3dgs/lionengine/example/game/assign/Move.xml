@@ -2,5 +2,5 @@
 <lionengine:skill xmlns:lionengine="http://lionengine.b3dgs.com">
     <lionengine:class>com.b3dgs.lionengine.example.game.assign.Move</lionengine:class>
     <lionengine:surface image="Move.png"/>
-    <lionengine:action name="Move" description="Move to" x="4" y="114" width="27" height ="19"/>
+    <lionengine:action name="Move" description="Move to" x="4" y="170" width="27" height ="19"/>
 </lionengine:skill>

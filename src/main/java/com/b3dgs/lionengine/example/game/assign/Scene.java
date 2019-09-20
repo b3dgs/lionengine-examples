@@ -49,7 +49,7 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
  */
 class Scene extends Sequence
 {
-    private static final Resolution NATIVE = new Resolution(320, 200, 60);
+    private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Services services = new Services();
     private final Text text = services.add(Graphics.createText(9));
@@ -88,7 +88,7 @@ class Scene extends Sequence
         camera.setLimits(map);
         handler.add(map);
 
-        text.setLocation(74, 192);
+        text.setLocation(74, 230);
 
         cursor.addImage(0, Medias.create("cursor.png"));
         cursor.addImage(1, Medias.create("cursor_order.png"));

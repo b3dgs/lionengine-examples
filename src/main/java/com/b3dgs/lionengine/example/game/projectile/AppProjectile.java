@@ -34,6 +34,6 @@ public class AppProjectile
     public static void main(String[] args)
     {
         EngineAwt.start(AppProjectile.class.getSimpleName(), Version.create(1, 0, 0), AppProjectile.class);
-        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get3x()), Scene.class);
     }
 }

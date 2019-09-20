@@ -34,6 +34,6 @@ public class AppWorld
     public static void main(String[] args)
     {
         EngineAwt.start(AppWorld.class.getSimpleName(), Version.create(1, 0, 0), AppWorld.class);
-        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get3x()), Scene.class);
     }
 }

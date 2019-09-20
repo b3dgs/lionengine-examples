@@ -35,6 +35,6 @@ public class AppHelloWorld
     public static void main(String[] args)
     {
         EngineAwt.start(AppHelloWorld.class.getSimpleName(), Version.create(1, 0, 0), AppHelloWorld.class);
-        Loader.start(Config.windowed(new Resolution(640, 480, 60)), Scene.class);
+        Loader.start(Config.windowed(new Resolution(960, 720, 60)), Scene.class);
     }
 }

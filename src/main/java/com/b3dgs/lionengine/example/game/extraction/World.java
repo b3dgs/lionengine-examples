@@ -66,7 +66,7 @@ class World extends WorldGame
         camera.setLimits(map);
         handler.add(map);
 
-        text.setLocation(74, 192);
+        text.setLocation(74, 230);
 
         cursor.addImage(0, Medias.create("cursor.png"));
         cursor.addImage(1, Medias.create("cursor_order.png"));

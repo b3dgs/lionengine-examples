@@ -37,7 +37,7 @@ public class AppTransition
     public static void main(String[] args)
     {
         EngineAwt.start(AppTransition.class.getSimpleName(), Version.create(1, 0, 0), AppTransition.class);
-        final Resolution output = new Resolution(640, 480, 60);
+        final Resolution output = new Resolution(960, 720, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }

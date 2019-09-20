@@ -37,7 +37,7 @@ public class AppAssign
     public static void main(String[] args)
     {
         EngineAwt.start(AppAssign.class.getSimpleName(), Version.create(1, 0, 0), AppAssign.class);
-        final Resolution output = new Resolution(640, 400, 60);
+        final Resolution output = new Resolution(960, 720, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }

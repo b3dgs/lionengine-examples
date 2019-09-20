@@ -34,6 +34,6 @@ public class AppEffect
     public static void main(String[] args)
     {
         EngineAwt.start(AppEffect.class.getSimpleName(), Version.create(1, 0, 0), AppEffect.class);
-        Loader.start(Config.windowed(Scene.NATIVE.get2x()), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get3x()), Scene.class);
     }
 }

@@ -37,7 +37,7 @@ public class AppSelector
     public static void main(String[] args)
     {
         EngineAwt.start(AppSelector.class.getSimpleName(), Version.create(1, 0, 0), AppSelector.class);
-        final Resolution output = new Resolution(640, 400, 60);
+        final Resolution output = new Resolution(960, 720, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }

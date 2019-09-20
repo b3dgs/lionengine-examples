@@ -37,7 +37,7 @@ public class AppPathfinding
     public static void main(String[] args)
     {
         EngineAwt.start(AppPathfinding.class.getSimpleName(), Version.create(1, 0, 0), AppPathfinding.class);
-        final Resolution output = new Resolution(640, 480, 60);
+        final Resolution output = new Resolution(960, 720, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }

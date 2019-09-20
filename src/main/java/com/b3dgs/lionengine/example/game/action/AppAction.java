@@ -37,7 +37,7 @@ public class AppAction
     public static void main(String[] args)
     {
         EngineAwt.start(AppAction.class.getSimpleName(), Version.create(1, 0, 0), AppAction.class);
-        final Resolution output = new Resolution(640, 400, 60);
+        final Resolution output = new Resolution(960, 600, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }

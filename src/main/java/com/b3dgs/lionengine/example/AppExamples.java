@@ -69,9 +69,9 @@ public class AppExamples
     /** Exit button. */
     private static final String EXIT = "Exit";
     /** BUtton width. */
-    private static final int BUTTON_WIDTH = 96;
+    private static final int BUTTON_WIDTH = 112;
     /** Button height. */
-    private static final int BUTTON_HEIGHT = 64;
+    private static final int BUTTON_HEIGHT = 72;
     /** Horizontal buttons. */
     private static final int HORIZONTALS = 3;
     /** Vertical buttons. */

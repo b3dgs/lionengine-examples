@@ -49,7 +49,7 @@ import com.b3dgs.lionengine.graphic.engine.Sequence;
  */
 class Scene extends Sequence
 {
-    private static final Resolution NATIVE = new Resolution(320, 200, 60);
+    private static final Resolution NATIVE = new Resolution(320, 240, 60);
 
     private final Services services = new Services();
     private final Factory factory = services.create(Factory.class);
@@ -82,7 +82,7 @@ class Scene extends Sequence
     public void load()
     {
         camera.setView(this, 0, 0, Origin.TOP_LEFT);
-        camera.setLocation(272, 192);
+        camera.setLocation(276, 172);
 
         map.addFeature(new MapTileViewerModel(services));
         map.create(Medias.create("level.png"), 16, 16, 16);

@@ -37,7 +37,7 @@ public class AppBackground
     public static void main(String[] args)
     {
         EngineAwt.start(AppBackground.class.getSimpleName(), Version.create(1, 0, 0), AppBackground.class);
-        final Resolution output = new Resolution(640, 480, 60);
+        final Resolution output = new Resolution(960, 720, 60);
         Loader.start(Config.windowed(output), Scene.class);
     }
 }
