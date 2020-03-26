@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <lionengine:featurable xmlns:lionengine="http://lionengine.b3dgs.com/xsd/9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://lionengine.b3dgs.com/xsd/9 http://lionengine.b3dgs.com/xsd/9/featurable.xsd">
-    <lionengine:class>com.b3dgs.lionengine.example.game.production.Building</lionengine:class>
-    <lionengine:surface image="Farm.png"/>
-    <lionengine:size width="32" height="32"/>
-    <lionengine:producible steps="3"/>
+    <lionengine:class>com.b3dgs.lionengine.game.feature.FeaturableModel</lionengine:class>
+    <lionengine:surface image="Dino.png"/>
+    <lionengine:frames horizontal="4" vertical="4"/>
+    <lionengine:rasterable height="16" smooth="false"/>
 </lionengine:featurable>

@@ -101,7 +101,7 @@ class Scene extends Sequence
         camera.setView(0, 0, getWidth(), getHeight(), getHeight());
         camera.setLimits(map);
 
-        final SetupSurfaceRastered setup = new SetupSurfaceRastered(Medias.create("object.xml"),
+        final SetupSurfaceRastered setup = new SetupSurfaceRastered(Medias.create("Object.xml"),
                                                                     Medias.create("raster.xml"));
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 4, 4);
         surface.setOrigin(Origin.MIDDLE);

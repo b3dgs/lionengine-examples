@@ -16,17 +16,13 @@
  */
 package com.b3dgs.lionengine.example.game.action;
 
-import java.util.Arrays;
-
-import com.b3dgs.lionengine.Media;
-import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.UtilReflection;
+import com.b3dgs.lionengine.Verbose;
 import com.b3dgs.lionengine.awt.MouseAwt;
-import com.b3dgs.lionengine.game.feature.ActionConfig;
 import com.b3dgs.lionengine.game.feature.Actionable;
 import com.b3dgs.lionengine.game.feature.ActionableModel;
 import com.b3dgs.lionengine.game.feature.DisplayableModel;
 import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.feature.LayerableModel;
 import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
@@ -35,55 +31,51 @@ import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.Image;
 
 /**
- * Button action implementation.
+ * Action implementation.
  */
-class Button extends FeaturableModel
+class Action extends FeaturableModel
 {
-    /** Media buildings reference. */
-    public static final Media BUILDINGS = Medias.create("Buildings.xml");
-    /** Media build farm reference. */
-    public static final Media BUILD_FARM = Medias.create("BuildFarm.xml");
-    /** Media build barracks reference. */
-    public static final Media BUILD_BARRACKS = Medias.create("BuildBarracks.xml");
-    /** Media cancel reference. */
-    public static final Media CANCEL = Medias.create("Cancel.xml");
+    /** Actionable feature. */
+    protected final Actionable actionable;
 
     /**
-     * Create build farm action.
+     * Create feature.
      * 
      * @param services The services reference.
      * @param setup The setup reference.
      */
-    public Button(Services services, Setup setup)
+    public Action(Services services, Setup setup)
     {
         super(services, setup);
 
-        addFeature(new ButtonLink(services, setup));
-
-        final Actionable actionable = addFeatureAndGet(new ActionableModel(services, setup));
+        actionable = addFeatureAndGet(new ActionableModel(services, setup));
         actionable.setClickAction(MouseAwt.LEFT);
-
-        final ActionFeature action = addFeatureAndGet(setup.getImplementation(ActionFeature.class,
-                                                                              UtilReflection.getParamTypes(services,
-                                                                                                           setup),
-                                                                              Arrays.asList(services, setup),
-                                                                              ActionConfig.NODE_ACTION));
-        actionable.setAction(action.create(services));
+        actionable.setAction(() -> Verbose.info(actionable.getDescription()));
 
         final Image image = Drawable.loadImage(setup.getSurface());
         image.setLocation(actionable.getButton().getX(), actionable.getButton().getY());
 
         final Text text = services.get(Text.class);
 
+        addFeature(new LayerableModel(1, 3));
         addFeature(new RefreshableModel(extrp ->
         {
-            actionable.update(extrp);
-            if (actionable.isOver())
+            if (actionable.isEnabled())
             {
-                text.setText(actionable.getDescription());
+                actionable.update(extrp);
+                if (actionable.isOver())
+                {
+                    text.setText(actionable.getDescription());
+                }
             }
         }));
 
-        addFeature(new DisplayableModel(image::render));
+        addFeature(new DisplayableModel(g ->
+        {
+            if (actionable.isEnabled())
+            {
+                image.render(g);
+            }
+        }));
     }
 }

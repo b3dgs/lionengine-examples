@@ -102,6 +102,7 @@ class Scene extends Sequence
         // Place images
         image.setLocation(0, 0);
         sprite.setLocation(32, 160);
+        sprite.setAngleAnchor(-24, -24);
         animation.setLocation(80, 150);
         animationMirror.setLocation(100, 150);
         tilesheet.setLocation(150, 150);

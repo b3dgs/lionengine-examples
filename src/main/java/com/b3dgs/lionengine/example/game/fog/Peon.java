@@ -30,7 +30,6 @@ import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
 import com.b3dgs.lionengine.game.feature.TransformableModel;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.fog.Fovable;
 import com.b3dgs.lionengine.game.feature.tile.map.transition.fog.FovableModel;
 import com.b3dgs.lionengine.graphic.drawable.Drawable;
 import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
@@ -58,8 +57,7 @@ class Peon extends FeaturableModel
         final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
         transformable.teleport(64, 64);
 
-        final Fovable fovable = addFeatureAndGet(new FovableModel(services, setup));
-        fovable.setFov(3);
+        addFeature(new FovableModel(services, setup));
 
         final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
         surface.setOrigin(Origin.BOTTOM_LEFT);

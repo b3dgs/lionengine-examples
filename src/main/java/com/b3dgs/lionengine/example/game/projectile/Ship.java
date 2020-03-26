@@ -76,12 +76,14 @@ class Ship extends FeaturableModel implements CollidableListener
         addFeatureAndGet(new LayerableModel(1));
 
         sprite = Drawable.loadSprite(setup.getSurface());
-        sprite.setOrigin(Origin.CENTER_BOTTOM);
+        sprite.setOrigin(Origin.MIDDLE);
+        sprite.setAngleAnchor(0, 0);
+        sprite.setFrameOffsets(0, 0);
         transformable = addFeatureAndGet(new TransformableModel(services, setup));
         transformable.teleport(x + UtilMath.cos(location * 1.5) * 60, y + UtilMath.sin(location * 2) * 30);
 
         collidable = addFeatureAndGet(new CollidableModel(services, setup));
-        collidable.setOrigin(Origin.CENTER_BOTTOM);
+        collidable.setOrigin(Origin.MIDDLE);
         collidable.setGroup(Integer.valueOf(group++));
 
         final Factory factory = services.get(Factory.class);
@@ -141,14 +143,7 @@ class Ship extends FeaturableModel implements CollidableListener
     {
         final double grad = Math.atan((transformable.getX() - target.getX()) / (target.getY() - transformable.getY()));
         final int angle = (int) StrictMath.toDegrees(grad);
-        if (sprite.getMirror() == Mirror.NONE)
-        {
-            sprite.rotate(-angle + 180);
-        }
-        else
-        {
-            sprite.rotate(angle + 180);
-        }
+        sprite.rotate(-angle + 180);
     }
 
     @Override

@@ -25,16 +25,16 @@ import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
 import com.b3dgs.lionengine.awt.Mouse;
 import com.b3dgs.lionengine.game.Cursor;
+import com.b3dgs.lionengine.game.feature.Camera;
 import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
 import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
 import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Handler;
 import com.b3dgs.lionengine.game.feature.Services;
+import com.b3dgs.lionengine.game.feature.collidable.ComponentCollision;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.Image;
 import com.b3dgs.lionengine.graphic.engine.Sequence;
 
 /**
@@ -51,7 +51,6 @@ class Scene extends Sequence
     private final Handler handler = services.create(Handler.class);
     private final Cursor cursor = services.create(Cursor.class);
     private final Mouse mouse = getInputDevice(Mouse.class);
-    private final Image hud;
 
     /**
      * Constructor.
@@ -62,10 +61,11 @@ class Scene extends Sequence
     {
         super(context, NATIVE);
 
-        hud = Drawable.loadImage(Medias.create("hud.png"));
-
         handler.addComponent(new ComponentRefreshable());
         handler.addComponent(new ComponentDisplayable());
+        handler.addComponent(new ComponentCollision());
+
+        services.add(new Camera());
 
         setSystemCursorVisible(false);
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
@@ -74,8 +74,6 @@ class Scene extends Sequence
     @Override
     public void load()
     {
-        hud.load();
-        hud.prepare();
         text.setLocation(74, 192);
 
         cursor.addImage(0, Medias.create("cursor.png"));
@@ -83,7 +81,7 @@ class Scene extends Sequence
         cursor.setInputDevice(mouse);
 
         final Factory factory = services.create(Factory.class);
-        handler.add(factory.create(Button.BUILDINGS));
+        handler.add(factory.create(Medias.create("Hud.xml")));
     }
 
     @Override
@@ -99,7 +97,6 @@ class Scene extends Sequence
     public void render(Graphic g)
     {
         g.clear(0, 0, getWidth(), getHeight());
-        hud.render(g);
         handler.render(g);
         text.render(g);
         cursor.render(g);
