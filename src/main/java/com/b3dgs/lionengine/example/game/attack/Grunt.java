@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,33 +19,25 @@ package com.b3dgs.lionengine.example.game.attack;
 import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Range;
 import com.b3dgs.lionengine.Verbose;
-import com.b3dgs.lionengine.Viewer;
+import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.feature.Animatable;
-import com.b3dgs.lionengine.game.feature.AnimatableModel;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Layerable;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.attackable.Attacker;
 import com.b3dgs.lionengine.game.feature.attackable.AttackerListener;
-import com.b3dgs.lionengine.game.feature.attackable.AttackerModel;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
 /**
  * Grunt entity implementation.
  */
-class Grunt extends FeaturableModel implements AttackerListener
+@FeatureInterface
+class Grunt extends FeatureModel implements AttackerListener
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Grunt.xml");
@@ -54,50 +46,29 @@ class Grunt extends FeaturableModel implements AttackerListener
     private static final Animation WALK = new Animation("walk", 6, 10, 0.15, true, false);
     private static final Animation ATTACK = new Animation("attack", 31, 34, 0.15, true, false);
 
-    private final Pathfindable pathfindable;
-    private final Attacker attacker;
-    private final Animatable animatable;
-    private final Layerable layerable;
+    @FeatureGet private Pathfindable pathfindable;
+    @FeatureGet private Attacker attacker;
+    @FeatureGet private Animatable animatable;
+    @FeatureGet private Layerable layerable;
 
     /**
-     * Create a peon.
+     * Create grunt.
      * 
      * @param services The services reference.
      * @param setup The setup reference.
      */
-    public Grunt(Services services, Setup setup)
+    Grunt(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        layerable = addFeatureAndGet(new LayerableModel(2));
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
-
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 8, 7);
-        surface.setOrigin(Origin.MIDDLE);
-        surface.setFrameOffsets(-8, -8);
-
-        animatable = addFeatureAndGet(new AnimatableModel(services, setup, surface));
         animatable.play(IDLE);
-
-        attacker = addFeatureAndGet(new AttackerModel(services, setup));
-        attacker.setAttackDistance(new Range(1, 1));
-        attacker.setAttackDamages(new Range(1, 5));
         attacker.setAttackFrame(ATTACK.getLast());
-        attacker.setAttackDelay(60);
-
-        final Viewer viewer = services.get(Viewer.class);
-
-        addFeature(new RefreshableModel(extrp ->
-        {
-            pathfindable.update(extrp);
-            attacker.update(extrp);
-            surface.setLocation(viewer, transformable);
-            animatable.update(extrp);
-        }));
-
-        addFeature(new DisplayableModel(surface::render));
     }
 
     /***

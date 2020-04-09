@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,53 +17,54 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.Mirror;
+import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.game.feature.tile.map.collision.Axis;
+import com.b3dgs.lionengine.game.feature.tile.map.collision.CollisionCategory;
+import com.b3dgs.lionengine.game.feature.tile.map.collision.CollisionResult;
+import com.b3dgs.lionengine.helper.StateHelper;
 
 /**
  * Walk state implementation.
  */
-class StateWalk extends StateBase
+class StateWalk extends StateHelper<EntityModel>
 {
+    private final Force movement;
+
     /**
-     * Create the walk state.
+     * Create the state.
      * 
-     * @param mario The mario reference.
+     * @param model The model reference.
      * @param animation The associated animation.
      */
-    public StateWalk(MarioModel mario, Animation animation)
+    StateWalk(EntityModel model, Animation animation)
     {
-        super(mario, animation);
+        super(model, animation);
 
-        addTransition(StateIdle.class, () -> Double.compare(movement.getDirectionHorizontal(), 0.0) == 0);
-        addTransition(StateTurn.class,
-                      () -> input.getHorizontalDirection() < 0 && movement.getDirectionHorizontal() > 0
-                            || input.getHorizontalDirection() > 0 && movement.getDirectionHorizontal() < 0);
-        addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
+        movement = model.getMovement();
+
+        addTransition(StateIdle.class, () -> isGoNone());
+        addTransition(StateTurn.class, () -> isChangingDirectionHorizontal(movement));
+        addTransition(StateJump.class, this::isGoUpOnce);
+        addTransition(StateFall.class, () -> transformable.getY() > 32);
     }
 
     @Override
-    public void enter()
+    protected void onCollided(CollisionResult result, CollisionCategory category)
     {
-        super.enter();
+        super.onCollided(result, category);
 
-        movement.setVelocity(0.5);
-        movement.setSensibility(0.1);
+        if (category.getAxis() == Axis.X)
+        {
+            movement.zero();
+        }
     }
 
     @Override
     public void update(double extrp)
     {
-        final double side = input.getHorizontalDirection();
-        movement.setDestination(side * 3.0, 0);
-        animator.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
+        super.update(extrp);
 
-        if (side < 0 && movement.getDirectionHorizontal() < 0)
-        {
-            mirrorable.mirror(Mirror.HORIZONTAL);
-        }
-        else if (side > 0 && movement.getDirectionHorizontal() > 0)
-        {
-            mirrorable.mirror(Mirror.NONE);
-        }
+        movement.setDestination(input.getHorizontalDirection() * EntityModel.SPEED_X, 0.0);
+        animatable.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
     }
 }

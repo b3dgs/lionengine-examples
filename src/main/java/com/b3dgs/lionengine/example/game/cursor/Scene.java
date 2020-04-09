@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,54 +16,19 @@
  */
 package com.b3dgs.lionengine.example.game.cursor;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
-import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
-import com.b3dgs.lionengine.awt.Mouse;
-import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.TextGame;
-import com.b3dgs.lionengine.game.feature.Camera;
-import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.tile.Tile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroup;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroupModel;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.MapTransitionExtractor;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.Transition;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.circuit.Circuit;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.circuit.MapCircuitExtractor;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewer;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
-import com.b3dgs.lionengine.graphic.ColorRgba;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.TextStyle;
-import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our little world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
-class Scene extends Sequence
+class Scene extends SequenceGame
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
-
-    private final TextGame text = new TextGame(Constant.FONT_DIALOG, 9, TextStyle.NORMAL);
-    private final Services services = new Services();
-    private final Camera camera = services.create(Camera.class);
-    private final Cursor cursor = services.create(Cursor.class);
-    private final MapTile map = services.create(MapTileGame.class);
-    private final MapTileViewer mapViewer = map.addFeatureAndGet(new MapTileViewerModel(services));
-    private final MapTileGroup mapGroup = map.addFeatureAndGet(new MapTileGroupModel());
-    private final Keyboard keyboard = getInputDevice(Keyboard.class);
-    private final Mouse mouse = getInputDevice(Mouse.class);
-    private final MapTransitionExtractor transitionExtractor = new MapTransitionExtractor(map);
-    private final MapCircuitExtractor circuitExtractor = new MapCircuitExtractor(map);
 
     /**
      * Constructor.
@@ -72,89 +37,9 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, NATIVE);
+        super(context, NATIVE, World::new);
 
-        setSystemCursorVisible(false);
-        keyboard.addActionPressed(KeyboardAwt.ESCAPE, this::end);
-    }
-
-    /**
-     * Draw info about the specified tile.
-     * 
-     * @param g The graphics output.
-     */
-    private void renderTileInfo(Graphic g)
-    {
-        final int tx = map.getInTileX(cursor);
-        final int ty = map.getInTileY(cursor);
-        final Tile tile = map.getTile(tx, ty);
-        if (tile != null)
-        {
-            final int x = tx * map.getTileWidth();
-            final int y = ty * map.getTileHeight();
-
-            text.drawRect(g, ColorRgba.GREEN, x, y, map.getTileWidth(), map.getTileHeight());
-            text.setColor(ColorRgba.YELLOW);
-            text.draw(g, x + 20, y + 35, "Tile number: " + tile.getNumber());
-            text.draw(g, x + 20, y + 25, "X = " + tx + " | Y = " + ty);
-            text.draw(g, x + 20, y + 15, "RX = " + cursor.getX() + " | RY = " + cursor.getY());
-            text.draw(g, x + 20, y + 5, "Group: " + mapGroup.getGroup(tile));
-
-            final Transition transition = transitionExtractor.getTransition(tile);
-            text.draw(g, x + 20, y - 5, "Transition: " + transition);
-
-            final Circuit circuit = circuitExtractor.getCircuit(tile);
-            text.draw(g, x + 20, y - 15, "Circuit: " + circuit);
-        }
-    }
-
-    @Override
-    public void load()
-    {
-        map.create(Medias.create("level.png"));
-        mapGroup.loadGroups(Medias.create("groups.xml"));
-
-        cursor.addImage(0, Medias.create("cursor.png"));
-        cursor.load();
-        cursor.setGrid(map.getTileWidth(), map.getTileHeight());
-        cursor.setInputDevice(mouse);
-        cursor.setViewer(camera);
-
-        camera.setView(0, 0, getWidth(), getHeight(), getHeight());
-        camera.setLimits(map);
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        mouse.update(extrp);
-
-        if (keyboard.isPressedOnce(KeyboardAwt.UP))
-        {
-            camera.moveLocation(extrp, 0, 64);
-        }
-        if (keyboard.isPressedOnce(KeyboardAwt.DOWN))
-        {
-            camera.moveLocation(extrp, 0, -64);
-        }
-        if (keyboard.isPressedOnce(KeyboardAwt.LEFT))
-        {
-            camera.moveLocation(extrp, -64, 0);
-        }
-        if (keyboard.isPressedOnce(KeyboardAwt.RIGHT))
-        {
-            camera.moveLocation(extrp, 64, 0);
-        }
-        cursor.update(extrp);
-        text.update(camera);
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        mapViewer.render(g);
-        renderTileInfo(g);
-        cursor.render(g);
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

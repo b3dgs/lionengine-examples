@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,38 +18,33 @@ package com.b3dgs.lionengine.example.game.extraction;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.Verbose;
-import com.b3dgs.lionengine.Viewer;
+import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.Tiled;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
+import com.b3dgs.lionengine.game.feature.rasterable.Rasterable;
 import com.b3dgs.lionengine.game.feature.tile.map.extractable.Extractor;
 import com.b3dgs.lionengine.game.feature.tile.map.extractable.ExtractorChecker;
 import com.b3dgs.lionengine.game.feature.tile.map.extractable.ExtractorListener;
-import com.b3dgs.lionengine.game.feature.tile.map.extractable.ExtractorModel;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
 /**
  * Peon entity implementation.
  */
-class Peon extends FeaturableModel implements ExtractorListener
+@FeatureInterface
+class Peon extends FeatureModel implements ExtractorListener
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
 
-    private final Pathfindable pathfindable;
-    private boolean visible = true;
+    @FeatureGet private Rasterable rasterable;
+    @FeatureGet private Extractor extractor;
+    @FeatureGet private Pathfindable pathfindable;
 
     /**
      * Create a peon.
@@ -60,17 +55,13 @@ class Peon extends FeaturableModel implements ExtractorListener
     public Peon(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        addFeatureAndGet(new LayerableModel(2));
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
-        surface.setOrigin(Origin.BOTTOM_LEFT);
-        surface.setFrameOffsets(8, 8);
-
-        final Extractor extractor = addFeatureAndGet(new ExtractorModel(services, setup));
-        extractor.setExtractionSpeed(0.05);
-        extractor.setDropOffSpeed(0.05);
-        extractor.setCapacity(5);
         extractor.setChecker(new ExtractorChecker()
         {
             @Override
@@ -88,26 +79,6 @@ class Peon extends FeaturableModel implements ExtractorListener
                 return true;
             }
         });
-
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
-
-        final Viewer viewer = services.get(Viewer.class);
-
-        addFeature(new RefreshableModel(extrp ->
-        {
-            pathfindable.update(extrp);
-            extractor.update(extrp);
-            surface.setLocation(viewer, transformable);
-        }));
-
-        addFeature(new DisplayableModel(g ->
-        {
-            if (visible)
-            {
-                surface.render(g);
-            }
-        }));
     }
 
     @Override
@@ -120,7 +91,7 @@ class Peon extends FeaturableModel implements ExtractorListener
     public void notifyStartExtraction(String type, Tiled resourceLocation)
     {
         Verbose.info("Started !");
-        visible = false;
+        rasterable.setVisibility(false);
     }
 
     @Override
@@ -132,7 +103,7 @@ class Peon extends FeaturableModel implements ExtractorListener
     @Override
     public void notifyStartCarry(String type, int totalQuantity)
     {
-        visible = true;
+        rasterable.setVisibility(true);
     }
 
     @Override

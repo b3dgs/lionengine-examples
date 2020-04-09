@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,40 +18,35 @@ package com.b3dgs.lionengine.example.game.production;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
+import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.feature.Featurable;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.producible.Producer;
 import com.b3dgs.lionengine.game.feature.producible.ProducerListener;
-import com.b3dgs.lionengine.game.feature.producible.ProducerModel;
+import com.b3dgs.lionengine.game.feature.rasterable.Rasterable;
 import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.CoordTile;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePath;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
 /**
  * Peon entity implementation.
  */
-class Peon extends FeaturableModel implements ProducerListener
+@FeatureInterface
+class Peon extends FeatureModel implements ProducerListener
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
 
-    private final Pathfindable pathfindable;
-    private final MapTile map;
+    private final MapTile map = services.get(MapTile.class);
 
-    private boolean visible = true;
+    @FeatureGet private Rasterable rasterable;
+    @FeatureGet private Pathfindable pathfindable;
+    @FeatureGet private Producer producer;
 
     /**
      * Create a peon.
@@ -62,40 +57,17 @@ class Peon extends FeaturableModel implements ProducerListener
     public Peon(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        map = services.get(MapTile.class);
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        addFeatureAndGet(new LayerableModel(2));
-
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
-        surface.setOrigin(Origin.BOTTOM_LEFT);
-        surface.setFrameOffsets(8, 8);
-
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        transformable.teleport(860, 860);
-
-        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
-
-        final Producer producer = addFeatureAndGet(new ProducerModel(services, setup));
         producer.setStepsSpeed(0.02);
         producer.setChecker(featurable -> pathfindable.isDestinationReached());
 
-        final Viewer viewer = services.get(Viewer.class);
-
-        addFeature(new RefreshableModel(extrp ->
-        {
-            pathfindable.update(extrp);
-            producer.update(extrp);
-            surface.setLocation(viewer, transformable);
-        }));
-
-        addFeature(new DisplayableModel(g ->
-        {
-            if (visible)
-            {
-                surface.render(g);
-            }
-        }));
+        pathfindable.setLocation(53, 53);
     }
 
     @Override
@@ -107,7 +79,7 @@ class Peon extends FeaturableModel implements ProducerListener
     @Override
     public void notifyStartProduction(Featurable featurable)
     {
-        visible = false;
+        rasterable.setVisibility(false);
     }
 
     @Override
@@ -123,6 +95,6 @@ class Peon extends FeaturableModel implements ProducerListener
         final CoordTile coord = map.getFeature(MapTilePath.class).getFreeTileAround(pathfindable, source);
         pathfindable.setLocation(coord);
 
-        visible = true;
+        rasterable.setVisibility(true);
     }
 }

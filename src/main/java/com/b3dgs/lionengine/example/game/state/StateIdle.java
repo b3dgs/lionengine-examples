@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,41 +17,40 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.io.InputDeviceDirectional;
+import com.b3dgs.lionengine.UtilMath;
+import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.helper.StateHelper;
 
 /**
  * Idle state implementation.
  */
-class StateIdle extends StateBase
+class StateIdle extends StateHelper<EntityModel>
 {
+    private final Force movement;
+
     /**
      * Create the state.
      * 
-     * @param mario The mario reference.
+     * @param model The model reference.
      * @param animation The associated animation.
      */
-    public StateIdle(MarioModel mario, Animation animation)
+    StateIdle(EntityModel model, Animation animation)
     {
-        super(mario, animation);
+        super(model, animation);
 
-        final InputDeviceDirectional input = mario.getInput();
-        addTransition(StateWalk.class, () -> Double.compare(input.getHorizontalDirection(), 0.0) != 0);
-        addTransition(StateJump.class, () -> input.getVerticalDirection() > 0);
-    }
+        movement = model.getMovement();
 
-    @Override
-    public void enter()
-    {
-        super.enter();
-
-        movement.setDestination(0.0, 0.0);
-        movement.setVelocity(0.3);
-        movement.setSensibility(0.01);
+        addTransition(StateWalk.class,
+                      () -> isGoHorizontal() && !UtilMath.isBetween(movement.getDirectionHorizontal(), -0.1, 0.1));
+        addTransition(StateJump.class, this::isGoUpOnce);
     }
 
     @Override
     public void update(double extrp)
     {
-        animator.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
+        super.update(extrp);
+
+        movement.setDestination(input.getHorizontalDirection() * EntityModel.SPEED_X, 0.0);
+        animatable.setAnimSpeed(Math.abs(movement.getDirectionHorizontal()) / 12.0);
     }
 }

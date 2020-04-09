@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@ import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our little world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
 class Scene extends SequenceGame
 {
@@ -39,16 +37,9 @@ class Scene extends SequenceGame
      */
     public Scene(Context context)
     {
-        super(context, NATIVE, services -> new World(services));
+        super(context, NATIVE, World::new);
 
-        setSystemCursorVisible(false);
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
-    }
-
-    @Override
-    public void load()
-    {
-        // Nothing to do
     }
 
     @Override

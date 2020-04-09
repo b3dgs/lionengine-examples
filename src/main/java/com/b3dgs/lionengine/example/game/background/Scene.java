@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,47 +19,17 @@ package com.b3dgs.lionengine.example.game.background;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
 import com.b3dgs.lionengine.Resolution;
-import com.b3dgs.lionengine.UtilMath;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
-import com.b3dgs.lionengine.game.background.BackgroundAbstract;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.engine.Sequence;
-import com.b3dgs.lionengine.graphic.engine.SourceResolutionProvider;
+import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
-class Scene extends Sequence
+class Scene extends SequenceGame
 {
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
-
-    private final Foreground foreground = new Foreground(NATIVE);
-    private final BackgroundAbstract background = new Swamp(new SourceResolutionProvider()
-    {
-        @Override
-        public int getWidth()
-        {
-            return NATIVE.getWidth();
-        }
-
-        @Override
-        public int getHeight()
-        {
-            return NATIVE.getHeight();
-        }
-
-        @Override
-        public int getRate()
-        {
-            return NATIVE.getRate();
-        }
-    }, 1.0, 1.0);
-
-    private double y;
 
     /**
      * Constructor.
@@ -68,31 +38,9 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, NATIVE);
+        super(context, NATIVE, World::new);
 
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
-    }
-
-    @Override
-    public void load()
-    {
-        y = 230;
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        y = UtilMath.wrapDouble(y + 1, 0.0, 360.0);
-        final double dy = UtilMath.sin(y) * 100 + 130;
-        background.update(extrp, 1.0, dy);
-        foreground.update(extrp, 1.0, dy);
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        background.render(g);
-        foreground.render(g);
     }
 
     @Override

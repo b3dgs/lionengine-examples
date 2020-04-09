@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,29 +18,28 @@ package com.b3dgs.lionengine.example.game.fog;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Tick;
 import com.b3dgs.lionengine.UtilRandom;
-import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
+import com.b3dgs.lionengine.game.feature.Routine;
 import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
-import com.b3dgs.lionengine.game.feature.tile.map.transition.fog.FovableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.game.feature.rasterable.SetupSurfaceRastered;
+import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
 
 /**
  * Peon implementation.
  */
-class Peon extends FeaturableModel
+@FeatureInterface
+class Peon extends FeatureModel implements Routine
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
+
+    private final Tick tick = new Tick();
+
+    @FeatureGet private Pathfindable pathfindable;
 
     /**
      * Create a peon.
@@ -48,37 +47,21 @@ class Peon extends FeaturableModel
      * @param services The services reference.
      * @param setup The setup reference.
      */
-    public Peon(Services services, Setup setup)
+    Peon(Services services, SetupSurfaceRastered setup)
     {
         super(services, setup);
 
-        addFeatureAndGet(new LayerableModel(1));
-
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        transformable.teleport(64, 64);
-
-        addFeature(new FovableModel(services, setup));
-
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
-        surface.setOrigin(Origin.BOTTOM_LEFT);
-        surface.setFrameOffsets(8, 8);
-
-        final Tick tick = new Tick();
         tick.start();
+    }
 
-        final Viewer viewer = services.get(Viewer.class);
-
-        addFeature(new RefreshableModel(extrp ->
+    @Override
+    public void update(double extrp)
+    {
+        tick.update(extrp);
+        if (tick.elapsed(Scene.NATIVE.getRate()))
         {
-            surface.setLocation(viewer, transformable);
-            tick.update(extrp);
-            if (tick.elapsed(Scene.NATIVE.getRate()))
-            {
-                transformable.teleport(UtilRandom.getRandomInteger(19) * 16, UtilRandom.getRandomInteger(14) * 16);
-                tick.restart();
-            }
-        }));
-
-        addFeature(new DisplayableModel(surface::render));
+            pathfindable.setLocation(UtilRandom.getRandomInteger(19), UtilRandom.getRandomInteger(14));
+            tick.restart();
+        }
     }
 }

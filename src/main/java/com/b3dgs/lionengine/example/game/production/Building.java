@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,40 +18,34 @@ package com.b3dgs.lionengine.example.game.production;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.FeatureProvider;
+import com.b3dgs.lionengine.game.feature.Animatable;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.producible.Producer;
 import com.b3dgs.lionengine.game.feature.producible.Producible;
 import com.b3dgs.lionengine.game.feature.producible.ProducibleListener;
-import com.b3dgs.lionengine.game.feature.producible.ProducibleModel;
+import com.b3dgs.lionengine.game.feature.rasterable.Rasterable;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
 /**
  * Building implementation.
  */
-class Building extends FeaturableModel implements ProducibleListener
+@FeatureInterface
+class Building extends FeatureModel implements ProducibleListener
 {
     /** Farm media reference. */
     public static final Media FARM = Medias.create("Farm.xml");
     /** Barracks media reference. */
     public static final Media BARRACKS = Medias.create("Barracks.xml");
 
-    private final SpriteAnimated surface;
-    private final Pathfindable pathfindable;
-    private final Producible producible;
-
-    private boolean visible;
+    @FeatureGet private Rasterable rasterable;
+    @FeatureGet private Pathfindable pathfindable;
+    @FeatureGet private Producible producible;
+    @FeatureGet private Animatable animatable;
 
     /**
      * Create a building.
@@ -62,36 +56,21 @@ class Building extends FeaturableModel implements ProducibleListener
     public Building(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        final Viewer viewer = services.get(Viewer.class);
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-
-        surface = Drawable.loadSpriteAnimated(setup.getSurface(), 2, 1);
-        surface.setOrigin(Origin.TOP_LEFT);
-
-        addFeatureAndGet(new LayerableModel(1));
-        pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
-        producible = addFeatureAndGet(new ProducibleModel(services, setup));
-        addFeature(new RefreshableModel(extrp ->
-        {
-            pathfindable.update(extrp);
-            surface.setLocation(viewer, transformable);
-        }));
-        addFeature(new DisplayableModel(g ->
-        {
-            if (visible)
-            {
-                surface.render(g);
-            }
-        }));
+        rasterable.setVisibility(false);
     }
 
     @Override
     public void notifyProductionStarted(Producer producer)
     {
         pathfindable.setLocation((int) producible.getX() / 16, (int) producible.getY() / 16);
-        visible = true;
+        rasterable.setVisibility(true);
     }
 
     @Override
@@ -103,6 +82,6 @@ class Building extends FeaturableModel implements ProducibleListener
     @Override
     public void notifyProductionEnded(Producer producer)
     {
-        surface.setFrame(2);
+        animatable.setFrame(2);
     }
 }

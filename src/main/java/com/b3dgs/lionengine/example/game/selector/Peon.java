@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,31 +20,35 @@ import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.FramesConfig;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.FeatureProvider;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
+import com.b3dgs.lionengine.game.feature.Routine;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collidable;
-import com.b3dgs.lionengine.game.feature.collidable.CollidableModel;
 import com.b3dgs.lionengine.game.feature.collidable.Collision;
 import com.b3dgs.lionengine.game.feature.collidable.selector.Selectable;
-import com.b3dgs.lionengine.game.feature.collidable.selector.SelectableModel;
 import com.b3dgs.lionengine.graphic.ColorRgba;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.graphic.Graphic;
 
 /**
  * Peon entity implementation.
  */
-class Peon extends FeaturableModel
+@FeatureInterface
+class Peon extends FeatureModel implements Routine
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
+
+    /** Viewer reference. */
+    private final Viewer viewer = services.get(Viewer.class);
+
+    @FeatureGet private Transformable transformable;
+    @FeatureGet private Collidable collidable;
+    @FeatureGet private Selectable selectable;
 
     /**
      * Create a peon.
@@ -55,41 +59,23 @@ class Peon extends FeaturableModel
     public Peon(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        addFeature(new LayerableModel(services, setup));
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        final Collidable collidable = addFeatureAndGet(new CollidableModel(services, setup));
-
-        final FramesConfig config = FramesConfig.imports(setup);
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(),
-                                                                   config.getHorizontal(),
-                                                                   config.getVertical());
-        surface.setOrigin(Origin.BOTTOM_LEFT);
-        surface.setFrameOffsets(config.getOffsetX(), config.getOffsetY());
-
-        transformable.teleport(432, 272);
         collidable.addCollision(Collision.AUTOMATIC);
-        collidable.setOrigin(Origin.BOTTOM_LEFT);
-        collidable.setGroup(Integer.valueOf(0));
+    }
 
-        final Viewer viewer = services.get(Viewer.class);
-
-        addFeature(new RefreshableModel(extrp ->
+    @Override
+    public void render(Graphic g)
+    {
+        if (selectable.isSelected())
         {
-            surface.setLocation(viewer, transformable);
-        }));
-
-        final Selectable selectable = addFeatureAndGet(new SelectableModel(services, setup));
-
-        addFeature(new DisplayableModel(g ->
-        {
-            surface.render(g);
-            if (selectable.isSelected())
-            {
-                g.setColor(ColorRgba.GREEN);
-                g.drawRect(viewer, Origin.BOTTOM_LEFT, transformable, false);
-            }
-        }));
+            g.setColor(ColorRgba.GREEN);
+            g.drawRect(viewer, Origin.BOTTOM_LEFT, transformable, false);
+        }
     }
 }

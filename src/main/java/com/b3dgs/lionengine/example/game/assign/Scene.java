@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,46 +16,19 @@
  */
 package com.b3dgs.lionengine.example.game.assign;
 
-import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
-import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
-import com.b3dgs.lionengine.awt.Mouse;
-import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.feature.Camera;
-import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
-import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
-import com.b3dgs.lionengine.game.feature.Factory;
-import com.b3dgs.lionengine.game.feature.Handler;
-import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroupModel;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePathModel;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.Graphics;
-import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our little world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
-class Scene extends Sequence
+class Scene extends SequenceGame
 {
     private static final Resolution NATIVE = new Resolution(320, 240, 60);
-
-    private final Services services = new Services();
-    private final Text text = services.add(Graphics.createText(9));
-    private final Handler handler = services.create(Handler.class);
-    private final Cursor cursor = services.create(Cursor.class);
-    private final Mouse mouse = getInputDevice(Mouse.class);
 
     /**
      * Constructor.
@@ -64,59 +37,9 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, NATIVE);
+        super(context, NATIVE, World::new);
 
-        handler.addComponent(new ComponentRefreshable());
-        handler.addComponent(new ComponentDisplayable());
-
-        setSystemCursorVisible(false);
         getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
-    }
-
-    @Override
-    public void load()
-    {
-        final Camera camera = services.create(Camera.class);
-        camera.setView(this, 0, 0, Origin.TOP_LEFT);
-        camera.setLocation(320, 208);
-
-        final MapTile map = services.create(MapTileGame.class);
-        map.addFeature(new MapTileViewerModel(services));
-        map.create(Medias.create("map", "level.png"));
-        map.addFeatureAndGet(new MapTileGroupModel()).loadGroups(Medias.create("map", "groups.xml"));
-        map.addFeatureAndGet(new MapTilePathModel(services)).loadPathfinding(Medias.create("map", "pathfinding.xml"));
-        camera.setLimits(map);
-        handler.add(map);
-
-        text.setLocation(74, 230);
-
-        cursor.addImage(0, Medias.create("cursor.png"));
-        cursor.addImage(1, Medias.create("cursor_order.png"));
-        cursor.load();
-        cursor.setGrid(map.getTileWidth(), map.getTileHeight());
-        cursor.setInputDevice(mouse);
-        cursor.setViewer(camera);
-
-        final Factory factory = services.create(Factory.class);
-        handler.add(factory.create(Move.MEDIA));
-        handler.add(factory.create(Peon.MEDIA));
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        text.setText(Constant.EMPTY_STRING);
-        mouse.update(extrp);
-        cursor.update(extrp);
-        handler.update(extrp);
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        handler.render(g);
-        text.render(g);
-        cursor.render(g);
     }
 
     @Override

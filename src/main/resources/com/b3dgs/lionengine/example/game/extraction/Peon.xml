@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <lionengine:featurable xmlns:lionengine="http://lionengine.b3dgs.com/xsd/9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://lionengine.b3dgs.com/xsd/9 http://lionengine.b3dgs.com/xsd/9/featurable.xsd">
-    <lionengine:class>com.b3dgs.lionengine.example.game.extraction.Peon</lionengine:class>
+    <lionengine:class>com.b3dgs.lionengine.helper.EntityHelper</lionengine:class>
+    <lionengine:features>
+        <lionengine:feature>com.b3dgs.lionengine.example.game.extraction.Peon</lionengine:feature>
+    </lionengine:features>
     <lionengine:surface image="Peon.png"/>
+    <lionengine:frames horizontal="15" vertical="9" offsetX="8" offsetY="8"/>
     <lionengine:size width="16" height="16"/>
+    <lionengine:origin>BOTTOM_LEFT</lionengine:origin>
     <lionengine:collisions>
         <lionengine:collision name="default" offsetX="0" offsetY="0" width="16" height="16" mirror="false"/>
     </lionengine:collisions>
+    <lionengine:layerable layerRefresh="2" layerDisplay="2"/>
+    <lionengine:extractor capacity="5" extract="0.05" dropoff="0.05"/>
     <lionengine:pathfindable>
         <lionengine:path category="ground" cost="1" block="false">
             <lionengine:movement>UP</lionengine:movement>

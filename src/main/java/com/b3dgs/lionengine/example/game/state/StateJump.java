@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,24 +17,31 @@
 package com.b3dgs.lionengine.example.game.state;
 
 import com.b3dgs.lionengine.Animation;
-import com.b3dgs.lionengine.Mirror;
+import com.b3dgs.lionengine.game.Force;
+import com.b3dgs.lionengine.helper.StateHelper;
 
 /**
  * Jump state implementation.
  */
-class StateJump extends StateBase
+class StateJump extends StateHelper<EntityModel>
 {
+    private final Force jump;
+    private final Force movement;
+
     /**
      * Create the state.
      * 
-     * @param mario The mario reference.
+     * @param model The model reference.
      * @param animation The associated animation.
      */
-    public StateJump(MarioModel mario, Animation animation)
+    StateJump(EntityModel model, Animation animation)
     {
-        super(mario, animation);
+        super(model, animation);
 
-        addTransition(StateIdle.class, () -> jump.getDirectionVertical() == 0);
+        movement = model.getMovement();
+        jump = model.getJump();
+
+        addTransition(StateFall.class, () -> Double.compare(jump.getDirectionVertical(), 0.0) == 0);
     }
 
     @Override
@@ -42,17 +49,16 @@ class StateJump extends StateBase
     {
         super.enter();
 
-        jump.setDirection(0.0, 8.0);
+        jump.zero();
+        jump.setDirection(0.0, 10.0);
     }
 
     @Override
     public void update(double extrp)
     {
-        final double side = input.getHorizontalDirection();
-        movement.setDestination(side * 3.0, 0);
-        if (movement.getDirectionHorizontal() != 0)
-        {
-            mirrorable.mirror(movement.getDirectionHorizontal() < 0 ? Mirror.HORIZONTAL : Mirror.NONE);
-        }
+        super.update(extrp);
+
+        movement.setDestination(input.getHorizontalDirection() * EntityModel.SPEED_X, 0.0);
+        body.resetGravity();
     }
 }

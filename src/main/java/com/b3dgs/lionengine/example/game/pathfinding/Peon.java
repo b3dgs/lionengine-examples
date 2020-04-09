@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,30 +18,29 @@ package com.b3dgs.lionengine.example.game.pathfinding;
 
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.awt.MouseAwt;
 import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
-import com.b3dgs.lionengine.game.feature.LayerableModel;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.FeatureProvider;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
+import com.b3dgs.lionengine.game.feature.Routine;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
-import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
 import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.Pathfindable;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.PathfindableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
 
 /**
  * Peon entity implementation.
  */
-class Peon extends FeaturableModel
+@FeatureInterface
+class Peon extends FeatureModel implements Routine
 {
     /** Media reference. */
     public static final Media MEDIA = Medias.create("Peon.xml");
+
+    private final Cursor cursor = services.get(Cursor.class);
+
+    @FeatureGet private Pathfindable pathfindable;
 
     /**
      * Create a peon.
@@ -52,35 +51,23 @@ class Peon extends FeaturableModel
     public Peon(Services services, Setup setup)
     {
         super(services, setup);
+    }
 
-        addFeatureAndGet(new LayerableModel(1));
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
 
-        final SpriteAnimated surface = Drawable.loadSpriteAnimated(setup.getSurface(), 15, 9);
-        surface.setOrigin(Origin.BOTTOM_LEFT);
-        surface.setFrameOffsets(8, 8);
-
-        final Transformable transformable = addFeatureAndGet(new TransformableModel(services, setup));
-
-        final Pathfindable pathfindable = addFeatureAndGet(new PathfindableModel(services, setup));
+        pathfindable.setRenderDebug(true);
         pathfindable.setLocation(13, 14);
+    }
 
-        final Viewer viewer = services.get(Viewer.class);
-        final Cursor cursor = services.get(Cursor.class);
-
-        addFeature(new RefreshableModel(extrp ->
+    @Override
+    public void update(double extrp)
+    {
+        if (cursor.hasClickedOnce(MouseAwt.RIGHT))
         {
-            if (cursor.hasClickedOnce(MouseAwt.RIGHT))
-            {
-                pathfindable.setDestination(cursor);
-            }
-            pathfindable.update(extrp);
-            surface.setLocation(viewer, transformable);
-        }));
-
-        addFeature(new DisplayableModel(g ->
-        {
-            pathfindable.render(g);
-            surface.render(g);
-        }));
+            pathfindable.setDestination(cursor);
+        }
     }
 }

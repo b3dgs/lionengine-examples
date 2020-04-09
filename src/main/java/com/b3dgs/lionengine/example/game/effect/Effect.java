@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,35 +21,37 @@ import com.b3dgs.lionengine.Animation;
 import com.b3dgs.lionengine.AnimatorStateListener;
 import com.b3dgs.lionengine.Media;
 import com.b3dgs.lionengine.Medias;
-import com.b3dgs.lionengine.Origin;
-import com.b3dgs.lionengine.UtilRandom;
 import com.b3dgs.lionengine.Viewer;
 import com.b3dgs.lionengine.game.AnimationConfig;
-import com.b3dgs.lionengine.game.FramesConfig;
-import com.b3dgs.lionengine.game.feature.DisplayableModel;
-import com.b3dgs.lionengine.game.feature.FeaturableModel;
+import com.b3dgs.lionengine.game.FeatureProvider;
+import com.b3dgs.lionengine.game.feature.Animatable;
+import com.b3dgs.lionengine.game.feature.FeatureGet;
+import com.b3dgs.lionengine.game.feature.FeatureInterface;
+import com.b3dgs.lionengine.game.feature.FeatureModel;
 import com.b3dgs.lionengine.game.feature.Identifiable;
-import com.b3dgs.lionengine.game.feature.RefreshableModel;
+import com.b3dgs.lionengine.game.feature.Routine;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.game.feature.TransformableModel;
-import com.b3dgs.lionengine.graphic.drawable.Drawable;
-import com.b3dgs.lionengine.graphic.drawable.SpriteAnimated;
+import com.b3dgs.lionengine.game.feature.rasterable.Rasterable;
 import com.b3dgs.lionengine.io.InputDevicePointer;
 
 /**
  * Effect implementation.
  */
-class Effect extends FeaturableModel
+@FeatureInterface
+class Effect extends FeatureModel implements Routine
 {
     /** Explode media. */
     public static final Media EXPLODE = Medias.create("Explode.xml");
 
-    private final Transformable transformable;
-    private final SpriteAnimated surface;
+    private final Viewer viewer = services.get(Viewer.class);
     private final Animation animExplode;
-    private final Viewer viewer;
+
+    @FeatureGet private Identifiable identifiable;
+    @FeatureGet private Transformable transformable;
+    @FeatureGet private Rasterable rasterable;
+    @FeatureGet private Animatable animatable;
 
     /**
      * Constructor.
@@ -61,28 +63,8 @@ class Effect extends FeaturableModel
     {
         super(services, setup);
 
-        viewer = services.get(Viewer.class);
-
-        final FramesConfig config = FramesConfig.imports(setup);
-        final int scale = UtilRandom.getRandomInteger(75) + 50;
-
         final AnimationConfig configAnimations = AnimationConfig.imports(setup);
         animExplode = configAnimations.getAnimation("explode");
-
-        surface = Drawable.loadSpriteAnimated(setup.getSurface(), config.getHorizontal(), config.getVertical());
-        surface.stretch(scale, scale);
-        surface.setOrigin(Origin.MIDDLE);
-        surface.addListener((AnimatorStateListener) state ->
-        {
-            if (AnimState.FINISHED == surface.getAnimState())
-            {
-                getFeature(Identifiable.class).destroy();
-            }
-        });
-
-        transformable = addFeatureAndGet(new TransformableModel(services, setup));
-        addFeature(new RefreshableModel(surface::update));
-        addFeature(new DisplayableModel(surface::render));
     }
 
     /**
@@ -93,7 +75,20 @@ class Effect extends FeaturableModel
     public void start(InputDevicePointer pointer)
     {
         transformable.teleport(viewer.getViewpointX(pointer.getX()), viewer.getViewpointY(pointer.getY()));
-        surface.setLocation(viewer, transformable);
-        surface.play(animExplode);
+        animatable.play(animExplode);
+    }
+
+    @Override
+    public void prepare(FeatureProvider provider)
+    {
+        super.prepare(provider);
+
+        animatable.addListener((AnimatorStateListener) state ->
+        {
+            if (animatable.is(AnimState.FINISHED))
+            {
+                identifiable.destroy();
+            }
+        });
     }
 }

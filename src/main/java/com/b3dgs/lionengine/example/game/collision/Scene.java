@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,41 +18,18 @@ package com.b3dgs.lionengine.example.game.collision;
 
 import com.b3dgs.lionengine.Context;
 import com.b3dgs.lionengine.Engine;
-import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.awt.Keyboard;
 import com.b3dgs.lionengine.awt.KeyboardAwt;
-import com.b3dgs.lionengine.game.feature.Camera;
-import com.b3dgs.lionengine.game.feature.CameraTracker;
-import com.b3dgs.lionengine.game.feature.ComponentDisplayable;
-import com.b3dgs.lionengine.game.feature.ComponentRefreshable;
-import com.b3dgs.lionengine.game.feature.Factory;
-import com.b3dgs.lionengine.game.feature.Handler;
-import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroupModel;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileRendererModel;
-import com.b3dgs.lionengine.game.feature.tile.map.collision.MapTileCollisionModel;
-import com.b3dgs.lionengine.game.feature.tile.map.collision.MapTileCollisionRenderer;
-import com.b3dgs.lionengine.game.feature.tile.map.collision.MapTileCollisionRendererModel;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewer;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.engine.Sequence;
+import com.b3dgs.lionengine.game.feature.SequenceGame;
 
 /**
  * Game loop designed to handle our little world.
- * 
- * @see com.b3dgs.lionengine.example.core.minimal
  */
-class Scene extends Sequence
+class Scene extends SequenceGame
 {
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
-
-    private final Services services = new Services();
-    private final Handler handler = services.create(Handler.class);
 
     /**
      * Create the scene.
@@ -61,60 +38,9 @@ class Scene extends Sequence
      */
     public Scene(Context context)
     {
-        super(context, NATIVE);
+        super(context, NATIVE, World::new);
 
-        handler.addComponent(new ComponentRefreshable());
-        handler.addComponent(new ComponentDisplayable());
-
-        services.add(getInputDevice(Keyboard.class)).addActionPressed(KeyboardAwt.ESCAPE, this::end);
-        services.add(context);
-    }
-
-    @Override
-    public void load()
-    {
-        final MapTile map = services.create(MapTileGame.class);
-        map.create(Medias.create("level.png"));
-
-        final Camera camera = services.create(Camera.class);
-        camera.setIntervals(16, 0);
-        camera.setView(0, 0, getWidth(), getHeight(), getHeight());
-        camera.setLimits(map);
-        handler.add(camera);
-
-        final CameraTracker tracker = new CameraTracker(services);
-        handler.add(tracker);
-
-        map.addFeatureAndGet(new MapTileGroupModel()).loadGroups(Medias.create("groups.xml"));
-        map.addFeatureAndGet(new MapTileCollisionModel(services))
-           .loadCollisions(Medias.create("formulas.xml"), Medias.create("collisions.xml"));
-        final MapTileCollisionRenderer mapCollisionRenderer;
-        mapCollisionRenderer = map.addFeatureAndGet(new MapTileCollisionRendererModel(services));
-        mapCollisionRenderer.createCollisionDraw();
-
-        final MapTileViewer mapViewer = map.addFeatureAndGet(new MapTileViewerModel(services));
-        mapViewer.addRenderer(new MapTileRendererModel());
-        mapViewer.addRenderer(mapCollisionRenderer);
-        handler.add(map);
-
-        final Factory factory = services.create(Factory.class);
-        final Player player = factory.create(Player.MEDIA);
-        handler.add(player);
-        tracker.track(player);
-    }
-
-    @Override
-    public void update(double extrp)
-    {
-        handler.update(extrp);
-    }
-
-    @Override
-    public void render(Graphic g)
-    {
-        g.clear(0, 0, getWidth(), getHeight());
-
-        handler.render(g);
+        getInputDevice(Keyboard.class).addActionPressed(KeyboardAwt.ESCAPE, this::end);
     }
 
     @Override

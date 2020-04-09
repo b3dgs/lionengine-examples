@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,49 +14,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package com.b3dgs.lionengine.example.game.collision;
+package com.b3dgs.lionengine.example.game.raster;
 
-import com.b3dgs.lionengine.Viewer;
-import com.b3dgs.lionengine.game.feature.Displayable;
+import com.b3dgs.lionengine.LionEngineException;
+import com.b3dgs.lionengine.UtilMath;
+import com.b3dgs.lionengine.game.FeatureProvider;
 import com.b3dgs.lionengine.game.feature.FeatureGet;
 import com.b3dgs.lionengine.game.feature.FeatureInterface;
 import com.b3dgs.lionengine.game.feature.FeatureModel;
+import com.b3dgs.lionengine.game.feature.Routine;
 import com.b3dgs.lionengine.game.feature.Services;
 import com.b3dgs.lionengine.game.feature.Setup;
 import com.b3dgs.lionengine.game.feature.Transformable;
-import com.b3dgs.lionengine.graphic.Graphic;
-import com.b3dgs.lionengine.graphic.drawable.Sprite;
 
 /**
- * Player rendering implementation.
+ * Dino implementation
  */
 @FeatureInterface
-class PlayerRenderer extends FeatureModel implements Displayable
+class Dino extends FeatureModel implements Routine
 {
-    private final Sprite surface;
-    private final Viewer viewer;
+    private int count;
 
     @FeatureGet private Transformable transformable;
 
     /**
-     * Constructor.
+     * Create feature.
      * 
-     * @param services The services reference.
-     * @param setup The setup reference.
-     * @param model The model reference.
+     * @param services The services reference (must not be <code>null</code>).
+     * @param setup The setup reference (must not be <code>null</code>).
+     * @throws LionEngineException If invalid arguments.
      */
-    public PlayerRenderer(Services services, Setup setup, PlayerModel model)
+    Dino(Services services, Setup setup)
     {
         super(services, setup);
-
-        viewer = services.get(Viewer.class);
-        surface = model.getSurface();
     }
 
     @Override
-    public void render(Graphic g)
+    public void prepare(FeatureProvider provider)
     {
-        surface.setLocation(viewer, transformable);
-        surface.render(g);
+        super.prepare(provider);
+
+        transformable.setLocationX(120);
+    }
+
+    @Override
+    public void update(double extrp)
+    {
+        transformable.setLocationY(UtilMath.sin(count) * 100 + 130);
+        count++;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
+ * Copyright (C) 2013-2020 Byron 3D Games Studio (www.b3dgs.com) Pierre-Alexandre (contact@b3dgs.com)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,21 @@
  */
 package com.b3dgs.lionengine.example.game.production;
 
-import java.io.IOException;
-
 import com.b3dgs.lionengine.Constant;
 import com.b3dgs.lionengine.Medias;
 import com.b3dgs.lionengine.Origin;
 import com.b3dgs.lionengine.awt.Mouse;
 import com.b3dgs.lionengine.game.Cursor;
-import com.b3dgs.lionengine.game.feature.Factory;
 import com.b3dgs.lionengine.game.feature.Services;
-import com.b3dgs.lionengine.game.feature.WorldGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTile;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGame;
-import com.b3dgs.lionengine.game.feature.tile.map.MapTileGroupModel;
-import com.b3dgs.lionengine.game.feature.tile.map.pathfinding.MapTilePathModel;
-import com.b3dgs.lionengine.game.feature.tile.map.viewer.MapTileViewerModel;
 import com.b3dgs.lionengine.graphic.Graphic;
 import com.b3dgs.lionengine.graphic.Graphics;
 import com.b3dgs.lionengine.graphic.Text;
-import com.b3dgs.lionengine.io.FileReading;
-import com.b3dgs.lionengine.io.FileWriting;
+import com.b3dgs.lionengine.helper.WorldHelper;
 
 /**
  * World implementation.
  */
-class World extends WorldGame
+class World extends WorldHelper
 {
     private final Text text = services.add(Graphics.createText(9));
     private final Cursor cursor = services.create(Cursor.class);
@@ -58,13 +48,8 @@ class World extends WorldGame
         camera.setView(source, 0, 0, Origin.TOP_LEFT);
         camera.teleport(768, 768);
 
-        final MapTile map = services.create(MapTileGame.class);
-        map.addFeature(new MapTileViewerModel(services));
         map.create(Medias.create("map", "level.png"));
-        map.addFeatureAndGet(new MapTileGroupModel()).loadGroups(Medias.create("map", "groups.xml"));
-        map.addFeatureAndGet(new MapTilePathModel(services)).loadPathfinding(Medias.create("map", "pathfinding.xml"));
         camera.setLimits(map);
-        handler.add(map);
 
         cursor.addImage(0, Medias.create("cursor.png"));
         cursor.load();
@@ -74,7 +59,6 @@ class World extends WorldGame
 
         text.setLocation(4, 192);
 
-        final Factory factory = services.create(Factory.class);
         handler.add(factory.create(BuildButton.FARM));
         handler.add(factory.create(BuildButton.BARRACKS));
         handler.add(factory.create(Peon.MEDIA));
@@ -86,6 +70,7 @@ class World extends WorldGame
         text.setText(Constant.EMPTY_STRING);
         mouse.update(extrp);
         cursor.update(extrp);
+
         super.update(extrp);
     }
 
@@ -93,19 +78,8 @@ class World extends WorldGame
     public void render(Graphic g)
     {
         super.render(g);
+
         text.render(g);
         cursor.render(g);
-    }
-
-    @Override
-    protected void saving(FileWriting file) throws IOException
-    {
-        // Nothing to do
-    }
-
-    @Override
-    protected void loading(FileReading file) throws IOException
-    {
-        // Nothing to do
     }
 }
