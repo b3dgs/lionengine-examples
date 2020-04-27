@@ -17,7 +17,6 @@
 package com.b3dgs.lionengine.example.game.background;
 
 import com.b3dgs.lionengine.Config;
-import com.b3dgs.lionengine.Resolution;
 import com.b3dgs.lionengine.Version;
 import com.b3dgs.lionengine.awt.graphic.EngineAwt;
 import com.b3dgs.lionengine.graphic.engine.Loader;
@@ -37,7 +36,6 @@ public class AppBackground
     public static void main(String[] args)
     {
         EngineAwt.start(AppBackground.class.getSimpleName(), Version.create(1, 0, 0), AppBackground.class);
-        final Resolution output = new Resolution(960, 720, 60);
-        Loader.start(Config.windowed(output), Scene.class);
+        Loader.start(Config.windowed(Scene.NATIVE.get3x()), Scene.class);
     }
 }

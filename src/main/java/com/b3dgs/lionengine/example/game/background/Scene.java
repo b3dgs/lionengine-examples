@@ -29,7 +29,7 @@ import com.b3dgs.lionengine.game.feature.SequenceGame;
 class Scene extends SequenceGame
 {
     /** Native resolution. */
-    public static final Resolution NATIVE = new Resolution(320, 240, 60);
+    public static final Resolution NATIVE = new Resolution(374, 208, 60);
 
     /**
      * Constructor.

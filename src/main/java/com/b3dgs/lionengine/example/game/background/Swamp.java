@@ -32,21 +32,13 @@ import com.b3dgs.lionengine.graphic.engine.SourceResolutionProvider;
  */
 class Swamp extends BackgroundAbstract
 {
-    /** Moon rasters. */
     private static final int MOON_RASTERS = 20;
+    private static final int PARALLAX_LINES = 96;
 
-    /** Backdrop. */
     private final Backdrop backdrop;
-    /** Clouds. */
     private final Clouds clouds;
-    /** Parallax. */
     private final Parallax parallax;
-    /** Number of parallax lines. */
-    private final int parallaxsNumber = 96;
-    /** The horizontal factor. */
-    double scaleH;
-    /** The vertical factor. */
-    double scaleV;
+    private final double scaleH;
 
     /**
      * Constructor.
@@ -57,18 +49,17 @@ class Swamp extends BackgroundAbstract
      */
     Swamp(SourceResolutionProvider source, double scaleH, double scaleV)
     {
-        super(null, 0, 512);
+        super(null, 0, 344);
+
         this.scaleH = scaleH;
-        this.scaleV = scaleV;
-        totalHeight = 112;
+        totalHeight = 82;
 
         final int width = source.getWidth();
         final int halfScreen = (int) (source.getWidth() / 3.5);
-        setOffsetY(source.getHeight() - 180);
 
         backdrop = new Backdrop(width);
         clouds = new Clouds(Medias.create("cloud.png"), width, 4);
-        parallax = new Parallax(source, Medias.create("parallax.png"), parallaxsNumber, halfScreen, 124, 50, 100);
+        parallax = new Parallax(source, Medias.create("parallax.png"), PARALLAX_LINES, halfScreen, 124, 50, 100);
         add(backdrop);
         add(clouds);
         add(parallax);
@@ -79,20 +70,13 @@ class Swamp extends BackgroundAbstract
      */
     private final class Backdrop implements BackgroundComponent
     {
-        /** Backdrop color A. */
         private final BackgroundElement backcolor;
-        /** Mountain element. */
         private final BackgroundElement mountain;
-        /** Moon element. */
         private final BackgroundElementRastered moon;
-        /** Mountain sprite. */
         private final Sprite mountainSprite;
-        /** Original offset. */
         private final int moonOffset;
-        /** Screen wide value. */
         private final int w;
-        /** Screen width. */
-        int screenWidth;
+        private final int screenWidth;
 
         /**
          * Constructor.
@@ -101,18 +85,68 @@ class Swamp extends BackgroundAbstract
          */
         Backdrop(int screenWidth)
         {
+            super();
+
             backcolor = createElement("backcolor.png", 0, 0);
             mountain = createElement("mountain.png", 0, 124);
-            final int x = (int) (208 * scaleH);
+            final int x = (int) (224 * scaleH);
             moonOffset = 50;
             moon = new BackgroundElementRastered(x,
                                                  moonOffset,
                                                  Medias.create("moon.png"),
-                                                 Medias.create("raster3.xml"),
+                                                 Medias.create("moon.xml"),
                                                  MOON_RASTERS);
             mountainSprite = (Sprite) mountain.getRenderable();
             this.screenWidth = screenWidth;
             w = (int) Math.ceil(screenWidth / (double) ((Sprite) mountain.getRenderable()).getWidth()) + 1;
+        }
+
+        /**
+         * Render backdrop element.
+         * 
+         * @param g The graphic output.
+         */
+        private void renderBackdrop(Graphic g)
+        {
+            final Sprite sprite = (Sprite) backcolor.getRenderable();
+
+            for (int i = 0; i < Math.ceil(screenWidth / (double) sprite.getWidth()); i++)
+            {
+                final int x = backcolor.getMainX() + i * sprite.getWidth();
+                final double y = backcolor.getOffsetY() + backcolor.getMainY();
+                sprite.setLocation(x, y);
+                sprite.render(g);
+            }
+        }
+
+        /**
+         * Render moon element.
+         * 
+         * @param g The graphic output.
+         */
+        private void renderMoon(Graphic g)
+        {
+            final int id = (int) (mountain.getOffsetY() + (totalHeight - getOffsetY())) / 6;
+            final Sprite spriteMoon = moon.getRaster(id);
+            spriteMoon.setLocation(moon.getMainX(), moon.getOffsetY() + moon.getMainY());
+            spriteMoon.render(g);
+        }
+
+        /**
+         * Render mountains element.
+         * 
+         * @param g The graphic output.
+         */
+        private void renderMountains(Graphic g)
+        {
+            final int oy = (int) (mountain.getOffsetY() + mountain.getMainY());
+            final int ox = (int) (-mountain.getOffsetX() + mountain.getMainX());
+            final int sx = mountainSprite.getWidth();
+            for (int j = 0; j < w; j++)
+            {
+                mountainSprite.setLocation(ox + sx * j, oy);
+                mountainSprite.render(g);
+            }
         }
 
         @Override
@@ -128,31 +162,9 @@ class Swamp extends BackgroundAbstract
         @Override
         public void render(Graphic g)
         {
-            // Render back background first
-            final Sprite sprite = (Sprite) backcolor.getRenderable();
-            for (int i = 0; i < Math.ceil(screenWidth / (double) sprite.getWidth()); i++)
-            {
-                final int x = backcolor.getMainX() + i * sprite.getWidth();
-                final double y = backcolor.getOffsetY() + backcolor.getMainY();
-                sprite.setLocation(x, y);
-                sprite.render(g);
-            }
-
-            // Render moon
-            final int id = (int) (mountain.getOffsetY() + (totalHeight - getOffsetY())) / 6;
-            final Sprite spriteMoon = moon.getRaster(id);
-            spriteMoon.setLocation(moon.getMainX(), moon.getOffsetY() + moon.getMainY());
-            spriteMoon.render(g);
-
-            // Render mountains
-            final int oy = (int) (mountain.getOffsetY() + mountain.getMainY());
-            final int ox = (int) (-mountain.getOffsetX() + mountain.getMainX());
-            final int sx = mountainSprite.getWidth();
-            for (int j = 0; j < w; j++)
-            {
-                mountainSprite.setLocation(ox + sx * j, oy);
-                mountainSprite.render(g);
-            }
+            renderBackdrop(g);
+            renderMoon(g);
+            renderMountains(g);
         }
     }
 }
