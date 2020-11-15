@@ -41,7 +41,7 @@ final class StateRun extends StateHelper<EntityModel>
 
         movement = model.getMovement();
 
-        addTransition(StateIdle.class, () -> isGoNone());
+        addTransition(StateIdle.class, this::isGoNone);
     }
 
     @Override

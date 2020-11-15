@@ -42,7 +42,7 @@ class StateWalk extends StateHelper<EntityModel>
 
         movement = model.getMovement();
 
-        addTransition(StateIdle.class, () -> isGoNone());
+        addTransition(StateIdle.class, this::isGoNone);
         addTransition(StateTurn.class, () -> isChangingDirectionHorizontal(movement));
         addTransition(StateJump.class, this::isGoUpOnce);
         addTransition(StateFall.class, () -> transformable.getY() > 32);

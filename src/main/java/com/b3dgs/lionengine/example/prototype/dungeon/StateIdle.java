@@ -34,7 +34,7 @@ final class StateIdle extends StateHelper<EntityModel>
     {
         super(model, animation);
 
-        addTransition(StateRun.class, () -> isGo());
+        addTransition(StateRun.class, this::isGo);
         addTransition(StateAttack.class, () -> isFire(Scene.FIRE1));
     }
 }
