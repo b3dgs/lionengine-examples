@@ -26,7 +26,7 @@ import com.b3dgs.lionengine.game.feature.SequenceGame;
 /**
  * Game loop designed to handle our little world.
  */
-class Scene extends SequenceGame
+class Scene extends SequenceGame<World>
 {
     /** Native resolution. */
     public static final Resolution NATIVE = new Resolution(320, 240, 60);
