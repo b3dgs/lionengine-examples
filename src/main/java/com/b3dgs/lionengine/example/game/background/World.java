@@ -27,8 +27,8 @@ import com.b3dgs.lionengine.helper.WorldHelper;
  */
 public class World extends WorldHelper
 {
-    private final Foreground foreground = new Foreground(source);
-    private final BackgroundAbstract background = new Swamp(source, 1.0, 1.0);
+    private final Foreground foreground = new Foreground(services, source);
+    private final BackgroundAbstract background = new Swamp(source);
 
     private double y;
 
@@ -47,7 +47,7 @@ public class World extends WorldHelper
     {
         y = UtilMath.wrapDouble(y + 1, 0.0, 360.0);
 
-        final double dy = UtilMath.sin(y) * 140 + 160;
+        final double dy = UtilMath.sin(y) * 170 + 160;
         background.update(extrp, 1.0, dy);
         foreground.update(extrp, 1.0, dy);
     }

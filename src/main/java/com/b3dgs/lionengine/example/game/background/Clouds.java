@@ -22,13 +22,13 @@ import com.b3dgs.lionengine.game.background.CloudsAbstract;
 /**
  * Clouds implementation.
  */
-class Clouds extends CloudsAbstract
+final class Clouds extends CloudsAbstract
 {
     private static final int LINE_WIDTH = 160;
     private static final int LINE_HEIGHT = 26;
     private static final int[] LINES_OFFSET =
     {
-        0, 30, 54, 73, 89, 100
+        0, 30, 54, 75, 90, 101
     };
     private static final double[] LINES_SPEED =
     {

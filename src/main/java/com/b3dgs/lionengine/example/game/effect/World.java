@@ -42,7 +42,7 @@ public class World extends WorldHelper
         super(services);
 
         camera.setView(source, 0, 0, Origin.TOP_LEFT);
-        factory.createCache(Medias.create(""), 20);
+        factory.createCache(spawner, Medias.create(""), 20);
     }
 
     @Override

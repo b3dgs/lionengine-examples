@@ -30,39 +30,58 @@ import com.b3dgs.lionengine.graphic.engine.SourceResolutionProvider;
 /**
  * Swamp background implementation.
  */
-class Swamp extends BackgroundAbstract
+final class Swamp extends BackgroundAbstract
 {
-    private static final int MOON_RASTERS = 20;
+    private static final int PARALLAX_Y = 127;
     private static final int PARALLAX_LINES = 96;
 
     private final Backdrop backdrop;
     private final Clouds clouds;
     private final Parallax parallax;
-    private final double scaleH;
+    private double scaleH;
 
     /**
      * Constructor.
      * 
      * @param source The resolution source reference.
-     * @param scaleH The horizontal factor.
-     * @param scaleV The horizontal factor.
      */
-    Swamp(SourceResolutionProvider source, double scaleH, double scaleV)
+    Swamp(SourceResolutionProvider source)
     {
-        super(null, 0, 344);
+        super(null, 0, 338);
 
-        this.scaleH = scaleH;
-        totalHeight = 82;
+        scaleH = 1.0;
+        totalHeight = 85;
 
         final int width = source.getWidth();
         final int halfScreen = (int) (source.getWidth() / 3.5);
 
-        backdrop = new Backdrop(width);
-        clouds = new Clouds(Medias.create("cloud.png"), width, 4);
-        parallax = new Parallax(source, Medias.create("parallax.png"), PARALLAX_LINES, halfScreen, 124, 50, 100);
+        backdrop = new Backdrop(theme, true, width);
+        clouds = new Clouds(Medias.create(theme, "cloud.png"), width, 4);
+        parallax = new Parallax(source,
+                                Medias.create(theme, "parallax.png"),
+                                PARALLAX_LINES,
+                                halfScreen,
+                                PARALLAX_Y,
+                                50,
+                                100);
         add(backdrop);
         add(clouds);
         add(parallax);
+    }
+
+    /**
+     * Called when the resolution changed.
+     * 
+     * @param width The new width.
+     * @param height The new height.
+     */
+    public void setScreenSize(int width, int height)
+    {
+        scaleH = width / (double) Scene.NATIVE.getWidth();
+        setOffsetY(height - Scene.NATIVE.getHeight());
+        backdrop.setScreenWidth(width);
+        clouds.setScreenWidth(width);
+        parallax.setScreenSize(width, height);
     }
 
     /**
@@ -70,34 +89,59 @@ class Swamp extends BackgroundAbstract
      */
     private final class Backdrop implements BackgroundComponent
     {
-        private final BackgroundElement backcolor;
+        private final BackgroundElement backcolorA;
+        private final BackgroundElement backcolorB;
         private final BackgroundElement mountain;
         private final BackgroundElementRastered moon;
         private final Sprite mountainSprite;
+        private final boolean flickering;
         private final int moonOffset;
-        private final int w;
-        private final int screenWidth;
+        private int w;
+        private int screenWidth;
+        private boolean flicker;
 
         /**
          * Constructor.
          * 
+         * @param path The backdrop path.
+         * @param flickering The flickering flag effect.
          * @param screenWidth The screen width.
          */
-        Backdrop(int screenWidth)
+        Backdrop(String path, boolean flickering, int screenWidth)
         {
             super();
 
-            backcolor = createElement("backcolor.png", 0, 0);
-            mountain = createElement("mountain.png", 0, 124);
+            this.flickering = flickering;
+            backcolorA = createElement(path, "backcolor1.png", 0, 0);
+            if (flickering)
+            {
+                backcolorB = createElement(path, "backcolor2.png", 0, 0);
+            }
+            else
+            {
+                backcolorB = null;
+            }
+            mountain = createElement(path, "mountain.png", 0, PARALLAX_Y);
             final int x = (int) (224 * scaleH);
             moonOffset = 50;
             moon = new BackgroundElementRastered(x,
                                                  moonOffset,
-                                                 Medias.create("moon.png"),
-                                                 Medias.create("moon.xml"),
-                                                 MOON_RASTERS);
+                                                 Medias.create(path, "moon.png"),
+                                                 Medias.create(path, "palette.png"),
+                                                 Medias.create(path, "raster.png"));
             mountainSprite = (Sprite) mountain.getRenderable();
             this.screenWidth = screenWidth;
+            w = (int) Math.ceil(screenWidth / (double) ((Sprite) mountain.getRenderable()).getWidth()) + 1;
+        }
+
+        /**
+         * Called when the resolution changed.
+         * 
+         * @param width The new width.
+         */
+        private void setScreenWidth(int width)
+        {
+            screenWidth = width;
             w = (int) Math.ceil(screenWidth / (double) ((Sprite) mountain.getRenderable()).getWidth()) + 1;
         }
 
@@ -108,12 +152,19 @@ class Swamp extends BackgroundAbstract
          */
         private void renderBackdrop(Graphic g)
         {
-            final Sprite sprite = (Sprite) backcolor.getRenderable();
-
+            final Sprite sprite;
+            if (flicker)
+            {
+                sprite = (Sprite) backcolorB.getRenderable();
+            }
+            else
+            {
+                sprite = (Sprite) backcolorA.getRenderable();
+            }
             for (int i = 0; i < Math.ceil(screenWidth / (double) sprite.getWidth()); i++)
             {
-                final int x = backcolor.getMainX() + i * sprite.getWidth();
-                final double y = backcolor.getOffsetY() + backcolor.getMainY();
+                final int x = backcolorA.getMainX() + i * sprite.getWidth();
+                final double y = backcolorA.getOffsetY() + backcolorA.getMainY();
                 sprite.setLocation(x, y);
                 sprite.render(g);
             }
@@ -126,10 +177,10 @@ class Swamp extends BackgroundAbstract
          */
         private void renderMoon(Graphic g)
         {
-            final int id = (int) (mountain.getOffsetY() + (totalHeight - getOffsetY())) / 6;
-            final Sprite spriteMoon = moon.getRaster(id);
-            spriteMoon.setLocation(moon.getMainX(), moon.getOffsetY() + moon.getMainY());
-            spriteMoon.render(g);
+            final int id = (int) (mountain.getOffsetY() + (totalHeight - getOffsetY()));
+            moon.setRaster(id);
+            moon.setLocation(moon.getMainX(), moon.getOffsetY() + moon.getMainY());
+            moon.render(g);
         }
 
         /**
@@ -152,11 +203,16 @@ class Swamp extends BackgroundAbstract
         @Override
         public void update(double extrp, int x, int y, double speed)
         {
-            backcolor.setOffsetY(y);
+            backcolorA.setOffsetY(y);
             moon.setOffsetY(moonOffset - totalHeight + getOffsetY());
             final double mx = mountain.getOffsetX() + speed * 0.24;
             mountain.setOffsetX(UtilMath.wrapDouble(mx, 0.0, mountainSprite.getWidth()));
             mountain.setOffsetY(y);
+
+            if (flickering)
+            {
+                flicker = !flicker;
+            }
         }
 
         @Override
